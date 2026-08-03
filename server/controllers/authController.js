@@ -40,13 +40,13 @@ const signup = async (req, res) => {
             });
         }
 
-        // Accept alphabets, spaces, apostrophes and hyphens only
-        const nameRegex = /^[A-Za-z\s'-]+$/;
+        // Accept alphabets and only single spaces between words
+        const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
 
         if (!nameRegex.test(trimmedName)) {
             return res.status(400).json({
                 success: false,
-                message: "Name can only contain letters, spaces, apostrophes (') and hyphens (-)"
+                message: "Name can only contain letters and single spaces between words"
             });
         }
 
