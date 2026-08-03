@@ -1,5 +1,6 @@
 const User = require('../models/UserSchema');
 const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 
 // @desc    Register a new user
 // @route   POST /api/auth/signup
@@ -12,10 +13,11 @@ const signup = async (req, res) => {
         // Trim inputs
         const trimmedName = name?.trim();
         const trimmedEmail = email?.trim().toLowerCase();
+        const trimmedPassword = password?.trim();
         const trimmedConfirmPassword = confirmPassword?.trim();
 
         // 1. Check if all required fields are provided
-        if (!trimmedName || !trimmedEmail || !password || !trimmedConfirmPassword) {
+        if (!trimmedName || !trimmedEmail || !trimmedPassword || !trimmedConfirmPassword) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
@@ -77,7 +79,7 @@ const signup = async (req, res) => {
 
         // 5. Password Validation
 
-        if (password.length < 8 || password.length > 20) {
+        if (trimmedPassword.length < 8 || trimmedPassword.length > 20) {
             return res.status(400).json({
                 success: false,
                 message: "Password must be between 8 and 20 characters"
@@ -85,7 +87,7 @@ const signup = async (req, res) => {
         }
 
         // No spaces allowed
-        if (/\s/.test(password)) {
+        if (/\s/.test(trimmedPassword)) {
             return res.status(400).json({
                 success: false,
                 message: "Password cannot contain spaces"
@@ -96,7 +98,7 @@ const signup = async (req, res) => {
         const passwordRegex =
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#_.+-])[A-Za-z\d@$!%*?&^#_.+-]{8,20}$/;
 
-        if (!passwordRegex.test(password)) {
+        if (!passwordRegex.test(trimmedPassword)) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -105,7 +107,7 @@ const signup = async (req, res) => {
         }
 
         // 6. Confirm Password Validation
-        if (password !== trimmedConfirmPassword) {
+        if (trimmedPassword !== trimmedConfirmPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Passwords do not match"
@@ -113,7 +115,7 @@ const signup = async (req, res) => {
         }
 
         // 7. Hash Password
-        const hashedPassword = await argon2.hash(password);
+        const hashedPassword = await argon2.hash(trimmedPassword);
 
         // 8. Create User
         const newUser = new User({
@@ -146,6 +148,96 @@ const signup = async (req, res) => {
     }
 }
 
+// @desc    Authenticate user & get token
+// @route   POST /api/auth/signin
+// @access  Public
+const signin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Email is required" });
+        }
+        if (!password) {
+            return res.status(400).json({ success: false, message: "Password is required" });
+        }
+
+        const trimmedEmail = email.trim().toLowerCase();
+        const trimmedPassword = password.trim();
+
+        if (trimmedEmail.length > 100) {
+            return res.status(400).json({ success: false, message: "Email cannot exceed 100 characters" });
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(trimmedEmail)) {
+            return res.status(400).json({ success: false, message: "Invalid email format" });
+        }
+
+        if (trimmedPassword.length < 8 || trimmedPassword.length > 20) {
+            return res.status(400).json({ success: false, message: "Password must be between 8 and 20 characters" });
+        }
+
+        if (/\s/.test(trimmedPassword)) {
+            return res.status(400).json({ success: false, message: "Password cannot contain spaces" });
+        }
+
+        const user = await User.findOne({
+            email: trimmedEmail
+        });
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password"
+            });
+        }
+
+        const isMatch = await argon2.verify(
+            user.password,
+            trimmedPassword
+        );
+
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password"
+            });
+        }
+
+        const payload = {
+            id: user._id,
+            role: user.role
+        };
+
+        const accessToken = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '15m' }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "User logged in successfully",
+            accessToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+    } catch (error) {
+        console.error("Signin Error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+};
+
 module.exports = {
-    signup
+    signup,
+    signin
 }
