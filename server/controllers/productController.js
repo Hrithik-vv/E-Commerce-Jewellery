@@ -1,5 +1,6 @@
 const Product = require('../models/ProductSchema');
 const cloudinary = require('../config/cloudinary');
+const { fetchProductsWithFilters } = require('../utils/productHelpers');
 
 const addProduct = async (req, res) => {
   try {
@@ -192,8 +193,78 @@ const editProduct = async (req, res) => {
   }
 };
 
+// GET /api/products/:id
+const getProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+    res.status(200).json({ success: true, product });
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch product', error: error.message });
+  }
+};
+
+// GET /api/products/:id/related
+const getRelatedProducts = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    // Fetch related products based on the same category, excluding the current product
+    const relatedProducts = await Product.find({
+      category: product.category,
+      _id: { $ne: product._id }
+    }).limit(4);
+
+    res.status(200).json({ success: true, count: relatedProducts.length, products: relatedProducts });
+  } catch (error) {
+    console.error('Error fetching related products:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch related products', error: error.message });
+  }
+};
+
+// GET /api/products/getbestsellers
+const getBestSellers = async (req, res) => {
+  try {
+    const result = await fetchProductsWithFilters({ isBestSeller: true }, req.query);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching best sellers:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch best sellers',
+      error: error.message
+    });
+  }
+};
+
+// GET /api/products/getproductsbycategory/:category
+const getProductsByCategory = async (req, res) => {
+  try {
+    const category = req.params.category;
+    const result = await fetchProductsWithFilters({ category }, req.query);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching products by category:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch products by category',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   addProduct,
   getAllProducts,
-  editProduct
+  editProduct,
+  getProductById,
+  getRelatedProducts,
+  getBestSellers,
+  getProductsByCategory
 };

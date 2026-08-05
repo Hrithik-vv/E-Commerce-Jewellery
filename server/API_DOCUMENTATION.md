@@ -174,3 +174,115 @@ Provides the same fields as **Add Product**, but all fields are **optional**.
 
 **Error (404 Not Found)**
 - Product with the provided ID does not exist.
+
+---
+
+### 4. Get Single Product Details
+Fetch the full details of a single product by its ID.
+
+**Endpoint:** `GET /products/getsingleproductdetails/:id`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | String | Yes | The MongoDB ObjectId of the product. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "product": {
+    "_id": "64e...",
+    "productName": "Emerald Drop Earrings",
+    "price": 5000,
+    "...": "..."
+  }
+}
+```
+
+**Error (404 Not Found)**
+- Product not found.
+
+---
+
+### 5. Get Related Products
+Fetch up to 4 related products based on the main product's category (excluding the main product).
+
+**Endpoint:** `GET /products/getrelatedproducts/:id`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | String | Yes | The MongoDB ObjectId of the main product. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "count": 4,
+  "products": [
+    {
+      "_id": "64e...",
+      "productName": "Matching Necklace",
+      "price": 3000
+    }
+  ]
+}
+```
+
+---
+
+### 6. Get Best Sellers
+Fetch best-selling products with pagination, sorting, and price filtering.
+
+**Endpoint:** `GET /products/getbestsellers`
+**Access:** Public
+
+#### Query Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `page` | Number | No | Page number for pagination (default: 1). |
+| `limit` | Number | No | Number of products per page (default: 24). |
+| `sort` | String | No | Sort order. Options: `price-low-high`, `date-new-old`. |
+| `minPrice` | Number | No | Minimum price filter. |
+| `maxPrice` | Number | No | Maximum price filter. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "count": 24,
+  "totalCount": 50,
+  "highestPrice": 10000,
+  "currentPage": 1,
+  "totalPages": 3,
+  "products": [
+    { ... }
+  ]
+}
+```
+
+---
+
+### 7. Get Products By Category
+Fetch products for a specific category with pagination, sorting, and price filtering.
+
+**Endpoint:** `GET /products/getproductsbycategory/:category`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `category` | String | Yes | The category name (e.g., Rings, Necklaces). |
+
+#### Query Parameters
+Supports the exact same query parameters as the **Get Best Sellers** endpoint (`page`, `limit`, `sort`, `minPrice`, `maxPrice`).
+
+#### Responses
+**Success (200 OK)**
+Same response structure as **Get Best Sellers**.
