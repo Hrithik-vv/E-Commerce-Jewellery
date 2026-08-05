@@ -1,7 +1,7 @@
-import BestSellerPage from './pages/BestSellerPage';
+import OTPVerificationPage from './pages/OTPVerificationPage';
 
 function App() {
-  return <BestSellerPage />;
+  return <OTPVerificationPage />;
 }
 
 export default App;
