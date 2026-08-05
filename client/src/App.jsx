@@ -1,7 +1,7 @@
-import ProductDetailsPage from './pages/ProductDetailsPage';
+import BestSellerPage from './pages/BestSellerPage';
 
 function App() {
-  return <ProductDetailsPage />;
+  return <BestSellerPage />;
 }
 
 export default App;
