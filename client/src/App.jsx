@@ -1,7 +1,7 @@
-import OTPVerificationPage from './pages/OTPVerificationPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
-  return <OTPVerificationPage />;
+  return <ResetPasswordPage />;
 }
 
 export default App;
