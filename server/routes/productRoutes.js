@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addProduct, getAllProducts, editProduct, getProductById, getRelatedProducts, getBestSellers, getProductsByCategory } = require('../controllers/productController');
+const { addProduct, getAllProducts, editProduct, getProductById, getRelatedProducts, getBestSellers, getProductsByCategory, deleteProduct } = require('../controllers/productController');
 const upload = require('../middleware/ImageUploadMiddleware');
 
 // POST /api/products/addproduct
@@ -30,5 +30,9 @@ router.get('/getbestsellers', getBestSellers);
 // GET /api/products/getproductsbycategory/:category
 // Fetch products by category with pagination, sorting, and filtering
 router.get('/getproductsbycategory/:category', getProductsByCategory);
+
+// DELETE /api/products/deleteproduct/:id
+// Delete a single product
+router.delete('/deleteproduct/:id', deleteProduct);
 
 module.exports = router;

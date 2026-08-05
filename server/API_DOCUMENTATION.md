@@ -286,3 +286,28 @@ Supports the exact same query parameters as the **Get Best Sellers** endpoint (`
 #### Responses
 **Success (200 OK)**
 Same response structure as **Get Best Sellers**.
+
+---
+
+### 8. Delete Product
+Delete an existing product by its ID.
+
+**Endpoint:** `DELETE /products/deleteproduct/:id`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | String | Yes | The MongoDB ObjectId of the product to delete. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Product deleted successfully"
+}
+```
+
+**Error (404 Not Found)**
+- Product not found.
