@@ -1,0 +1,324 @@
+import React, { useState } from 'react';
+import '../css/CheckoutPage.css';
+
+export default function CheckoutPage() {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [shippingMethod, setShippingMethod] = useState('standard');
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [billingAddressType, setBillingAddressType] = useState('same');
+  const [saveAddress, setSaveAddress] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [shipping, setShipping] = useState({
+    country: '', firstName: '', lastName: '', address: '', city: '', state: '', pin: '', phone: ''
+  });
+
+  const [billing, setBilling] = useState({
+    country: '', firstName: '', lastName: '', address: '', city: '', state: '', pin: '', phone: ''
+  });
+
+  const validateEmail = (val) => {
+    if (!val) return "Email is required.";
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(val)) return "Please enter a valid email.";
+    return "";
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (emailError) setEmailError(validateEmail(e.target.value));
+  };
+
+  const handlePay = () => {
+    const err = validateEmail(email);
+    if (err) {
+      setEmailError(err);
+      return;
+    }
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      alert('Payment successful! Redirecting to confirmation...');
+    }, 1500);
+  };
+
+  const AddressForm = ({ data, setData }) => (
+    <div className="checkout-form-grid">
+      <div className="checkout-input-group w-full">
+        <select className="checkout-select" value={data.country} onChange={e => setData({...data, country: e.target.value})}>
+          <option value="" disabled>Country/Region</option>
+          <option value="IN">India</option>
+          <option value="US">United States</option>
+        </select>
+      </div>
+      <div className="checkout-input-group w-half">
+        <input className="checkout-input" placeholder="First Name" value={data.firstName} onChange={e => setData({...data, firstName: e.target.value})} />
+      </div>
+      <div className="checkout-input-group w-half">
+        <input className="checkout-input" placeholder="Last Name" value={data.lastName} onChange={e => setData({...data, lastName: e.target.value})} />
+      </div>
+      <div className="checkout-input-group w-full">
+        <div className="checkout-input-wrapper">
+          <svg className="checkout-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <input className="checkout-input with-icon" placeholder="Address" value={data.address} onChange={e => setData({...data, address: e.target.value})} />
+        </div>
+      </div>
+      <div className="checkout-input-group w-half">
+        <input className="checkout-input" placeholder="City" value={data.city} onChange={e => setData({...data, city: e.target.value})} />
+      </div>
+      <div className="checkout-input-group w-quarter">
+        <select className="checkout-select" value={data.state} onChange={e => setData({...data, state: e.target.value})}>
+          <option value="" disabled>State</option>
+          <option value="MH">MH</option>
+          <option value="DL">DL</option>
+        </select>
+      </div>
+      <div className="checkout-input-group w-quarter">
+        <input className="checkout-input" placeholder="PIN Code" value={data.pin} onChange={e => setData({...data, pin: e.target.value})} />
+      </div>
+      <div className="checkout-input-group w-full">
+        <div className="checkout-input-wrapper">
+          <svg className="checkout-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <input className="checkout-input with-icon" placeholder="Phone Number" value={data.phone} onChange={e => setData({...data, phone: e.target.value})} />
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="checkout-page-wrapper">
+      <div className="checkout-container">
+        {/* LEFT SECTION */}
+        <div className="checkout-left-section">
+          
+          {/* Section 2 – Page Header */}
+          <div>
+            <h1 className="checkout-page-title">Checkout</h1>
+            <p className="checkout-subtitle">Complete your order securely.</p>
+            <p className="checkout-breadcrumb">Home &gt; Cart &gt; Checkout</p>
+          </div>
+
+          {/* Section 3 – Contact Information */}
+          <div className="checkout-card">
+            <h2 className="checkout-section-title">Contact Information</h2>
+            <div className="checkout-input-group">
+              <div className="checkout-input-wrapper">
+                <svg className="checkout-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <input 
+                  className="checkout-input with-icon" 
+                  type="email" 
+                  placeholder="Email Address"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+              </div>
+              {emailError && <div className="checkout-validation-msg">{emailError}</div>}
+            </div>
+          </div>
+
+          {/* Section 4 – Shipping Address */}
+          <div className="checkout-card">
+            <h2 className="checkout-section-title">Shipping Address</h2>
+            <AddressForm data={shipping} setData={setShipping} />
+            <div className="checkout-checkbox-wrapper">
+              <input 
+                type="checkbox" 
+                className="checkout-checkbox" 
+                id="saveAddress" 
+                checked={saveAddress} 
+                onChange={(e) => setSaveAddress(e.target.checked)} 
+              />
+              <label htmlFor="saveAddress" className="checkout-checkbox-label">Save this information for next time</label>
+            </div>
+          </div>
+
+          {/* Section 5 – Shipping Method */}
+          <div className="checkout-card">
+            <h2 className="checkout-section-title">Shipping Method</h2>
+            
+            <div 
+              className={`checkout-shipping-card ${shippingMethod === 'standard' ? 'selected' : ''}`}
+              onClick={() => setShippingMethod('standard')}
+            >
+              <svg className="checkout-shipping-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+              <div className="checkout-shipping-info">
+                <p className="checkout-shipping-name">Standard Shipping</p>
+                <p className="checkout-shipping-est">3-5 Business Days</p>
+              </div>
+              <div className="checkout-shipping-price">$5.00</div>
+            </div>
+
+            <div 
+              className={`checkout-shipping-card ${shippingMethod === 'express' ? 'selected' : ''}`}
+              onClick={() => setShippingMethod('express')}
+            >
+              <svg className="checkout-shipping-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+              <div className="checkout-shipping-info">
+                <p className="checkout-shipping-name">Express Shipping</p>
+                <p className="checkout-shipping-est">1-2 Business Days</p>
+              </div>
+              <div className="checkout-shipping-price">$15.00</div>
+            </div>
+          </div>
+
+          {/* Section 6 – Payment */}
+          <div className="checkout-card">
+            <h2 className="checkout-section-title">Payment</h2>
+            <div className="checkout-security-msg">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              All transactions are secure and encrypted.
+            </div>
+
+            <div 
+              className={`checkout-payment-card ${paymentMethod === 'card' ? 'selected' : ''}`}
+              onClick={() => setPaymentMethod('card')}
+            >
+              <input type="radio" className="checkout-payment-radio" checked={paymentMethod === 'card'} readOnly />
+              <svg className="checkout-payment-icon" style={{ marginLeft: '16px' }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              <div className="checkout-payment-name">Credit Card (Razorpay)</div>
+            </div>
+            
+            {paymentMethod === 'card' && (
+              <div className="checkout-payment-info-card" style={{ marginBottom: '16px' }}>
+                You will be redirected to Razorpay securely to complete your purchase.
+              </div>
+            )}
+
+            <div 
+              className={`checkout-payment-card ${paymentMethod === 'cod' ? 'selected' : ''}`}
+              onClick={() => setPaymentMethod('cod')}
+            >
+              <input type="radio" className="checkout-payment-radio" checked={paymentMethod === 'cod'} readOnly />
+              <svg className="checkout-payment-icon" style={{ marginLeft: '16px' }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+              <div className="checkout-payment-name">Cash on Delivery</div>
+            </div>
+          </div>
+
+          {/* Section 7 – Billing Address */}
+          <div className="checkout-card">
+            <h2 className="checkout-section-title">Billing Address</h2>
+            <div className="checkout-billing-radio-group">
+              <label className="checkout-billing-radio-wrapper">
+                <input 
+                  type="radio" 
+                  className="checkout-payment-radio" 
+                  checked={billingAddressType === 'same'} 
+                  onChange={() => setBillingAddressType('same')}
+                />
+                <span className="checkout-checkbox-label">Same as shipping address</span>
+              </label>
+              <label className="checkout-billing-radio-wrapper">
+                <input 
+                  type="radio" 
+                  className="checkout-payment-radio" 
+                  checked={billingAddressType === 'different'} 
+                  onChange={() => setBillingAddressType('different')}
+                />
+                <span className="checkout-checkbox-label">Use a different billing address</span>
+              </label>
+            </div>
+            
+            {billingAddressType === 'different' && (
+              <AddressForm data={billing} setData={setBilling} />
+            )}
+          </div>
+
+        </div>
+
+        {/* RIGHT SECTION (Order Summary) */}
+        <div className="checkout-right-section">
+          <div className="checkout-card checkout-summary-wrapper">
+            <h2 className="checkout-section-title">Order Summary</h2>
+            
+            {/* Section 8 – Order Summary */}
+            <div className="checkout-product-card">
+              <div className="checkout-product-img"></div>
+              <div className="checkout-product-info">
+                <h3 className="checkout-product-name">Elegant Ring</h3>
+                <p className="checkout-product-qty">Qty: 1</p>
+              </div>
+              <div className="checkout-product-price">$250.00</div>
+            </div>
+
+            <div className="checkout-product-card" style={{ borderBottom: 'none', marginBottom: '16px' }}>
+              <div className="checkout-product-img"></div>
+              <div className="checkout-product-info">
+                <h3 className="checkout-product-name">Diamond Necklace</h3>
+                <p className="checkout-product-qty">Qty: 1</p>
+              </div>
+              <div className="checkout-product-price">$850.00</div>
+            </div>
+
+            {/* Section 9 – Price Summary */}
+            <div className="checkout-price-row">
+              <span>Subtotal</span>
+              <span>$1100.00</span>
+            </div>
+            <div className="checkout-price-row">
+              <span>Shipping</span>
+              <span>{shippingMethod === 'standard' ? '$5.00' : '$15.00'}</span>
+            </div>
+            <div className="checkout-price-row">
+              <span>Tax</span>
+              <span>$110.00</span>
+            </div>
+            <div className="checkout-price-row checkout-price-discount">
+              <span>Discount</span>
+              <span>-$50.00</span>
+            </div>
+
+            <div className="checkout-price-divider"></div>
+
+            <div className="checkout-total-row">
+              <span>Total</span>
+              <span>${1100 + (shippingMethod === 'standard' ? 5 : 15) + 110 - 50}.00</span>
+            </div>
+
+            {/* Section 10 – Action Buttons */}
+            <div className="checkout-bottom-actions">
+              <button 
+                className="checkout-pay-btn" 
+                onClick={handlePay}
+                disabled={isSubmitting}
+              >
+                Pay Now
+              </button>
+              <button className="checkout-back-btn">
+                Back to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
