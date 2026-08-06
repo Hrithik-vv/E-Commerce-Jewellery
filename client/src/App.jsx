@@ -4,6 +4,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import OTPVerificationPage from './pages/OTPVerificationPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import AdminProfilePage from './pages/AdminProfilePage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/otp" element={<OTPVerificationPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/admin-profile" element={<AdminProfilePage />} />
       </Routes>
     </Router>
   );
