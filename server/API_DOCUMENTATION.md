@@ -336,7 +336,8 @@ Fetch the current user's cart. Creates an empty cart if one doesn't exist.
       }
     ],
     "specialInstructions": ""
-  }
+  },
+  "total": 2000
 }
 ```
 
@@ -361,7 +362,8 @@ Add a product to the cart or increase its quantity if it already exists.
 {
   "success": true,
   "message": "Product added to cart",
-  "cart": { ... }
+  "cart": { ... },
+  "total": 2000
 }
 ```
 
@@ -384,8 +386,9 @@ Update the exact quantity of a specific item in the cart.
 ```json
 {
   "success": true,
-  "message": "Cart updated",
-  "cart": { ... }
+  "message": "Cart updated successfully",
+  "cart": { ... },
+  "total": 2000
 }
 ```
 
@@ -408,7 +411,8 @@ Remove an item completely from the cart.
 {
   "success": true,
   "message": "Item removed from cart",
-  "cart": { ... }
+  "cart": { ... },
+  "total": 1000
 }
 ```
 
