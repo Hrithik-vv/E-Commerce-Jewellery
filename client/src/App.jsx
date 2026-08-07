@@ -9,6 +9,7 @@ import ProductListPage from './pages/ProductListPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
+import OrderListPage from './pages/OrderListPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
         <Route path="/add-product" element={<AddProductPage />} />
         <Route path="/edit-product" element={<EditProductPage />} />
+        <Route path="/orders" element={<OrderListPage />} />
       </Routes>
     </Router>
   );

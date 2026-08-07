@@ -14,7 +14,7 @@ const AddProductPage = () => {
 
       <div className="add-product-page-header">
         <h1 className="add-product-page-title">Add Product</h1>
-        <p className="add-product-page-description">Briefly explains the purpose of the Add Product page.</p>
+        <p className="add-product-page-description">Enter the details below to add a new piece of jewellery to your store's inventory.</p>
       </div>
 
       <div className="add-product-form-shell">
