@@ -1,0 +1,350 @@
+/* SECTION 1 — Edit Product Page */
+.edit-product-main-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  padding: 32px 80px;
+  gap: 32px;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .edit-product-main-container {
+    padding: 24px 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .edit-product-main-container {
+    padding: 20px;
+  }
+}
+
+.edit-product-back-link {
+  font-family: Manrope;
+  font-weight: 500;
+  font-size: 14px;
+  color: #0B5D50;
+  margin-bottom: 12px;
+}
+
+.edit-product-back-link:hover {
+  text-decoration: underline;
+}
+
+.edit-product-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 767px) {
+  .edit-product-page-header {
+    gap: 6px;
+  }
+}
+
+.edit-product-page-title {
+  font-family: Manrope;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .edit-product-page-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .edit-product-page-title {
+    font-size: 24px;
+  }
+}
+
+.edit-product-page-description {
+  font-family: Manrope;
+  font-size: 15px;
+  font-weight: 400;
+  color: #6B7280;
+}
+
+@media (max-width: 767px) {
+  .edit-product-page-description {
+    font-size: 14px;
+  }
+}
+
+/* SECTION 2 — Form Shell */
+.edit-product-form-shell {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+@media (max-width: 999px) {
+  .edit-product-form-shell {
+    flex-direction: column;
+  }
+}
+
+.edit-product-form-main {
+  flex: 1 1 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.edit-product-form-side {
+  flex: 1 1 32%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* SECTION 3, 4, 5, 6, 7 — Card Container & Title */
+.edit-product-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.edit-product-card-title {
+  font-family: Manrope;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 20px;
+}
+
+/* Product Name & Category */
+.edit-product-input, .edit-product-select {
+  height: 44px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-family: Manrope;
+  font-size: 14px;
+}
+
+.edit-product-select {
+  width: 100%;
+}
+
+.edit-product-input:focus, .edit-product-select:focus {
+  border-color: #0B5D50;
+  box-shadow: 0 0 0 3px rgba(11,93,80,0.1);
+  outline: none;
+}
+
+/* Description */
+.edit-product-textarea {
+  min-height: 120px;
+  padding: 12px 14px;
+  resize: vertical;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-family: Manrope;
+  font-size: 14px;
+}
+
+.edit-product-textarea:focus {
+  border-color: #0B5D50;
+  box-shadow: 0 0 0 3px rgba(11,93,80,0.1);
+  outline: none;
+}
+
+/* SECTION 4 — Pricing Card */
+.edit-product-price-row {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 499px) {
+  .edit-product-price-row {
+    flex-direction: column;
+  }
+}
+
+.edit-product-number-input {
+  height: 44px;
+}
+
+.edit-product-field-hint {
+  font-family: Manrope;
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* SECTION 5 — Product Image Card */
+.edit-product-image-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.edit-product-image-thumbnail {
+  width: 88px;
+  height: 88px;
+  border-radius: 10px;
+  background: #F3F4F6;
+}
+
+.edit-product-image-filename {
+  font-family: Manrope;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.edit-product-image-subtext {
+  font-family: Manrope;
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+.edit-product-upload-box {
+  border: 2px dashed #D1D5DB;
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.edit-product-upload-box:hover {
+  border-color: #0B5D50;
+  background: #F9FAFB;
+}
+
+/* SECTION 6 — Inventory Card */
+.edit-product-inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-product-inventory-badge {
+  display: inline-flex;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.edit-product-badge-instock {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+/* SECTION 7 — Visibility Card */
+.edit-product-visibility-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-product-visibility-label {
+  font-family: Manrope;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.edit-product-toggle-switch {
+  width: 44px;
+  height: 24px;
+  background: #D1D5DB;
+  transition: 200ms ease;
+}
+
+.edit-product-toggle-switch.active {
+  background: #0B5D50;
+}
+
+/* SECTION 8 — Product Meta Card */
+.edit-product-meta-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.edit-product-meta-row:last-child {
+  border-bottom: none;
+}
+
+.edit-product-meta-label {
+  font-family: Manrope;
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.edit-product-meta-value {
+  font-family: Manrope;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* SECTION 9 — Form Footer */
+.edit-product-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.edit-product-btn-delete {
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid #FEE2E2;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #DC2626;
+  font-family: Manrope;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.edit-product-btn-delete:hover {
+  background: #FEE2E2;
+}
+
+.edit-product-btn-cancel {
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #374151;
+  font-family: Manrope;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.edit-product-btn-cancel:hover {
+  background: #F9FAFB;
+}
+
+.edit-product-btn-save {
+  height: 44px;
+  padding: 0 24px;
+  background: #0B5D50;
+  color: #FFFFFF;
+  font-family: Manrope;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+}
+
+.edit-product-btn-save:hover {
+  background: #094A40;
+}

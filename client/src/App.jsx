@@ -8,6 +8,7 @@ import AdminProfilePage from './pages/AdminProfilePage';
 import ProductListPage from './pages/ProductListPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import AddProductPage from './pages/AddProductPage';
+import EditProductPage from './pages/EditProductPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
         <Route path="/add-product" element={<AddProductPage />} />
+        <Route path="/edit-product" element={<EditProductPage />} />
       </Routes>
     </Router>
   );
