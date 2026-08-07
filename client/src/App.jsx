@@ -7,20 +7,12 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import AdminProfilePage from './pages/AdminProfilePage';
 import ProductListPage from './pages/ProductListPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import AddProductPage from './pages/AddProductPage';
 
 function App() {
   return (
     <Router>
-      {/* <nav style={{ padding: '10px', background: '#eee', marginBottom: '20px' }}>
-        <ul style={{ display: 'flex', gap: '15px', listStyle: 'none', margin: 0, padding: 0 }}>
-          <li><Link to="/">Home (Best Sellers)</Link></li>
-          <li><Link to="/product">Product Details</Link></li>
-          <li><Link to="/checkout">Checkout</Link></li>
-          <li><Link to="/otp">OTP Verification</Link></li>
-          <li><Link to="/reset-password">Reset Password</Link></li>
-        </ul>
-      </nav> */}
-      
+
       <Routes>
         <Route path="/" element={<BestSellerPage />} />
         <Route path="/product" element={<ProductDetailsPage />} />
@@ -30,6 +22,7 @@ function App() {
         <Route path="/admin-profile" element={<AdminProfilePage />} />
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
+        <Route path="/add-product" element={<AddProductPage />} />
       </Routes>
     </Router>
   );

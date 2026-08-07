@@ -1,0 +1,279 @@
+/* SECTION 1 — Add Product Page */
+.add-product-main-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  padding: 32px 80px;
+  gap: 32px;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .add-product-main-container {
+    padding: 24px 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .add-product-main-container {
+    padding: 20px;
+  }
+}
+
+.add-product-back-link {
+  font-family: Manrope;
+  font-weight: 500;
+  font-size: 14px;
+  color: #0B5D50;
+  margin-bottom: 12px;
+}
+
+.add-product-back-link:hover {
+  text-decoration: underline;
+}
+
+.add-product-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 767px) {
+  .add-product-page-header {
+    gap: 6px;
+  }
+}
+
+.add-product-page-title {
+  font-family: Manrope;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .add-product-page-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .add-product-page-title {
+    font-size: 24px;
+  }
+}
+
+.add-product-page-description {
+  font-family: Manrope;
+  font-size: 15px;
+  font-weight: 400;
+  color: #6B7280;
+}
+
+@media (max-width: 767px) {
+  .add-product-page-description {
+    font-size: 14px;
+  }
+}
+
+/* SECTION 2 — Form Shell */
+.add-product-form-shell {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+@media (max-width: 999px) {
+  .add-product-form-shell {
+    flex-direction: column;
+  }
+}
+
+.add-product-form-main {
+  flex: 1 1 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.add-product-form-side {
+  flex: 1 1 32%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* SECTION 3, 4, 5, 6, 7 — Card Container & Title */
+.add-product-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.add-product-card-title {
+  font-family: Manrope;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 20px;
+}
+
+/* Product Name & Category */
+.add-product-input, .add-product-select {
+  height: 44px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-family: Manrope;
+  font-size: 14px;
+}
+
+.add-product-select {
+  width: 100%;
+}
+
+.add-product-input:focus, .add-product-select:focus {
+  border-color: #0B5D50;
+  box-shadow: 0 0 0 3px rgba(11,93,80,0.1);
+  outline: none;
+}
+
+/* Description */
+.add-product-textarea {
+  min-height: 120px;
+  padding: 12px 14px;
+  resize: vertical;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-family: Manrope;
+  font-size: 14px;
+}
+
+.add-product-textarea:focus {
+  border-color: #0B5D50;
+  box-shadow: 0 0 0 3px rgba(11,93,80,0.1);
+  outline: none;
+}
+
+/* SECTION 4 — Pricing Card */
+.add-product-price-row {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 499px) {
+  .add-product-price-row {
+    flex-direction: column;
+  }
+}
+
+.add-product-number-input {
+  height: 44px;
+}
+
+.add-product-field-hint {
+  font-family: Manrope;
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* SECTION 5 — Product Image Card */
+.add-product-upload-box {
+  border: 2px dashed #D1D5DB;
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.add-product-upload-box:hover {
+  border-color: #0B5D50;
+  background: #F9FAFB;
+}
+
+.add-product-upload-icon {
+  color: #9CA3AF;
+}
+
+.add-product-upload-text {
+  font-size: 14px;
+  color: #374151;
+}
+
+.add-product-upload-subtext {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* SECTION 7 — Visibility Card */
+.add-product-visibility-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-product-visibility-label {
+  font-family: Manrope;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.add-product-toggle-switch {
+  width: 44px;
+  height: 24px;
+  background: #D1D5DB;
+  transition: 200ms ease;
+}
+
+.add-product-toggle-switch.active {
+  background: #0B5D50;
+}
+
+/* SECTION 8 — Form Footer */
+.add-product-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.add-product-btn-cancel {
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #374151;
+  font-family: Manrope;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.add-product-btn-cancel:hover {
+  background: #F9FAFB;
+}
+
+.add-product-btn-submit {
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 8px;
+  background: #0B5D50;
+  color: #FFFFFF;
+  font-family: Manrope;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+}
+
+.add-product-btn-submit:hover {
+  background: #094A40;
+}
