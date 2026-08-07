@@ -75,3 +75,366 @@ Authenticate a user or administrator and retrieve an access token.
 
 **Error (401 Unauthorized)**
 - Invalid email or password.
+
+---
+
+## Product Routes
+
+### 1. Add Product
+Create a new product with an image.
+
+**Endpoint:** `POST /products/addproduct`
+**Content-Type:** `form-data`
+**Access:** Public
+
+#### Request Body (Form-Data)
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `productName` | String | Yes | Name of the product. |
+| `description` | String | Yes | Description of the product. |
+| `category` | String | Yes | Must be one of: Rings, Necklaces, Bracelets, Earrings, Bangles, Jhumkas. |
+| `price` | Number | Yes | Selling price of the product (positive number). |
+| `compareAtPrice` | Number | No | Original price, must be greater than `price` if provided. |
+| `stockQuantity` | Number | Yes | Available stock quantity. |
+| `isBestSeller` | Boolean | No | Mark as best seller (`true` or `false`). |
+| `productImage` | File | Yes | Image file (PNG, JPG, JPEG) up to 5MB. Uploaded to Cloudinary. |
+
+#### Responses
+**Success (201 Created)**
+```json
+{
+  "success": true,
+  "message": "Product added successfully.",
+  "product": {
+    "_id": "64e...",
+    "productName": "Emerald Drop Earrings",
+    "category": "Earrings",
+    "price": 5000,
+    "productImage": "https://res.cloudinary.com/.../image.png",
+    "createdAt": "2026-08-04T12:00:00Z"
+  }
+}
+```
+
+**Error (400 Bad Request)**
+- Validation errors (e.g., missing fields, compare-at price less than price).
+
+---
+
+### 2. Get All Products
+Fetch a list of all products, sorted by newest first.
+
+**Endpoint:** `GET /products/allproducts`
+**Access:** Public
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "count": 1,
+  "products": [
+    {
+      "_id": "64e...",
+      "productName": "Emerald Drop Earrings",
+      "price": 5000
+    }
+  ]
+}
+```
+
+---
+
+### 3. Edit Product
+Update an existing product's details and optionally upload a new image.
+
+**Endpoint:** `PUT /products/editproduct/:id`
+**Content-Type:** `multipart/form-data`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | String | Yes | The MongoDB ObjectId of the product to update. |
+
+#### Request Body (Form-Data)
+Provides the same fields as **Add Product**, but all fields are **optional**. 
+- Providing a new `productImage` uploads it to Cloudinary and updates the record.
+- Providing an empty string for `compareAtPrice` removes the compare-at price from the product.
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Product updated successfully",
+  "product": { ...updated details... }
+}
+```
+
+**Error (404 Not Found)**
+- Product with the provided ID does not exist.
+
+---
+
+### 4. Get Single Product Details
+Fetch the full details of a single product by its ID.
+
+**Endpoint:** `GET /products/getsingleproductdetails/:id`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | String | Yes | The MongoDB ObjectId of the product. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "product": {
+    "_id": "64e...",
+    "productName": "Emerald Drop Earrings",
+    "price": 5000,
+    "...": "..."
+  }
+}
+```
+
+**Error (404 Not Found)**
+- Product not found.
+
+---
+
+### 5. Get Related Products
+Fetch up to 4 related products based on the main product's category (excluding the main product).
+
+**Endpoint:** `GET /products/getrelatedproducts/:id`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | String | Yes | The MongoDB ObjectId of the main product. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "count": 4,
+  "products": [
+    {
+      "_id": "64e...",
+      "productName": "Matching Necklace",
+      "price": 3000
+    }
+  ]
+}
+```
+
+---
+
+### 6. Get Best Sellers
+Fetch best-selling products with pagination, sorting, and price filtering.
+
+**Endpoint:** `GET /products/getbestsellers`
+**Access:** Public
+
+#### Query Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `page` | Number | No | Page number for pagination (default: 1). |
+| `limit` | Number | No | Number of products per page (default: 24). |
+| `sort` | String | No | Sort order. Options: `price-low-high`, `date-new-old`. |
+| `minPrice` | Number | No | Minimum price filter. |
+| `maxPrice` | Number | No | Maximum price filter. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "count": 24,
+  "totalCount": 50,
+  "highestPrice": 10000,
+  "currentPage": 1,
+  "totalPages": 3,
+  "products": [
+    { ... }
+  ]
+}
+```
+
+---
+
+### 7. Get Products By Category
+Fetch products for a specific category with pagination, sorting, and price filtering.
+
+**Endpoint:** `GET /products/getproductsbycategory/:category`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `category` | String | Yes | The category name (e.g., Rings, Necklaces). |
+
+#### Query Parameters
+Supports the exact same query parameters as the **Get Best Sellers** endpoint (`page`, `limit`, `sort`, `minPrice`, `maxPrice`).
+
+#### Responses
+**Success (200 OK)**
+Same response structure as **Get Best Sellers**.
+
+---
+
+### 8. Delete Product
+Delete an existing product by its ID.
+
+**Endpoint:** `DELETE /products/deleteproduct/:id`
+**Access:** Public
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | String | Yes | The MongoDB ObjectId of the product to delete. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Product deleted successfully"
+}
+```
+
+**Error (404 Not Found)**
+- Product not found.
+
+---
+
+## Cart Endpoints
+
+### 1. Get Cart
+Fetch the current user's cart. Creates an empty cart if one doesn't exist.
+
+**Endpoint:** `GET /cart/getcart`
+**Access:** Private (User/Admin)
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "cart": {
+    "user": "64d...",
+    "items": [
+      {
+        "product": { "_id": "64e...", "productName": "Ring", "price": 1000 },
+        "quantity": 2
+      }
+    ],
+    "specialInstructions": ""
+  },
+  "total": 2000
+}
+```
+
+---
+
+### 2. Add to Cart
+Add a product to the cart or increase its quantity if it already exists.
+
+**Endpoint:** `POST /cart/addcart`
+**Access:** Private
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `productId` | String | Yes | MongoDB ObjectId of the product. |
+| `quantity` | Number | Yes | Quantity to add (must be at least 1). |
+| `specialInstructions` | String | No | The customer notes text. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Product added to cart",
+  "cart": { ... },
+  "total": 2000
+}
+```
+
+---
+
+### 3. Update Cart Quantity
+Update the exact quantity of a specific item in the cart.
+
+**Endpoint:** `PUT /cart/updatecart`
+**Access:** Private
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `productId` | String | Yes | MongoDB ObjectId of the product. |
+| `quantity` | Number | Yes | New quantity (must be at least 1). |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Cart updated successfully",
+  "cart": { ... },
+  "total": 2000
+}
+```
+
+---
+
+### 4. Remove Item from Cart
+Remove an item completely from the cart.
+
+**Endpoint:** `DELETE /cart/removecart/:productId`
+**Access:** Private
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `productId` | String | Yes | MongoDB ObjectId of the product to remove. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Item removed from cart",
+  "cart": { ... },
+  "total": 1000
+}
+```
+
+---
+
+### 5. Update Cart Notes
+Save special instructions / customer notes to the cart.
+
+**Endpoint:** `PUT /cart/notes`
+**Access:** Private
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `specialInstructions` | String | Yes | The customer notes text. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Cart notes updated",
+  "cart": { ... }
+}
+```
