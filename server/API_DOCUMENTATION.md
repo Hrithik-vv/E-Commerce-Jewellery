@@ -311,3 +311,126 @@ Delete an existing product by its ID.
 
 **Error (404 Not Found)**
 - Product not found.
+
+---
+
+## Cart Endpoints
+
+### 1. Get Cart
+Fetch the current user's cart. Creates an empty cart if one doesn't exist.
+
+**Endpoint:** `GET /cart/getcart`
+**Access:** Private (User/Admin)
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "cart": {
+    "user": "64d...",
+    "items": [
+      {
+        "product": { "_id": "64e...", "productName": "Ring", "price": 1000 },
+        "quantity": 2
+      }
+    ],
+    "specialInstructions": ""
+  }
+}
+```
+
+---
+
+### 2. Add to Cart
+Add a product to the cart or increase its quantity if it already exists.
+
+**Endpoint:** `POST /cart/addcart`
+**Access:** Private
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `productId` | String | Yes | MongoDB ObjectId of the product. |
+| `quantity` | Number | Yes | Quantity to add (must be at least 1). |
+| `specialInstructions` | String | No | The customer notes text. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Product added to cart",
+  "cart": { ... }
+}
+```
+
+---
+
+### 3. Update Cart Quantity
+Update the exact quantity of a specific item in the cart.
+
+**Endpoint:** `PUT /cart/updatecart`
+**Access:** Private
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `productId` | String | Yes | MongoDB ObjectId of the product. |
+| `quantity` | Number | Yes | New quantity (must be at least 1). |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Cart updated",
+  "cart": { ... }
+}
+```
+
+---
+
+### 4. Remove Item from Cart
+Remove an item completely from the cart.
+
+**Endpoint:** `DELETE /cart/removecart/:productId`
+**Access:** Private
+
+#### Path Parameters
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `productId` | String | Yes | MongoDB ObjectId of the product to remove. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Item removed from cart",
+  "cart": { ... }
+}
+```
+
+---
+
+### 5. Update Cart Notes
+Save special instructions / customer notes to the cart.
+
+**Endpoint:** `PUT /cart/notes`
+**Access:** Private
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `specialInstructions` | String | Yes | The customer notes text. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Cart notes updated",
+  "cart": { ... }
+}
+```
