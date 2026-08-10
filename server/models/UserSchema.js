@@ -27,6 +27,24 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["Admin", "User"],
         default: "User"
+    },
+
+    status: {
+        type: String,
+        enum: ["Active", "Inactive"],
+        default: "Active"
+    },
+
+    lastLogin: {
+        type: Date
+    },
+
+    resetPasswordOTP: {
+        type: String
+    },
+
+    resetPasswordExpires: {
+        type: Date
     }
 }, {
     timestamps: true
