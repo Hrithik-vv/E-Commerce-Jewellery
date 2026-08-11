@@ -177,10 +177,67 @@ const deleteUser = async (req, res) => {
     }
 };
 
+// @desc    Get user profile (Current logged-in user)
+// @route   GET /api/profile
+// @access  Private
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+        res.status(200).json({ success: true, data: user });
+    } catch (error) {
+        console.error("Get User Profile Error:", error);
+        res.status(500).json({ success: false, message: "Server Error" });
+    }
+};
+
+// @desc    Update user profile (Current logged-in user)
+// @route   PUT /api/profile
+// @access  Private
+const updateUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        const { name, phone, address } = req.body;
+
+        if (name) user.name = name;
+        if (phone !== undefined) user.phone = phone; // Allow empty string to clear
+        if (address) {
+            user.address = {
+                fullName: address.fullName !== undefined ? address.fullName : user.address?.fullName,
+                phone: address.phone !== undefined ? address.phone : user.address?.phone,
+                addressLine1: address.addressLine1 !== undefined ? address.addressLine1 : user.address?.addressLine1,
+                addressLine2: address.addressLine2 !== undefined ? address.addressLine2 : user.address?.addressLine2,
+                city: address.city !== undefined ? address.city : user.address?.city,
+                state: address.state !== undefined ? address.state : user.address?.state,
+                pinCode: address.pinCode !== undefined ? address.pinCode : user.address?.pinCode
+            };
+        }
+
+        const updatedUser = await user.save();
+
+        const userResponse = updatedUser.toObject();
+        delete userResponse.password;
+
+        res.status(200).json({ success: true, data: userResponse });
+    } catch (error) {
+        console.error("Update User Profile Error:", error);
+        res.status(500).json({ success: false, message: "Server Error" });
+    }
+};
+
 module.exports = {
     getUsers,
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserProfile,
+    updateUserProfile
 };
