@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaArrowLeft, FaCheck } from 'react-icons/fa';
-import './OrderTracking.css';
+import '../css/OrderTracking.css';
 
 function OrderTracking() {
   // Sample Data for Order

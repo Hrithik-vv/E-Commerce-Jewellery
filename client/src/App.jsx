@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import "react-toastify/dist/ReactToastify.css";
+import {ToastContainer} from "react-toastify";
 import BestSellerPage from './pages/BestSellerPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OTPVerificationPage from './pages/OTPVerificationPage';
@@ -14,24 +16,22 @@ import SingleOrderPage from './pages/SingleOrderPage';
 import UserListPage from './pages/UserListPage';
 import SingleUserDetailsPage from './pages/SingleUserDetailsPage';
 import AdminDashboard from './pages/AdminDashboard';
-import Login from "../client/src/pages/Login";
-import Home from "../client/src/pages/Home";
-import "react-toastify/dist/ReactToastify.css";
-import {ToastContainer} from "react-toastify";
-import Header from "../client/src/Components/Header";
-import Footer from "../client/src/Components/Footer";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import About from "./pages/About";
-import UserProfile from "../client/src/pages/UserProfile";
-import SignUp from "../client/src/pages/SignUp";
-import Contact from "../client/src/pages/Contact";
-import Category from "../client/src/pages/Category";
-import PrivacyPolicy from "../client/src/pages/PrivacyPolicy";
-import DisclaimerPolicy from "../client/src/pages/DisclaimerPolicy";
-import OrderTracking from "../client/src/pages/OrderTracking";
-import Cart from "../client/src/pages/Cart";
-import ShippingPolicy from "../client/src/pages/ShippingPolicy";
-import RefundPolicy from "../client/src/pages/RefundPolicy";
-import PopupBestSellers from "./pages/PopupBestSellers";
+import UserProfile from "./pages/UserProfile";
+import SignUp from "./pages/SignUp";
+import Contact from "./pages/Contact";
+import Category from "./pages/Category";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import DisclaimerPolicy from "./pages/DisclaimerPolicy";
+import OrderTracking from "./pages/OrderTracking";
+import Cart from "./pages/Cart";
+import ShippingPolicy from "./pages/ShippingPolicy";
+import RefundPolicy from "./pages/RefundPolicy";
+import PopupBestSellers from "./components/PopupBestSellers";
 
 
 function App() {
@@ -39,7 +39,7 @@ function App() {
     <Router>
  <Header/>
       <Routes>
-        <Route path="/" element={<BestSellerPage />} />
+        <Route path="/best-sellers" element={<BestSellerPage />} />
         <Route path="/product" element={<ProductDetailsPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/otp" element={<OTPVerificationPage />} />

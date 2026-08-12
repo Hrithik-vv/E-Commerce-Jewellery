@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./UserProfile.css";
+import "../css/UserProfile.css";
 import { Link } from "react-router-dom";
 
 function UserProfile() {

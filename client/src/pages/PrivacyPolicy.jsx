@@ -1,5 +1,5 @@
 import React from 'react';
-import './PrivacyPolicy.css';
+import '../css/PrivacyPolicy.css';
 
 function PrivacyPolicy() {
   return (

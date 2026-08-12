@@ -1,5 +1,5 @@
 import React from 'react';
-import './RefundPolicy.css';
+import '../css/RefundPolicy.css';
 
 function RefundPolicy() {
   return (

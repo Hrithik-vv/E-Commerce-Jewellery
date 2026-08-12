@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaTimes, FaPlus, FaMinus, FaTrashAlt, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import './Cart.css';
+import '../css/Cart.css';
 
 function Cart({ isOpen = true, onClose }) {
   // Sample Cart Items State

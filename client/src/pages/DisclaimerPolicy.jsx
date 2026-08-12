@@ -1,5 +1,5 @@
 import React from 'react';
-import './DisclaimerPolicy.css';
+import '../css/DisclaimerPolicy.css';
 
 function DisclaimerPolicy() {
   return (

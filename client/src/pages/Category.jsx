@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import './Category.css';
+import '../css/Category.css';
 
 // Sample Products Data
 const INITIAL_PRODUCTS = [

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaTimes, FaArrowRight, FaGem } from 'react-icons/fa';
-import './PopupBestSellers.css';
+import '../css/PopupBestSellers.css';
 
 function PopupBestSellers({ isOpen = true, onClose, imageUrl }) {
   if (!isOpen) return null;

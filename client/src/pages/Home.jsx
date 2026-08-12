@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaArrowRight, FaStar, FaEnvelope, FaShippingFast, FaShieldAlt, FaUndo, FaHeadset } from "react-icons/fa";
-import "./Home.css";
+import "../css/Home.css";
 
 function Home() {
   // Newsletter Form State & Validation

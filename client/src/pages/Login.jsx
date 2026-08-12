@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
-import "./Login.css";
+import '../css/Login.css';
 
 function Login() {
   const navigate = useNavigate();
