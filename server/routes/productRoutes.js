@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addProduct, getAllProducts, editProduct, getProductById, getRelatedProducts, getBestSellers, getProductsByCategory, deleteProduct } = require('../controllers/productController');
+const { addProduct, getAllProducts, editProduct, getProductById, getRelatedProducts, getBestSellers, getProductsByCategory, deleteProduct, getCategories } = require('../controllers/productController');
 const upload = require('../middleware/ImageUploadMiddleware');
 
 // POST /api/products/addproduct
@@ -10,6 +10,10 @@ router.post('/addproduct', upload.single('productImage'), addProduct);
 // GET /api/products/allproducts
 // Fetch all products
 router.get('/allproducts', getAllProducts);
+
+// GET /api/products/categories
+// Fetch all categories with product counts
+router.get('/categories', getCategories);
 
 // PUT /api/products/editproduct/:id
 // Edit an existing product (handles optional image upload)
