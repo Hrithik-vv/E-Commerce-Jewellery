@@ -284,6 +284,34 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// GET /api/products/categories
+const getCategories = async (req, res) => {
+  try {
+    const categoriesAggr = await Product.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } }
+    ]);
+    
+    const formattedCategories = categoriesAggr.map(c => ({
+      name: c._id,
+      count: c.count
+    }));
+    
+    const allCategories = ['Rings', 'Necklaces', 'Bracelets', 'Earrings', 'Bangles', 'Jhumkas'];
+    const finalCategories = allCategories.map(cat => {
+      const found = formattedCategories.find(c => c.name === cat);
+      return {
+        name: cat,
+        count: found ? found.count : 0
+      };
+    });
+    
+    res.status(200).json({ success: true, categories: finalCategories });
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
 module.exports = {
   addProduct,
   getAllProducts,
@@ -292,5 +320,6 @@ module.exports = {
   getRelatedProducts,
   getBestSellers,
   getProductsByCategory,
-  deleteProduct
+  deleteProduct,
+  getCategories
 };

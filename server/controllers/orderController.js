@@ -94,7 +94,7 @@ const updateOrderStatus = async (req, res) => {
     const { status } = req.body;
     
     // Validate status
-    const validStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+    const validStatuses = ['Pending', 'Processing', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
         return res.status(400).json({ success: false, message: 'Invalid status provided' });
     }
@@ -111,6 +111,18 @@ const updateOrderStatus = async (req, res) => {
     }
 
     order.orderStatus = status;
+
+    // Update tracking dates
+    if (!order.tracking) {
+        order.tracking = { orderedAt: order.createdAt || Date.now() };
+    }
+    
+    if (status === 'Processing') order.tracking.processedAt = Date.now();
+    else if (status === 'Shipped') order.tracking.shippedAt = Date.now();
+    else if (status === 'Out for Delivery') order.tracking.outForDeliveryAt = Date.now();
+    else if (status === 'Delivered') order.tracking.deliveredAt = Date.now();
+    else if (status === 'Cancelled') order.tracking.cancelledAt = Date.now();
+
     await order.save();
 
     res.status(200).json({ success: true, message: `Order status updated to ${status}`, order });

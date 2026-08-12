@@ -438,3 +438,168 @@ Save special instructions / customer notes to the cart.
   "cart": { ... }
 }
 ```
+
+---
+
+## Product Categories (New)
+
+### 1. Get All Categories
+Fetch all product categories with their respective product counts.
+
+**Endpoint:** `GET /products/categories`
+**Access:** Public
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "categories": [
+    { "name": "Rings", "count": 12 },
+    { "name": "Necklaces", "count": 8 },
+    { "name": "Bracelets", "count": 0 },
+    { "name": "Earrings", "count": 15 },
+    { "name": "Bangles", "count": 4 },
+    { "name": "Jhumkas", "count": 0 }
+  ]
+}
+```
+
+---
+
+## Newsletter Routes
+
+### 1. Subscribe to Newsletter
+Subscribe a valid email address to the newsletter.
+
+**Endpoint:** `POST /newsletter/subscribe`
+**Access:** Public
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `email` | String | Yes | Valid email format. |
+
+#### Responses
+**Success (201 Created)**
+```json
+{
+  "success": true,
+  "message": "Successfully subscribed to the newsletter"
+}
+```
+
+**Error (400 Bad Request)**
+- Email is already subscribed.
+
+---
+
+## Admin Dashboard Routes
+
+### 1. Get Dashboard Statistics
+Fetch aggregated statistics, recent orders, top-selling products, and low-stock items for the admin dashboard.
+
+**Endpoint:** `GET /dashboard`
+**Access:** Private (Admin)
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "data": {
+    "overview": {
+      "totalOrders": 12,
+      "totalRevenue": 150000,
+      "totalProducts": 45,
+      "totalUsers": 21
+    },
+    "recentOrders": [
+      {
+        "orderId": "65b...",
+        "customer": "John Doe",
+        "date": "2026-08-11T10:00:00.000Z",
+        "amount": 2500,
+        "status": "Delivered"
+      }
+    ],
+    "topSellingProducts": [
+      {
+        "productId": "65c...",
+        "name": "Gold Necklace",
+        "image": "url-to-image.jpg",
+        "sold": 14,
+        "revenue": 28000
+      }
+    ],
+    "lowStockProducts": [
+      {
+        "productId": "65d...",
+        "productName": "Diamond Ring",
+        "sku": "65D4A1B2",
+        "stock": 2,
+        "status": "Low Stock"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Order Tracking Updates
+
+### 1. Get Single Order (Tracking Timeline Added)
+The existing `GET /orders/getorder/:id` response now includes a `tracking` object containing exact timestamps for when an order reached each fulfillment stage.
+
+**Endpoint:** `GET /orders/getorder/:id`
+**Access:** Private (Admin)
+
+#### Updated Response Structure
+```json
+{
+  "success": true,
+  "order": {
+    "_id": "65b...",
+    "orderStatus": "Out for Delivery",
+    "tracking": {
+      "orderedAt": "2026-08-11T11:00:00.000Z",
+      "processedAt": "2026-08-11T11:05:00.000Z",
+      "shippedAt": "2026-08-11T11:10:00.000Z",
+      "outForDeliveryAt": "2026-08-11T11:15:00.000Z"
+    }
+  }
+}
+```
+
+---
+
+## User Management Routes (Admin Extensions)
+
+Additional admin endpoints for the User Details page.
+
+### 1. Reset User Password
+**Endpoint:** `PUT /users/:id/reset-password`
+**Access:** Private (Admin)
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `newPassword` | String | Yes | The new password (min 8 chars). |
+
+### 2. Deactivate User Account
+Changes the user's status to `Inactive`.
+
+**Endpoint:** `PUT /users/:id/deactivate`
+**Access:** Private (Admin)
+
+### 3. Get User Activity
+Fetches chronological activity history for a user.
+
+**Endpoint:** `GET /users/:id/activity`
+**Access:** Private (Admin)
+
+### 4. Get User Statistics
+Fetches dashboard stats for a user.
+
+**Endpoint:** `GET /users/:id/statistics`
+**Access:** Private (Admin)

@@ -23,6 +23,8 @@ app.use("/api/cart", require("./routes/cartRoutes"));
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
+app.use("/api/dashboard", require("./routes/dashboardRoutes"));
+app.use("/api/newsletter", require("./routes/newsletterRoutes"));
 
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
