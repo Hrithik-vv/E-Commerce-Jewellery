@@ -1,124 +1,35 @@
 import React from "react";
 import {FaFacebookF,FaInstagram,FaWhatsapp,FaTwitter,FaMapMarkerAlt,FaPhoneAlt,FaEnvelope,} from "react-icons/fa";
+import "./Footer.css";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer
-      style={{
-        width: "100%",
-        backgroundColor: "#0B3D36",
-        padding: "60px 80px 0px",
-        color: "#FFFFFF",
-      }}
-    >
+    <footer className="footer-container">
       {/* Top Section */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1.4fr 1fr 1fr 1fr 1fr",
-          gap: "40px",
-          paddingBottom: "48px",
-        }}
-      >
+      <div className="footer-top">
         {/* Brand Column */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-          {/* Logo Container */}
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            {/* Logo Text */}
-            <span
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "22px",
-                fontWeight: 700,
-                color: "#D4AF37",
-                letterSpacing: "1px",
-              }}
-            >
-              Elora Jewellery
-            </span>
+        <div className="footer-brand-col">
+          <div className="footer-logo-box">
+            <span className="footer-logo-text">Elora Jewellery</span>
           </div>
 
-          {/* Tagline Text */}
-          <p
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#C9D2CF",
-              lineHeight: "1.6",
-              margin: 0,
-            }}
-          >
+          <p className="footer-tagline">
             Crafting timeless elegance and sustainable luxury for your most cherished moments.
           </p>
 
           {/* Social Icons Row */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              marginTop: "8px",
-            }}
-          >
-            <div
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                border: "1px solid #3A6660",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#FFFFFF",
-                cursor: "pointer",
-              }}
-            >
+          <div className="footer-social-row">
+            <div className="social-icon-circle">
               <FaFacebookF size={14} />
             </div>
-            <div
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                border: "1px solid #3A6660",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#FFFFFF",
-                cursor: "pointer",
-              }}
-            >
+            <div className="social-icon-circle">
               <FaInstagram size={14} />
             </div>
-            <div
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                border: "1px solid #3A6660",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#FFFFFF",
-                cursor: "pointer",
-              }}
-            >
+            <div className="social-icon-circle">
               <FaWhatsapp size={14} />
             </div>
-            <div
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                border: "1px solid #3A6660",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#FFFFFF",
-                cursor: "pointer",
-              }}
-            >
+            <div className="social-icon-circle">
               <FaTwitter size={14} />
             </div>
           </div>
@@ -126,231 +37,75 @@ function Footer() {
 
         {/* Quick Links Column */}
         <div>
-          <h4
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              color: "#D4AF37",
-              marginBottom: "16px",
-            }}
-          >
-            Quick Links
-          </h4>
-          <div
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#C9D2CF",
-            }}
-          >
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Home</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>About Us</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Contact Us</div>
+          <h4 className="footer-heading">Quick Links</h4>
+          <div className="footer-links-list">
+            <div className="footer-link-item">Home</div>
+            <div className="footer-link-item">About Us</div>
+            <div className="footer-link-item">Contact Us</div>
           </div>
         </div>
 
         {/* Categories Column */}
         <div>
-          <h4
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              color: "#D4AF37",
-              marginBottom: "16px",
-            }}
-          >
-            Categories
-          </h4>
-          <div
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#C9D2CF",
-            }}
-          >
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Bangles</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Pendants</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Rings</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Earrings</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Necklaces</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>+ More</div>
+          <h4 className="footer-heading">Categories</h4>
+          <div className="footer-links-list">
+            <div className="footer-link-item">Bangles</div>
+            <div className="footer-link-item">Pendants</div>
+            <div className="footer-link-item">Rings</div>
+            <div className="footer-link-item">Earrings</div>
+            <div className="footer-link-item">Necklaces</div>
+            <div className="footer-link-item">+ More</div>
           </div>
         </div>
 
         {/* Customer Support Column */}
         <div>
-          <h4
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              color: "#D4AF37",
-              marginBottom: "16px",
-            }}
-          >
-            Customer Support
-          </h4>
-          <div
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#C9D2CF",
-            }}
-          >
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Privacy Policy</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Refund Policy</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Shipping Policy</div>
-            <div style={{ marginBottom: "12px", cursor: "pointer" }}>Disclaimer Policy</div>
+          <h4 className="footer-heading">Customer Support</h4>
+          <div className="footer-links-list">
+           <Link to="/privacy-policy" className="footer-link-item">Privacy Policy</Link>
+            <Link to="/refund-policy" className="footer-link-item">Refund Policy</Link>
+            <Link to="/shipping-policy" className="footer-link-item">Shipping Policy</Link>
+            <Link to="/disclaimer-policy" className="footer-link-item">Disclaimer Policy</Link>
           </div>
         </div>
 
         {/* Contact Column */}
         <div>
-          <h4
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "15px",
-              fontWeight: 600,
-              color: "#D4AF37",
-              marginBottom: "16px",
-            }}
-          >
-            Contact
-          </h4>
+          <h4 className="footer-heading">Contact</h4>
 
           {/* Address Item Row */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "10px",
-              marginBottom: "14px",
-            }}
-          >
-            <FaMapMarkerAlt
-              style={{
-                width: "15px",
-                height: "15px",
-                color: "#D4AF37",
-                marginTop: "2px",
-                flexShrink: 0,
-              }}
-            />
+          <div className="contact-item-row">
+            <FaMapMarkerAlt className="contact-icon" />
             <a
               href="https://maps.google.com/?q=MG+Road+Kochi+Kerala"
               target="_blank"
               rel="noreferrer"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "14px",
-                fontWeight: 400,
-                color: "#C9D2CF",
-                lineHeight: "1.5",
-                textDecoration: "none",
-              }}
+              className="contact-text-link"
             >
               Elora Jewellery, MG Road, Kochi, Kerala - 682016
             </a>
           </div>
 
           {/* Phone Item Row */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "10px",
-              marginBottom: "14px",
-            }}
-          >
-            <FaPhoneAlt
-              style={{
-                width: "15px",
-                height: "15px",
-                color: "#D4AF37",
-                marginTop: "2px",
-                flexShrink: 0,
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "14px",
-                fontWeight: 400,
-                color: "#C9D2CF",
-                lineHeight: "1.5",
-              }}
-            >
-              +91 98765 43210
-            </span>
+          <div className="contact-item-row">
+            <FaPhoneAlt className="contact-icon" />
+            <span className="contact-text">+91 98765 43210</span>
           </div>
 
           {/* Email Item Row */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "10px",
-              marginBottom: "14px",
-            }}
-          >
-            <FaEnvelope
-              style={{
-                width: "15px",
-                height: "15px",
-                color: "#D4AF37",
-                marginTop: "2px",
-                flexShrink: 0,
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: "14px",
-                fontWeight: 400,
-                color: "#C9D2CF",
-                lineHeight: "1.5",
-              }}
-            >
-              support@elorajewellery.com
-            </span>
+          <div className="contact-item-row">
+            <FaEnvelope className="contact-icon" />
+            <span className="contact-text">support@elorajewellery.com</span>
           </div>
         </div>
       </div>
 
       {/* Divider Line */}
-      <div
-        style={{
-          width: "100%",
-          height: "1px",
-          backgroundColor: "#244B45",
-        }}
-      />
+      <div className="footer-divider" />
 
       {/* Bottom Bar */}
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "20px 0px",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "13px",
-            fontWeight: 400,
-            color: "#9FB0AC",
-            textAlign: "center",
-            margin: 0,
-          }}
-        >
+      <div className="footer-bottom">
+        <p className="footer-copyright">
           © {new Date().getFullYear()} Elora Jewellery. All rights reserved.
         </p>
       </div>

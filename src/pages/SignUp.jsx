@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './SignUp.css';
 
 const SignUp = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
   // Form Field States
   const [formData, setFormData] = useState({
     fullName: '',
@@ -80,7 +82,7 @@ const SignUp = () => {
 
     if (name === 'fullName') {
       const trimmed = value.trim();
-      const regex = /^[A-Za-z\s'\-]{3,50}$/;
+      const regex = /^[A-Za-z\s'-]{3,50}$/;
       if (!regex.test(trimmed)) {
         setErrors((prev) => ({
           ...prev,
@@ -141,36 +143,32 @@ const SignUp = () => {
     } else {
       setErrors((prev) => ({ ...prev, consent: '' }));
     }
-    if (!errors.fullName && !errors.email && !errors.password && !errors.confirmPassword) {
-      alert('Account Created Successfully!');
-      navigate('/login'); 
-    }
 
-    // Final check
     if (!errors.fullName && !errors.email && !errors.password && !errors.confirmPassword) {
       alert('Account Created Successfully!');
+      navigate('/login');
     }
   };
 
   return (
-    <div style={styles.pageBackground}>
-      <div style={styles.cardContainer}>
-        {/* Logo Section - Pure Clean BRD Style */}
-        <div style={styles.logoSection}>
-          <div style={styles.logoMark}>L</div>
-          <div style={styles.logoText}>ELORA</div>
+    <div className="page-background">
+      <div className="card-container">
+        {/* Logo Section */}
+        <div className="logo-section">
+          <div className="logo-mark">L</div>
+          <div className="logo-text">ELORA</div>
         </div>
 
         {/* Page Heading & Subtext */}
-        <h1 style={styles.pageHeading}>Create Your Account</h1>
-        <p style={styles.subtext}>Join us today to get started with your journey</p>
+        <h1 className="page-heading">Create Your Account</h1>
+        <p className="subtext">Join us today to get started with your journey</p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} noValidate>
-          <div style={styles.formFieldsContainer}>
+          <div className="form-fields-container">
             {/* Full Name */}
-            <div style={styles.fieldGroup}>
-              <label style={styles.fieldLabel} htmlFor="fullName">
+            <div className="field-group">
+              <label className="field-label" htmlFor="fullName">
                 Full Name
               </label>
               <input
@@ -182,15 +180,15 @@ const SignUp = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                style={styles.inputField}
+                className="input-field"
                 required
               />
-              {errors.fullName && <span style={styles.errorMessage}>{errors.fullName}</span>}
+              {errors.fullName && <span className="error-message">{errors.fullName}</span>}
             </div>
 
             {/* Email Input */}
-            <div style={styles.fieldGroup}>
-              <label style={styles.fieldLabel} htmlFor="email">
+            <div className="field-group">
+              <label className="field-label" htmlFor="email">
                 Email Address
               </label>
               <input
@@ -202,18 +200,18 @@ const SignUp = () => {
                 value={formData.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                style={styles.inputField}
+                className="input-field"
                 required
               />
-              {errors.email && <span style={styles.errorMessage}>{errors.email}</span>}
+              {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
 
             {/* Password Input */}
-            <div style={styles.fieldGroup}>
-              <label style={styles.fieldLabel} htmlFor="password">
+            <div className="field-group">
+              <label className="field-label" htmlFor="password">
                 Password
               </label>
-              <div style={styles.inputWrapper}>
+              <div className="input-wrapper">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -223,40 +221,38 @@ const SignUp = () => {
                   value={formData.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  style={{ ...styles.inputField, paddingRight: '45px' }}
+                  className="input-field input-field-padded"
                   required
                 />
                 <span
                   onClick={() => setShowPassword(!showPassword)}
-                  style={styles.togglePassword}
+                  className="toggle-password"
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </span>
               </div>
               {passwordStrength && (
                 <span
-                  style={{
-                    ...styles.strengthIndicator,
-                    color:
-                      passwordStrength === 'Strong'
-                        ? '#059669'
-                        : passwordStrength === 'Medium'
-                        ? '#D97706'
-                        : '#DC2626',
-                  }}
+                  className={`strength-indicator ${
+                    passwordStrength === 'Strong'
+                      ? 'strength-strong'
+                      : passwordStrength === 'Medium'
+                      ? 'strength-medium'
+                      : 'strength-weak'
+                  }`}
                 >
                   Strength: {passwordStrength}
                 </span>
               )}
-              {errors.password && <span style={styles.errorMessage}>{errors.password}</span>}
+              {errors.password && <span className="error-message">{errors.password}</span>}
             </div>
 
             {/* Confirm Password Input */}
-            <div style={styles.fieldGroup}>
-              <label style={styles.fieldLabel} htmlFor="confirmPassword">
+            <div className="field-group">
+              <label className="field-label" htmlFor="confirmPassword">
                 Confirm Password
               </label>
-              <div style={styles.inputWrapper}>
+              <div className="input-wrapper">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
@@ -264,67 +260,66 @@ const SignUp = () => {
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  style={{ ...styles.inputField, paddingRight: '45px' }}
+                  className="input-field input-field-padded"
                   required
                 />
                 <span
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  style={styles.togglePassword}
+                  className="toggle-password"
                 >
                   {showConfirmPassword ? 'Hide' : 'Show'}
                 </span>
               </div>
               {errors.confirmPassword && (
-                <span style={styles.errorMessage}>{errors.confirmPassword}</span>
+                <span className="error-message">{errors.confirmPassword}</span>
               )}
             </div>
           </div>
 
           {/* Consent Row */}
-          <div style={styles.consentRow}>
+          <div className="consent-row">
             <input
               type="checkbox"
               id="consent"
               name="consent"
               checked={formData.consent}
               onChange={handleChange}
-              style={styles.checkbox}
+              className="checkbox"
               required
             />
-            <label htmlFor="consent" style={styles.consentText}>
+            <label htmlFor="consent" className="consent-text">
               I accept the{' '}
-              <a href="#terms" style={styles.link}>
+              <a href="#terms" className="link">
                 Terms & Conditions
               </a>{' '}
               and{' '}
-              <a href="#privacy" style={styles.link}>
+              <a href="#privacy" className="link">
                 Privacy Policy
               </a>
             </label>
           </div>
           {errors.consent && (
-            <span style={{ ...styles.errorMessage, display: 'block', marginTop: '-14px', marginBottom: '14px' }}>
+            <span className="error-message error-message-consent">
               {errors.consent}
             </span>
           )}
 
           {/* Create Account Button */}
-          <button type="submit" style={styles.createAccountBtn}>
+          <button type="submit" className="create-account-btn">
             Create Account
           </button>
-          
 
           {/* Divider Row */}
-          <div style={styles.dividerRow}>
-            <div style={styles.dividerLine} />
-            <span style={styles.dividerText}>OR</span>
-            <div style={styles.dividerLine} />
+          <div className="divider-row">
+            <div className="divider-line" />
+            <span className="divider-text">OR</span>
+            <div className="divider-line" />
           </div>
 
           {/* Footer Row */}
-          <div style={styles.footerRow}>
-            <span style={styles.footerText}>Already have an account?</span>
-            <a href="#signin" style={styles.signInLink}>
+          <div className="footer-row">
+            <span className="footer-text">Already have an account?</span>
+            <a href="#signin" className="sign-in-link">
               Sign In
             </a>
           </div>
@@ -332,201 +327,6 @@ const SignUp = () => {
       </div>
     </div>
   );
-};
-
-// Exact Style Definitions based on BRD Specifications
-const styles = {
-  pageBackground: {
-    width: '100%',
-    minHeight: '100vh',
-    backgroundColor: '#FBF8F3',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '48px 24px',
-    boxSizing: 'border-box',
-    fontFamily: 'Poppins, sans-serif',
-  },
-  cardContainer: {
-    width: '100%',
-    maxWidth: '420px',
-    backgroundColor: '#FFFFFF',
-    border: '1px solid #E5E7EB',
-    borderRadius: '16px',
-    padding: '40px 36px',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
-    boxSizing: 'border-box',
-  },
-  logoSection: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '6px',
-    marginBottom: '28px',
-  },
-  logoMark: {
-    width: '44px',
-    height: '44px',
-    borderRadius: '50%',
-    backgroundColor: '#134E4A',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#FFFFFF',
-    fontFamily: 'Cormorant Garamond, serif',
-    fontWeight: '700',
-    fontSize: '20px',
-  },
-  logoText: {
-    fontFamily: 'Cormorant Garamond, serif',
-    fontSize: '22px',
-    fontWeight: '700',
-    color: '#134E4A',
-    letterSpacing: '1px',
-  },
-  pageHeading: {
-    fontFamily: 'Cormorant Garamond, serif',
-    fontSize: '26px',
-    fontWeight: '700',
-    color: '#134E4A',
-    textAlign: 'center',
-    marginBottom: '6px',
-  },
-  subtext: {
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '14px',
-    fontWeight: '400',
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: '28px',
-  },
-  formFieldsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-    marginBottom: '20px',
-  },
-  fieldGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  fieldLabel: {
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '13px',
-    fontWeight: '500',
-    color: '#374151',
-    marginBottom: '6px',
-  },
-  inputWrapper: {
-    position: 'relative',
-    width: '100%',
-  },
-  inputField: {
-    width: '100%',
-    height: '44px',
-    padding: '0 14px',
-    border: '1px solid #D1D5DB',
-    borderRadius: '10px',
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '14px',
-    backgroundColor: '#FFFFFF',
-    outline: 'none',
-    boxSizing: 'border-box',
-  },
-  togglePassword: {
-    position: 'absolute',
-    right: '14px',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    cursor: 'pointer',
-    fontSize: '12px',
-    color: '#6B7280',
-    userSelect: 'none',
-  },
-  errorMessage: {
-    fontSize: '11px',
-    color: '#DC2626',
-    marginTop: '4px',
-  },
-  strengthIndicator: {
-    fontSize: '11px',
-    marginTop: '4px',
-    fontWeight: '500',
-  },
-  consentRow: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '8px',
-    marginBottom: '22px',
-  },
-  checkbox: {
-    width: '16px',
-    height: '16px',
-    marginTop: '3px',
-    cursor: 'pointer',
-  },
-  consentText: {
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '12.5px',
-    fontWeight: '400',
-    color: '#6B7280',
-    lineHeight: '1.5',
-  },
-  link: {
-    color: '#0B5D50',
-    textDecoration: 'none',
-  },
-  createAccountBtn: {
-    width: '100%',
-    height: '46px',
-    backgroundColor: '#134E4A',
-    color: '#FFFFFF',
-    border: 'none',
-    borderRadius: '24px',
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '14px',
-    fontWeight: '500',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
-    marginBottom: '18px',
-  },
-  dividerRow: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    marginBottom: '18px',
-  },
-  dividerLine: {
-    flex: 1,
-    height: '1px',
-    backgroundColor: '#E5E7EB',
-  },
-  dividerText: {
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '12px',
-    fontWeight: '400',
-    color: '#9CA3AF',
-  },
-  footerRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '4px',
-  },
-  footerText: {
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '13px',
-    fontWeight: '400',
-    color: '#6B7280',
-  },
-  signInLink: {
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '13px',
-    fontWeight: '500',
-    color: '#0B5D50',
-    cursor: 'pointer',
-    textDecoration: 'none',
-  },
 };
 
 export default SignUp;
