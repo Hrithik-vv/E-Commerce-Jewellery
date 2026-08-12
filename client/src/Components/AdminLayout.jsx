@@ -8,8 +8,8 @@ const LogoSection = () => (
         <div className="admin-sidebar-logo-badge">
             <span style={{ color: '#D4AF37', fontSize: '24px' }}>✨</span>
         </div>
-        <h2 className="admin-sidebar-brand-name">AURA</h2>
-        <p className="admin-sidebar-brand-subtitle">FINE JEWELLERY</p>
+        <h2 className="admin-sidebar-brand-name">ELORA</h2>
+        <p className="admin-sidebar-brand-subtitle">JEWELLERY</p>
     </div>
 );
 
