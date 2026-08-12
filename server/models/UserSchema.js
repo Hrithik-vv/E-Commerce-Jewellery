@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema({
         addressLine2: { type: String, trim: true },
         city: { type: String, trim: true },
         state: { type: String, trim: true },
+        country: { type: String, trim: true },
         pinCode: { type: String, trim: true }
     },
 
@@ -60,7 +61,58 @@ const userSchema = new mongoose.Schema({
 
     resetPasswordExpires: {
         type: Date
-    }
+    },
+
+    username: {
+        type: String,
+        trim: true
+    },
+
+    profileImage: {
+        type: String,
+        default: ""
+    },
+
+    emailVerified: {
+        type: Boolean,
+        default: false
+    },
+
+    phoneVerified: {
+        type: Boolean,
+        default: false
+    },
+
+    twoFactorEnabled: {
+        type: Boolean,
+        default: false
+    },
+
+    loginCount: {
+        type: Number,
+        default: 0
+    },
+
+    assignedProjects: {
+        type: Number,
+        default: 0
+    },
+
+    tasksCompleted: {
+        type: Number,
+        default: 0
+    },
+
+    tasksPending: {
+        type: Number,
+        default: 0
+    },
+
+    activities: [{
+        activityType: { type: String },
+        description: { type: String },
+        date: { type: Date, default: Date.now }
+    }]
 }, {
     timestamps: true
 });

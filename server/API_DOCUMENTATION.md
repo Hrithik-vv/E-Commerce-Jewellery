@@ -576,30 +576,138 @@ The existing `GET /orders/getorder/:id` response now includes a `tracking` objec
 
 ## User Management Routes (Admin Extensions)
 
-Additional admin endpoints for the User Details page.
+Endpoints specifically designed for the Admin Dashboard User Details page.
 
-### 1. Reset User Password
-**Endpoint:** `PUT /users/:id/reset-password`
+### 1. Get User Details
+Fetches all user information, including contact details, statistics, and activity timeline.
+
+**Endpoint:** `GET /users/:id`
 **Access:** Private (Admin)
 
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "64d...",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "User",
+    "status": "Active",
+    "username": "johndoe123",
+    "profileImage": "https://res.cloudinary.com/...",
+    "phone": "+1-555-0198",
+    "address": {
+      "city": "Techville",
+      "country": "United States"
+    },
+    "loginCount": 5,
+    "assignedProjects": 3,
+    "tasksCompleted": 10,
+    "tasksPending": 2,
+    "activities": [
+      {
+        "activityType": "Password Reset",
+        "description": "Password was reset by Administrator",
+        "date": "2026-08-12T10:00:00.000Z"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 2. Update User Details
+Updates contact information, statistics, and general profile settings.
+
+**Endpoint:** `PUT /users/:id`
+**Content-Type:** `application/json`
+**Access:** Private (Admin)
+
+#### Request Body (All fields optional)
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `username` | String | User's unique username |
+| `phone` | String | Phone number |
+| `profileImage` | String | Profile Image URL (if uploaded directly) |
+| `address` | Object | Object containing `city`, `country`, `addressLine1`, etc. |
+| `assignedProjects` | Number | Total assigned projects |
+| `tasksCompleted` | Number | Total completed tasks |
+| `tasksPending` | Number | Total pending tasks |
+| `emailVerified` | Boolean | Email verification status |
+| `twoFactorEnabled`| Boolean | 2FA status |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "data": { ...updated details... }
+}
+```
+
+---
+
+### 3. Upload User Profile Photo
+Uploads an image file securely to Cloudinary and attaches it to the user's profile.
+
+**Endpoint:** `PUT /users/:id/upload-photo`
+**Content-Type:** `multipart/form-data`
+**Access:** Private (Admin)
+
+#### Request Body (Form-Data)
 | Field | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `newPassword` | String | Yes | The new password (min 8 chars). |
+| `profileImage`| File | Yes | Image file (PNG, JPG, JPEG) up to 5MB. |
 
-### 2. Deactivate User Account
-Changes the user's status to `Inactive`.
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "Profile photo uploaded successfully",
+  "profileImage": "https://res.cloudinary.com/..."
+}
+```
+
+---
+
+### 4. Reset User Password
+Forces a password reset for a specific user.
+
+**Endpoint:** `PUT /users/:id/reset-password`
+**Content-Type:** `application/json`
+**Access:** Private (Admin)
+
+#### Request Body
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `password` | String | Yes | The new password. |
+
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "User password reset successfully"
+}
+```
+
+---
+
+### 5. Deactivate User Account
+Instantly changes the user's status to `Inactive`.
 
 **Endpoint:** `PUT /users/:id/deactivate`
 **Access:** Private (Admin)
 
-### 3. Get User Activity
-Fetches chronological activity history for a user.
-
-**Endpoint:** `GET /users/:id/activity`
-**Access:** Private (Admin)
-
-### 4. Get User Statistics
-Fetches dashboard stats for a user.
-
-**Endpoint:** `GET /users/:id/statistics`
-**Access:** Private (Admin)
+#### Responses
+**Success (200 OK)**
+```json
+{
+  "success": true,
+  "message": "User account deactivated successfully"
+}
+```
