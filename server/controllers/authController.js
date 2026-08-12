@@ -1,5 +1,5 @@
 const User = require('../models/UserSchema');
-const argon2 = require('argon2');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // @desc    Register a new user
@@ -115,7 +115,7 @@ const signup = async (req, res) => {
         }
 
         // 7. Hash Password
-        const hashedPassword = await argon2.hash(trimmedPassword);
+        const hashedPassword = await bcrypt.hash(trimmedPassword, 10);
 
         // 8. Create User
         const newUser = new User({
@@ -193,9 +193,9 @@ const signin = async (req, res) => {
             });
         }
 
-        const isMatch = await argon2.verify(
-            user.password,
-            trimmedPassword
+        const isMatch = await bcrypt.compare(
+            trimmedPassword,
+            user.password
         );
 
         if (!isMatch) {
@@ -340,7 +340,7 @@ const resetPassword = async (req, res) => {
         }
 
         // Hash new password
-        user.password = await argon2.hash(trimmedPassword);
+        user.password = await bcrypt.hash(trimmedPassword, 10);
         user.resetPasswordOTP = undefined;
         user.resetPasswordExpires = undefined;
 

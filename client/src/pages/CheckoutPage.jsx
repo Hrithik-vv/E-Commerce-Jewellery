@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import '../css/CheckoutPage.css';
 
 export default function CheckoutPage() {
@@ -9,6 +12,7 @@ export default function CheckoutPage() {
   const [billingAddressType, setBillingAddressType] = useState('same');
   const [saveAddress, setSaveAddress] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const [shipping, setShipping] = useState({
     country: '', firstName: '', lastName: '', address: '', city: '', state: '', pin: '', phone: ''
@@ -30,17 +34,95 @@ export default function CheckoutPage() {
     if (emailError) setEmailError(validateEmail(e.target.value));
   };
 
-  const handlePay = () => {
+  const handlePay = async () => {
     const err = validateEmail(email);
     if (err) {
       setEmailError(err);
       return;
     }
+
+    if (paymentMethod === 'cod') {
+      toast.success('Order placed successfully via Cash on Delivery!');
+      navigate('/');
+      return;
+    }
+
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      const subtotal = 1100;
+      const shippingCost = shippingMethod === 'standard' ? 5 : 15;
+      const tax = 110;
+      const discount = 50;
+      const finalAmount = subtotal + shippingCost + tax - discount;
+
+      // 1. Create Razorpay order via backend
+      const { data: orderData } = await axios.post('/api/payment/create-order', {
+        amount: finalAmount,
+        currency: 'INR'
+      });
+
+      if (!orderData.success) {
+        toast.error('Failed to initiate payment');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // 2. Configure Razorpay checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Frontend Razorpay key
+        amount: orderData.order.amount,
+        currency: orderData.order.currency,
+        name: 'ELORA Jewellery',
+        description: 'Order Payment',
+        order_id: orderData.order.id,
+        handler: async function (response) {
+          try {
+            // 3. Verify Payment
+            const verifyRes = await axios.post('/api/payment/verify-payment', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              contactEmail: email,
+              shippingAddress: shipping,
+              billingAddress: billingAddressType === 'same' ? shipping : billing,
+              orderItems: [], // Replace with actual cart items
+              pricing: { total: finalAmount },
+            });
+
+            if (verifyRes.data.success) {
+              toast.success('Payment successful!');
+              navigate('/payment-success');
+            } else {
+              toast.error('Payment verification failed');
+            }
+          } catch (error) {
+            console.error('Verify error:', error);
+            toast.error('Payment verification failed');
+          }
+        },
+        prefill: {
+          name: shipping.firstName + ' ' + shipping.lastName,
+          email: email,
+          contact: shipping.phone,
+        },
+        theme: {
+          color: '#D4AF37', // Gold color
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      
+      rzp.on('payment.failed', function (response){
+        toast.error('Payment failed: ' + response.error.description);
+      });
+
+      rzp.open();
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error('Something went wrong during checkout');
+    } finally {
       setIsSubmitting(false);
-      alert('Payment successful! Redirecting to confirmation...');
-    }, 1500);
+    }
   };
 
   const AddressForm = ({ data, setData }) => (

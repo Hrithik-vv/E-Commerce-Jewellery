@@ -1,5 +1,5 @@
 const User = require('../models/UserSchema');
-const argon2 = require('argon2');
+const bcrypt = require('bcryptjs');
 
 const createAdmin = async () => {
     try {
@@ -17,7 +17,7 @@ const createAdmin = async () => {
             return;
         }
 
-        const hashedPassword = await argon2.hash(adminPassword);
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
         
         const adminUser = new User({
             name: "Admin",

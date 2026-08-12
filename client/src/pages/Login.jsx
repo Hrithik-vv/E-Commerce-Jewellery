@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
-import '../css/Login.css';
+import "../css/Login.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ function Login() {
     if (isValid) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/signin",
+          "/api/auth/signin",
           {
             email: trimmedEmail,
             password: password,
