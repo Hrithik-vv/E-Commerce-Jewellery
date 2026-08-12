@@ -1,0 +1,271 @@
+/* Base Page Container */
+.about-page-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* 1. Hero Section */
+.about-hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('https://img.magnific.com/premium-photo/green-mandala-background_905450-16905.jpg?semt=ais_hybrid&w=740&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+.about-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+  z-index: 1;
+}
+
+.about-hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  width: 100%;
+}
+
+.about-hero-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 56px;
+  line-height: 1.15;
+  text-align: center;
+  width: fit-content;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+}
+
+/* 2. Intro Statement Section */
+.about-intro-section {
+  width: 100%;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  background-color: #faf9f6;
+}
+
+.about-intro-container {
+  margin: 0 auto;
+  max-width: 640px;
+  text-align: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.about-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 24px;
+  color: #014d40;
+  line-height: 32px;
+  text-align: center;
+  margin: 0;
+}
+
+/* 3. Brand Story Section */
+.about-story-section {
+  width: 100%;
+  padding-top: 40px;
+  padding-bottom: 48px;
+  background-color: #faf9f6;
+}
+
+.about-story-container {
+  margin: 0 auto;
+  max-width: 680px;
+  text-align: left;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.about-story-paragraph {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 26px;
+  text-align: left;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.about-story-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* 4. Customer Review Section */
+.about-review-section {
+  width: 100%;
+  padding-top: 64px;
+  padding-bottom: 64px;
+  background-color: #f3f7f5;
+}
+
+.review-wrapper {
+  margin: 0 auto;
+  max-width: 1024px;
+  padding-left: 40px;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.about-review-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  color: #014d40;
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 24px;
+  margin-top: 0;
+}
+
+.stars-container {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.rating-summary-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.rating-score {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: #046a5a;
+  line-height: 1;
+}
+
+.rating-count {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #8a8a8a;
+  margin-left: 4px;
+}
+
+/* Review Grid & Cards */
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.review-card {
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  border-radius: 8px;
+  transition: all 300ms ease;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.review-card:hover,
+.review-card:focus,
+.review-card:active {
+  background-color: #f3f7f5;
+  border-color: #046a5a;
+}
+
+.review-card-stars {
+  margin-bottom: 12px;
+}
+
+.review-text-clamp {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #2b2b2b;
+  line-height: 24px;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.reviewer-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #014d40;
+  margin-top: auto;
+  margin-bottom: 2px;
+}
+
+.view-all-reviews-wrapper {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.view-all-reviews {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #046a5a;
+  text-decoration: none;
+  padding: 8px 4px;
+  transition: color 200ms ease, text-decoration 200ms ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.view-all-reviews:hover {
+  color: #d4af37;
+  text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .about-hero-heading {
+    font-size: 44px;
+  }
+  .about-review-heading {
+    font-size: 36px;
+  }
+  .review-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .about-hero-heading {
+    font-size: 32px;
+  }
+  .about-review-heading {
+    font-size: 32px;
+  }
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+  .review-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
