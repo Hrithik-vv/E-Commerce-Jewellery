@@ -5,9 +5,13 @@ const {
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    adminResetUserPassword,
+    deactivateUser,
+    uploadUserProfilePhoto
 } = require('../controllers/userController');
 const { protect, authorize } = require('../middleware/AuthMiddleware');
+const upload = require('../middleware/ImageUploadMiddleware');
 
 // All routes are protected and require Admin role
 router.use(protect);
@@ -21,5 +25,9 @@ router.route('/:id')
     .get(getUserById)
     .put(updateUser)
     .delete(deleteUser);
+
+router.put('/:id/reset-password', adminResetUserPassword);
+router.put('/:id/deactivate', deactivateUser);
+router.put('/:id/upload-photo', upload.single('profileImage'), uploadUserProfilePhoto);
 
 module.exports = router;
