@@ -1,23 +1,31 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../utils/api';
 import '../css/BestSellerPage.css';
 
-const MOCK_PRODUCTS = Array.from({ length: 24 }).map((_, index) => ({
-  id: index + 1,
-  name: `Elegant Ring ${index + 1}`,
-  price: 2500 + (index * 500) % 5000,
-  isBestSeller: true,
-}));
-
 export default function BestSellerPage() {
+  const navigate = useNavigate();
+  
+  // UI State
   const [isPricePopoverOpen, setIsPricePopoverOpen] = useState(false);
+  const popoverRef = useRef(null);
+
+  // Filter & Pagination State
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [appliedMinPrice, setAppliedMinPrice] = useState(null);
   const [appliedMaxPrice, setAppliedMaxPrice] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState('Best Selling');
+  const [priceError, setPriceError] = useState(null);
 
-  const popoverRef = useRef(null);
+  // Data State
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [highestPrice, setHighestPrice] = useState(0);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -31,15 +39,67 @@ export default function BestSellerPage() {
     };
   }, []);
 
+  useEffect(() => {
+    fetchBestSellers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, sortOption, appliedMinPrice, appliedMaxPrice]);
+
+  const fetchBestSellers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      let sortParam = 'best-selling';
+      if (sortOption === 'Price Low to High') sortParam = 'price-low-high';
+      else if (sortOption === 'Date New to Old') sortParam = 'date-new-old';
+
+      let endpoint = `/products/getbestsellers?page=${currentPage}&limit=24&sort=${sortParam}`;
+      if (appliedMinPrice !== null && appliedMinPrice !== '') endpoint += `&minPrice=${appliedMinPrice}`;
+      if (appliedMaxPrice !== null && appliedMaxPrice !== '') endpoint += `&maxPrice=${appliedMaxPrice}`;
+
+      const data = await api.get(endpoint);
+      if (data.success) {
+        setProducts(data.products || []);
+        setTotalCount(data.totalCount || 0);
+        setTotalPages(data.totalPages || 1);
+        if (data.highestPrice !== undefined) {
+          setHighestPrice(data.highestPrice);
+        }
+      } else {
+        setError('Unable to load best sellers. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Unable to load best sellers. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleApplyPrice = () => {
+    setPriceError(null);
+    if (minPrice !== '' && Number(minPrice) < 0) {
+      setPriceError('Minimum price cannot be negative.');
+      return;
+    }
+    if (maxPrice !== '' && Number(maxPrice) < 0) {
+      setPriceError('Maximum price cannot be negative.');
+      return;
+    }
+    if (minPrice !== '' && maxPrice !== '' && Number(minPrice) > Number(maxPrice)) {
+      setPriceError('Minimum price cannot exceed maximum price.');
+      return;
+    }
+
     setAppliedMinPrice(minPrice);
     setAppliedMaxPrice(maxPrice);
+    setCurrentPage(1);
     setIsPricePopoverOpen(false);
   };
 
-  const highestPrice = useMemo(() => {
-    return Math.max(...MOCK_PRODUCTS.map(p => p.price));
-  }, []);
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    setCurrentPage(1);
+  };
 
   const isPriceApplied = appliedMinPrice !== null && appliedMinPrice !== '' && appliedMaxPrice !== null && appliedMaxPrice !== '';
   const priceLabel = isPriceApplied 
@@ -98,6 +158,11 @@ export default function BestSellerPage() {
                     />
                   </div>
                 </div>
+                {priceError && (
+                  <div className="bsp-price-error" style={{ color: 'red', fontSize: '12px', marginTop: '8px' }}>
+                    {priceError}
+                  </div>
+                )}
                 <button className="bsp-apply-btn" onClick={handleApplyPrice}>
                   Apply
                 </button>
@@ -107,7 +172,7 @@ export default function BestSellerPage() {
 
           {/* Section 6 – Result Count */}
           <div className="bsp-result-count">
-            {MOCK_PRODUCTS.length} products
+            {totalCount} products
           </div>
 
           {/* Section 7 – Toolbar Right (Sort) */}
@@ -116,7 +181,7 @@ export default function BestSellerPage() {
             <select 
               className="bsp-sort-select" 
               value={sortOption} 
-              onChange={(e) => setSortOption(e.target.value)}
+              onChange={handleSortChange}
             >
               <option value="Best Selling">Best Selling</option>
               <option value="Price Low to High">Price Low to High</option>
@@ -127,47 +192,75 @@ export default function BestSellerPage() {
         </div>
 
         {/* Section 8 – Product Grid */}
-        <div className="bsp-product-grid">
-          {MOCK_PRODUCTS.map(product => (
-            /* Section 9 – Product Card */
-            <div key={product.id} className="bsp-product-card">
-              <div className="bsp-product-image-container">
-                <svg className="bsp-placeholder-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                </svg>
-                <div className="bsp-best-seller-tag">Best Seller</div>
-              </div>
-              <h3 className="bsp-product-name">{product.name}</h3>
-              <p className="bsp-product-price">Rs. {product.price}</p>
+        <div className="bsp-product-grid-container" style={{ minHeight: '400px' }}>
+          {loading ? (
+            <div className="bsp-loading-state" style={{ padding: '40px 0', textAlign: 'center', color: '#6B7280', fontFamily: '"Poppins", sans-serif' }}>
+              Loading best sellers...
             </div>
-          ))}
+          ) : error ? (
+            <div className="bsp-error-state" style={{ padding: '40px 0', textAlign: 'center', color: '#EF4444', fontFamily: '"Poppins", sans-serif' }}>
+              {error}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="bsp-empty-state" style={{ padding: '40px 0', textAlign: 'center', color: '#6B7280', fontFamily: '"Poppins", sans-serif' }}>
+              No best seller products found matching your criteria.
+            </div>
+          ) : (
+            <div className="bsp-product-grid">
+              {products.map(product => (
+                /* Section 9 – Product Card */
+                <div
+                  key={product._id}
+                  className="bsp-product-card"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="bsp-product-image-container">
+                    {product.productImage ? (
+                      <img src={product.productImage} alt={product.productName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <svg className="bsp-placeholder-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      </svg>
+                    )}
+                    {product.isBestSeller && <div className="bsp-best-seller-tag">Best Seller</div>}
+                  </div>
+                  <h3 className="bsp-product-name">{product.productName}</h3>
+                  <p className="bsp-product-price">Rs. {product.price}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Section 10 – Pagination */}
-        <div className="bsp-pagination">
-          <button 
-            className="bsp-page-btn" 
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-          >
-            <svg className="bsp-btn-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.5 9L4.5 6L7.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Prev
-          </button>
-          
-          <span className="bsp-page-indicator">Page {currentPage}</span>
-          
-          <button 
-            className="bsp-page-btn" 
-            onClick={() => setCurrentPage(p => p + 1)}
-          >
-            Next
-            <svg className="bsp-btn-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4.5 9L7.5 6L4.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
+        {totalCount > 0 && (
+          <div className="bsp-pagination">
+            <button 
+              className="bsp-page-btn" 
+              disabled={currentPage === 1 || loading}
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            >
+              <svg className="bsp-btn-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.5 9L4.5 6L7.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Prev
+            </button>
+            
+            <span className="bsp-page-indicator">Page {currentPage} of {totalPages}</span>
+            
+            <button 
+              className="bsp-page-btn" 
+              disabled={currentPage >= totalPages || loading}
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            >
+              Next
+              <svg className="bsp-btn-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4.5 9L7.5 6L4.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        )}
 
       </div>
     </div>

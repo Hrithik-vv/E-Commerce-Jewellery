@@ -350,7 +350,16 @@ function UserProfile() {
         </div>
 
         {/* SIGN OUT BUTTON */}
-        <button className="btn-signout" onClick={() => alert("Signing out...")}>
+        <button 
+          className="btn-signout" 
+          onClick={() => {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("user");
+            localStorage.removeItem("isLoggedIn");
+            window.dispatchEvent(new Event('auth-change'));
+            window.location.href = "/login";
+          }}
+        >
           Sign out
         </button>
       </main>

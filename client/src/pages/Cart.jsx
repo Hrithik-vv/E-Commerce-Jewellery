@@ -1,60 +1,35 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaTimes, FaPlus, FaMinus, FaTrashAlt, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useCart } from '../utils/CartContext';
 import '../css/Cart.css';
 
 function Cart({ isOpen = true, onClose }) {
-  // Sample Cart Items State
-  const [cartItems, setCartItems] = useState([
-    {
-      id: '1',
-      title: 'Emerald Solitaire Pendant',
-      variant: '18k Yellow Gold / 18 Inch',
-      price: 650.0,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=300',
-      error: '',
-    },
-    {
-      id: '2',
-      title: 'Classic Gold Band',
-      variant: 'Size 7',
-      price: 320.0,
-      quantity: 2,
-      image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=300',
-      error: '',
-    },
-  ]);
+  const navigate = useNavigate();
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    totalItemCount,
+    subtotal,
+    cartNotes,
+    setCartNotes,
+  } = useCart();
 
   const [notesOpen, setNotesOpen] = useState(false);
-  const [cartNotes, setCartNotes] = useState('');
 
-  // Total Quantity Count
-  const totalItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-
-  // Subtotal Calculation
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-  // Quantity Change Handlers
   const handleQuantityChange = (id, newQty) => {
-    if (isNaN(newQty) || newQty < 1) {
-      setCartItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, error: 'Quantity must be at least 1' } : item))
-      );
-      return;
-    }
-
-    setCartItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity: Number(newQty), error: '' } : item))
-    );
+    updateQuantity(id, newQty);
   };
 
   const handleRemoveItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    removeFromCart(id);
   };
 
   const handleCheckout = () => {
-    // Redirect to Shopify Checkout securely
-    window.location.href = '/checkout';
+    if (onClose) onClose();
+    navigate('/checkout');
   };
 
   return (
@@ -89,12 +64,12 @@ function Cart({ isOpen = true, onClose }) {
             <h3 className="empty-cart-title">Your cart is empty</h3>
             <p className="empty-cart-account">
               Have an account?{' '}
-              <a href="/account/login" className="empty-cart-login-link">
+              <Link to="/login" className="empty-cart-login-link">
                 Log in
-              </a>{' '}
+              </Link>{' '}
               to check out faster.
             </p>
-            <button className="continue-shopping-btn" onClick={() => (window.location.href = '/collections/all')}>
+            <button className="continue-shopping-btn" onClick={() => { if (onClose) onClose(); navigate('/best-sellers'); }}>
               Continue Shopping
             </button>
           </div>
@@ -104,19 +79,19 @@ function Cart({ isOpen = true, onClose }) {
             <div className="cart-products-scroll">
               {cartItems.map((item) => (
                 <div key={item.id} className="cart-product-card">
-                  <a href={`/products/${item.id}`}>
+                  <Link to={`/product/${item.id}`}>
                     <img src={item.image} alt={item.title} className="cart-product-image" />
-                  </a>
+                  </Link>
 
                   <div className="cart-product-info">
                     <div className="cart-product-title-row">
-                      <a href={`/products/${item.id}`} className="cart-product-title">
+                      <Link to={`/product/${item.id}`} className="cart-product-title">
                         {item.title}
-                      </a>
+                      </Link>
                     </div>
 
                     {item.variant && <div className="cart-product-variant">{item.variant}</div>}
-                    <div className="cart-product-price">${item.price.toFixed(2)}</div>
+                    <div className="cart-product-price">${Number(item.price).toFixed(2)}</div>
 
                     <div className="cart-product-actions">
                       <div className="quantity-selector">
@@ -191,9 +166,9 @@ function Cart({ isOpen = true, onClose }) {
 
               <p className="tax-shipping-note">
                 Taxes, discounts and shipping calculated at checkout.{' '}
-                <a href="/policies/shipping-policy" className="shipping-policy-link">
+                <Link to="/shipping-policy" className="shipping-policy-link">
                   Shipping Policy
-                </a>
+                </Link>
               </p>
 
               {/* Checkout Button */}

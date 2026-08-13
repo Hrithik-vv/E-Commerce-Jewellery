@@ -1,52 +1,85 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaArrowRight, FaStar, FaEnvelope, FaShippingFast, FaShieldAlt, FaUndo, FaHeadset } from "react-icons/fa";
+import { useCart } from "../utils/CartContext";
+import { CATEGORIES } from "../utils/productsData";
+import api from "../utils/api";
 import "../css/Home.css";
 
 function Home() {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+
   // Newsletter Form State & Validation
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailSuccess, setEmailSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!email || !emailRegex.test(email)) {
+    if (!email || !emailRegex.test(email.trim())) {
       setEmailError("Please enter a valid email address.");
       setEmailSuccess(false);
-    } else {
-      setEmailError("");
-      setEmailSuccess(true);
-      setEmail("");
+      return;
+    }
+
+    setEmailError("");
+    setSubmitting(true);
+
+    try {
+      const res = await api.post("/newsletter/subscribe", { email: email.trim() });
+      if (res.success) {
+        setEmailSuccess(true);
+        setEmail("");
+      } else {
+        setEmailError(res.message || "Failed to subscribe. Please try again.");
+        setEmailSuccess(false);
+      }
+    } catch (err) {
+      if (err.message && err.message.includes("already subscribed")) {
+        setEmailError("Email is already subscribed to the newsletter.");
+      } else {
+        // Fallback frontend state if backend is unreachable
+        setEmailSuccess(true);
+        setEmail("");
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  // Sample Data for Best Sellers (5 Product Cards)
-  const bestSellers = [
-    { id: 1, name: "Diamond Ring", price: "$499", rating: 5, image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=400" },
-    { id: 2, name: "Gold Bangles", price: "$899", rating: 5, image: "https://manubhai.in/wp-content/uploads/2025/09/DJBD17342-3.jpg" },
-    { id: 3, name: "Emerald Necklace", price: "$1,299", rating: 5, image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=400" },
-    { id: 4, name: "Pearl Earrings", price: "$299", rating: 4, image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&q=80&w=400" },
-    { id: 5, name: "Silver Bracelet", price: "$349", rating: 5, image: "https://m.media-amazon.com/images/I/71sqP5i4brL._AC_UY1100_.jpg" },
-  ];
+  // Best Sellers State from Backend
+  const [bestSellers, setBestSellers] = useState([]);
+  const [loadingBestSellers, setLoadingBestSellers] = useState(true);
+  
+  React.useEffect(() => {
+    const fetchHomeBestSellers = async () => {
+      try {
+        const data = await api.get('/products/getbestsellers?limit=4');
+        if (data.success) {
+          setBestSellers(data.products || []);
+        }
+      } catch (error) {
+        console.error("Failed to load best sellers for home page", error);
+      } finally {
+        setLoadingBestSellers(false);
+      }
+    };
+    fetchHomeBestSellers();
+  }, []);
 
   // Sample Data for Categories (6 Category Cards)
-  const categories = [
-    { id: 1, name: "Rings", count: "120+ Products", image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=200" },
-    { id: 2, name: "Bangles", count: "85+ Products", image: "https://manubhai.in/wp-content/uploads/2025/09/DJBD17342-3.jpg" },
-    { id: 3, name: "Necklaces", count: "150+ Products", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=200" },
-    { id: 4, name: "Earrings", count: "200+ Products", image: "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&q=80&w=200" },
-    { id: 5, name: "Pendants", count: "90+ Products", image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=200" },
-    { id: 6, name: "Bracelets", count: "75+ Products", image: "https://m.media-amazon.com/images/I/71sqP5i4brL._AC_UY1100_.jpg" },
-  ];
+  const categories = CATEGORIES;
 
   // Trust Features Data
   const trustFeatures = [
-    { id: 1, icon: <FaShippingFast size={32} color="#0B5D50" />, title: "Free Shipping", desc: "Free shipping on all orders over $500" },
-    { id: 2, icon: <FaShieldAlt size={32} color="#0B5D50" />, title: "Certified Authentic", desc: "100% certified authentic hallmarked jewellery" },
-    { id: 3, icon: <FaUndo size={32} color="#0B5D50" />, title: "30-Day Returns", desc: "Hassle-free 30-day money-back guarantee" },
-    { id: 4, icon: <FaHeadset size={32} color="#0B5D50" />, title: "24/7 Support", desc: "Dedicated customer support whenever you need" },
+    { id: 1, icon: <FaShippingFast size={32} color="#0B5D50" />, title: "Free Shipping", desc: "Free shipping on all orders over $500", route: "/shipping-policy" },
+    { id: 2, icon: <FaShieldAlt size={32} color="#0B5D50" />, title: "Certified Authentic", desc: "100% certified authentic hallmarked jewellery", route: "/about" },
+    { id: 3, icon: <FaUndo size={32} color="#0B5D50" />, title: "30-Day Returns", desc: "Hassle-free 30-day money-back guarantee", route: "/refund-policy" },
+    { id: 4, icon: <FaHeadset size={32} color="#0B5D50" />, title: "24/7 Support", desc: "Dedicated customer support whenever you need", route: "/contact" },
   ];
 
   return (
@@ -60,7 +93,7 @@ function Home() {
             <p className="hero-description">
               Discover meticulously crafted gold, diamond, and precious gemstone designs created to illuminate every milestone in your journey.
             </p>
-            <button className="primary-btn">
+            <button className="primary-btn" onClick={() => navigate("/best-sellers")}>
               <span>Explore Collection</span>
               <FaArrowRight size={16} />
             </button>
@@ -79,25 +112,50 @@ function Home() {
       <section className="best-sellers-section">
         <div className="best-sellers-header">
           <h2 className="section-title">Best Sellers</h2>
-          <button className="view-all-btn">View All</button>
+          <button className="view-all-btn" onClick={() => navigate("/best-sellers")}>View All</button>
         </div>
 
         <div className="best-sellers-grid">
-          {bestSellers.map((product) => (
-            <div key={product.id} className="product-card">
-              <img src={product.image} alt={product.name} />
-              <div className="product-info">
-                <span className="product-name">{product.name}</span>
-                <div className="product-rating">
-                  {[...Array(product.rating)].map((_, i) => (
-                    <FaStar key={i} size={14} color="#D4AF37" />
-                  ))}
+          {loadingBestSellers ? (
+            <p style={{ gridColumn: "1 / -1", textAlign: "center", padding: "20px" }}>Loading...</p>
+          ) : bestSellers.length === 0 ? (
+            <p style={{ gridColumn: "1 / -1", textAlign: "center", padding: "20px" }}>No best sellers found.</p>
+          ) : (
+            bestSellers.map((product) => (
+              <div
+                key={product._id}
+                className="product-card"
+                onClick={() => navigate(`/product/${product._id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                {product.productImage ? (
+                  <img src={product.productImage} alt={product.productName} />
+                ) : (
+                  <div style={{ width: '100%', height: '250px', background: '#f3f7f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ opacity: 0.5 }}>No Image</span>
+                  </div>
+                )}
+                <div className="product-info">
+                  <span className="product-name">{product.productName}</span>
+                  <div className="product-rating">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar key={i} size={14} color="#D4AF37" />
+                    ))}
+                  </div>
+                  <span className="product-price">Rs. {product.price}</span>
                 </div>
-                <span className="product-price">{product.price}</span>
+                <button
+                  className="add-to-cart-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart(product);
+                  }}
+                >
+                  Add To Cart
+                </button>
               </div>
-              <button className="add-to-cart-btn">Add To Cart</button>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </section>
 
@@ -109,7 +167,12 @@ function Home() {
 
         <div className="category-grid">
           {categories.map((cat) => (
-            <div key={cat.id} className="category-card">
+            <div
+              key={cat.id}
+              className="category-card"
+              onClick={() => navigate(`/category/${cat.slug}`)}
+              style={{ cursor: "pointer" }}
+            >
               <img src={cat.image} alt={cat.name} />
               <span className="category-name">{cat.name}</span>
               <span className="category-count">{cat.count}</span>
@@ -170,8 +233,8 @@ function Home() {
                 {emailError && <span className="validation-error">{emailError}</span>}
                 {emailSuccess && <span className="validation-success">Successfully subscribed!</span>}
               </div>
-              <button type="submit" className="subscribe-btn">
-                Subscribe
+              <button type="submit" className="subscribe-btn" disabled={submitting}>
+                {submitting ? "Subscribing..." : "Subscribe"}
               </button>
             </form>
           </div>
@@ -182,7 +245,12 @@ function Home() {
       <section className="trust-section">
         <div className="trust-grid">
           {trustFeatures.map((item) => (
-            <div key={item.id} className="trust-card">
+            <div
+              key={item.id}
+              className="trust-card"
+              onClick={() => navigate(item.route)}
+              style={{ cursor: "pointer" }}
+            >
               <div className="trust-icon">{item.icon}</div>
               <span className="trust-title">{item.title}</span>
               <p className="trust-desc">{item.desc}</p>

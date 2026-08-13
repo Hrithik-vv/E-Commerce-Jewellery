@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import axios from "axios";
+import api from "../utils/api";
 import "../css/Login.css";
 
 function Login() {
@@ -13,6 +13,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Validation Message State
   const [emailError, setEmailError] = useState("");
@@ -55,35 +56,38 @@ function Login() {
 
     // Backend API Call
     if (isValid) {
+      setIsSubmitting(true);
       try {
-        const response = await axios.post(
-          "/api/auth/signin",
-          {
-            email: trimmedEmail,
-            password: password,
-          }
-        );
+        const response = await api.post("/auth/signin", {
+          email: trimmedEmail,
+          password: password,
+        });
 
-        if (response.data.success) {
-          toast.success(response.data.message || "Login Successful!");
+        if (response.success) {
+          toast.success(response.message || "Login Successful!");
 
           // Store Access Token & User Details
-          localStorage.setItem("accessToken", response.data.accessToken);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem("accessToken", response.accessToken);
+          localStorage.setItem("user", JSON.stringify(response.user));
           localStorage.setItem("isLoggedIn", "true");
 
           if (rememberMe) {
             localStorage.setItem("rememberedUser", trimmedEmail);
           }
-
-          navigate("/");
+          
+          window.dispatchEvent(new Event('auth-change'));
+          
+          // Role-Based Routing
+          if (response.user.role === 'Admin') {
+            navigate("/admin-dashboard");
+          } else {
+            navigate("/");
+          }
         }
       } catch (error) {
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("Unable to connect to the backend server.");
-        }
+        toast.error(error.message || "Unable to connect to the backend server.");
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -180,8 +184,8 @@ function Login() {
           </div>
 
           {/* Sign In Button */}
-          <button type="submit" className="sign-in-button">
-            Sign In
+          <button type="submit" className="sign-in-button" disabled={isSubmitting}>
+            {isSubmitting ? "Signing In..." : "Sign In"}
           </button>
         </form>
 

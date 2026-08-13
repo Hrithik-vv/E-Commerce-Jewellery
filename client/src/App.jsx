@@ -33,6 +33,7 @@ import UserListPage from './pages/UserListPage';
 import SingleUserDetailsPage from './pages/SingleUserDetailsPage';
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { CartProvider } from './utils/CartContext';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -71,44 +72,46 @@ const Layout = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          {/* Public Pages */}
-          <Route path="/" element={<Home />} />
-          <Route path="/best-sellers" element={<BestSellerPage />} />
-          <Route path="/product/:id" element={<ProductDetailsPage />} />
-          <Route path="/category/:category" element={<Category />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/payment-success" element={<PaymentSuccessPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/otp" element={<OTPVerificationPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/ordertracking" element={<OrderTracking />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/disclaimer-policy" element={<DisclaimerPolicy />} />
-          <Route path="/shipping-policy" element={<ShippingPolicy />} />
-          <Route path="/refund-policy" element={<RefundPolicy />} />
-          <Route path="/popup-best-sellers" element={<PopupBestSellers />} />
+    <CartProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            {/* Public Pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/best-sellers" element={<BestSellerPage />} />
+            <Route path="/product/:id" element={<ProductDetailsPage />} />
+            <Route path="/category/:category" element={<Category />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/otp" element={<OTPVerificationPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/ordertracking" element={<OrderTracking />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/disclaimer-policy" element={<DisclaimerPolicy />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/popup-best-sellers" element={<PopupBestSellers />} />
 
-          {/* Admin Pages */}
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin-profile" element={<AdminProfilePage />} />
-          <Route path="/products" element={<ProductListPage />} />
-          <Route path="/add-product" element={<AddProductPage />} />
-          <Route path="/edit-product/:id" element={<EditProductPage />} />
-          <Route path="/orders" element={<OrderListPage />} />
-          <Route path="/order/:id" element={<SingleOrderPage />} />
-          <Route path="/users" element={<UserListPage />} />
-          <Route path="/user-details/:id" element={<SingleUserDetailsPage />} />
-        </Routes>
-      </Layout>
-    </Router>
+            {/* Admin Pages */}
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin-profile" element={<AdminProfilePage />} />
+            <Route path="/products" element={<ProductListPage />} />
+            <Route path="/add-product" element={<AddProductPage />} />
+            <Route path="/edit-product/:id" element={<EditProductPage />} />
+            <Route path="/orders" element={<OrderListPage />} />
+            <Route path="/order/:id" element={<SingleOrderPage />} />
+            <Route path="/users" element={<UserListPage />} />
+            <Route path="/user-details/:id" element={<SingleUserDetailsPage />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </CartProvider>
   );
 }
 

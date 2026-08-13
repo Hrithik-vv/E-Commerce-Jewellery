@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api from '../utils/api';
 import '../css/SignUp.css';
 
 const SignUp = () => {
@@ -17,6 +19,7 @@ const SignUp = () => {
   // UI Visibility States
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Validation Error States
   const [errors, setErrors] = useState({});
@@ -130,7 +133,7 @@ const SignUp = () => {
   };
 
   // Submit Handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Check consent
@@ -145,8 +148,25 @@ const SignUp = () => {
     }
 
     if (!errors.fullName && !errors.email && !errors.password && !errors.confirmPassword) {
-      alert('Account Created Successfully!');
-      navigate('/login');
+      setIsSubmitting(true);
+      try {
+        const payload = {
+          name: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          consent: formData.consent,
+        };
+        const response = await api.post("/auth/signup", payload);
+        if (response.success) {
+          toast.success(response.message || 'Account Created Successfully!');
+          navigate('/login');
+        }
+      } catch (err) {
+        toast.error(err.message || "Failed to create account. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -305,8 +325,8 @@ const SignUp = () => {
           )}
 
           {/* Create Account Button */}
-          <button type="submit" className="create-account-btn">
-            Create Account
+          <button type="submit" className="create-account-btn" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating Account...' : 'Create Account'}
           </button>
 
           {/* Divider Row */}
@@ -319,9 +339,13 @@ const SignUp = () => {
           {/* Footer Row */}
           <div className="footer-row">
             <span className="footer-text">Already have an account?</span>
-            <a href="#signin" className="sign-in-link">
+            <span 
+              className="sign-in-link" 
+              onClick={() => navigate('/login')}
+              style={{ cursor: 'pointer' }}
+            >
               Sign In
-            </a>
+            </span>
           </div>
         </form>
       </div>

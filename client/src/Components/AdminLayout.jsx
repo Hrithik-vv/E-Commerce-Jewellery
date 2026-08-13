@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/AdminDashboard.css';
 
 // --- Sidebar Components ---
@@ -36,13 +36,26 @@ const NavigationMenu = () => (
     </nav>
 );
 
-const LogoutButton = () => (
-    <div className="admin-sidebar-logout">
-        <a className="admin-sidebar-logout-btn">
-            <span style={{ fontSize: '18px' }}>🚪</span> <span>Logout</span>
-        </a>
-    </div>
-);
+const LogoutButton = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        localStorage.removeItem("isLoggedIn");
+        window.dispatchEvent(new Event('auth-change'));
+        navigate("/login");
+    };
+
+    return (
+        <div className="admin-sidebar-logout">
+            <a href="#" className="admin-sidebar-logout-btn" onClick={handleLogout}>
+                <span style={{ fontSize: '18px' }}>🚪</span> <span>Logout</span>
+            </a>
+        </div>
+    );
+};
 
 const SidebarQuote = () => (
     <div className="admin-sidebar-quote">
@@ -79,15 +92,22 @@ const Notification = () => (
     </div>
 );
 
-const AdminProfile = () => (
-    <div className="admin-profile-section">
-        <div className="admin-avatar">JD</div>
-        <div className="admin-profile-info">
-            <span className="admin-profile-name">John Doe</span>
-            <span className="admin-profile-role">Admin</span>
+const AdminProfile = () => {
+    const userStr = localStorage.getItem("user");
+    const user = userStr ? JSON.parse(userStr) : null;
+    const name = user?.name || "Admin";
+    const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+    return (
+        <div className="admin-profile-section">
+            <div className="admin-avatar">{initials}</div>
+            <div className="admin-profile-info">
+                <span className="admin-profile-name">{name}</span>
+                <span className="admin-profile-role">Admin</span>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 const TopBar = ({ toggleSidebar }) => (
     <header className="admin-topbar">
@@ -107,6 +127,29 @@ const TopBar = ({ toggleSidebar }) => (
 
 const AdminLayout = ({ children }) => {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const navigate = useNavigate();
+
+    // Protect Admin Routes
+    useEffect(() => {
+        const checkAdminAuth = () => {
+            const userStr = localStorage.getItem("user");
+            if (!userStr) {
+                navigate("/login");
+                return;
+            }
+
+            try {
+                const user = JSON.parse(userStr);
+                if (user.role !== "Admin") {
+                    navigate("/");
+                }
+            } catch (e) {
+                navigate("/login");
+            }
+        };
+
+        checkAdminAuth();
+    }, [navigate]);
 
     const toggleSidebar = () => {
         setIsMobileOpen(!isMobileOpen);

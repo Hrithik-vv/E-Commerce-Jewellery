@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../utils/CartContext';
+import api from '../utils/api';
 import '../css/ProductDetailsPage.css';
 
 /* Inline SVG icons to avoid external dependencies */
@@ -32,31 +35,77 @@ function PlaceholderIcon({ size = 64 }) {
   );
 }
 
-/* Sample product data */
-const product = {
-  name: 'Emerald Essence Necklace',
-  price: '₹12,499',
-  details: [
-    { label: 'Length', value: '80cm' },
-    { label: 'Extension chain', value: 'No extension' },
-    { label: 'Material', value: '18K Gold Plated Brass' },
-    { label: 'Stone', value: 'Cubic Zirconia' },
-    { label: 'Clasp type', value: 'Lobster claw' },
-  ],
-};
-
-const relatedProducts = [
-  { name: 'Jade Drop Earrings', price: '₹4,299' },
-  { name: 'Pearl Blossom Bracelet', price: '₹6,799' },
-  { name: 'Sapphire Aura Ring', price: '₹8,999' },
-  { name: 'Golden Ivy Pendant', price: '₹10,199' },
-];
-
 export default function ProductDetailsPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
+
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const [productRes, relatedRes] = await Promise.all([
+          api.get(`/products/getsingleproductdetails/${id}`),
+          api.get(`/products/getrelatedproducts/${id}`)
+        ]);
+
+        if (productRes.success) {
+          setProduct(productRes.product);
+        } else {
+          setError(productRes.message || 'Product not found');
+        }
+
+        if (relatedRes.success) {
+          setRelatedProducts(relatedRes.products || []);
+        }
+      } catch (err) {
+        setError(err.message || 'Failed to fetch product details.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProductData();
+      setQty(1); // Reset quantity on navigation
+    }
+  }, [id]);
 
   const decrement = () => setQty((q) => (q > 1 ? q - 1 : 1));
   const increment = () => setQty((q) => q + 1);
+
+  const handleAddToCart = () => {
+    if (product) addToCart(product, qty);
+  };
+
+  const handleBuyNow = () => {
+    if (product) {
+      addToCart(product, qty);
+      navigate('/checkout');
+    }
+  };
+
+  if (isLoading) {
+    return <div style={{ padding: '4rem', textAlign: 'center' }}>Loading product...</div>;
+  }
+
+  if (error || !product) {
+    return (
+      <div style={{ padding: '4rem', textAlign: 'center' }}>
+        <h2 style={{ color: 'red' }}>{error || 'Product not found'}</h2>
+        <button onClick={() => navigate('/products')} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
+          Back to Products
+        </button>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -65,14 +114,22 @@ export default function ProductDetailsPage() {
         {/* Product Image */}
         <div className="product-image-section">
           <div className="product-image">
-            <PlaceholderIcon size={64} />
+            {product.productImage ? (
+              <img
+                src={product.productImage}
+                alt={product.productName}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }}
+              />
+            ) : (
+              <PlaceholderIcon size={64} />
+            )}
           </div>
         </div>
 
         {/* Product Info */}
         <div className="product-info">
-          <h1 className="product-title">{product.name}</h1>
-          <p className="product-price">{product.price}</p>
+          <h1 className="product-title">{product.productName}</h1>
+          <p className="product-price">Rs. {product.price.toLocaleString()}</p>
           <hr className="product-divider" />
 
           {/* Action Row */}
@@ -82,21 +139,29 @@ export default function ProductDetailsPage() {
               <div className="qty-value">{qty}</div>
               <button className="qty-btn" onClick={increment} aria-label="Increase quantity">+</button>
             </div>
-            <button className="add-to-cart-btn">
+            <button className="add-to-cart-btn" onClick={handleAddToCart}>
               <CartIcon />
               Add to Cart
             </button>
           </div>
 
-          <button className="buy-now-btn">Buy It Now</button>
+          <button className="buy-now-btn" onClick={handleBuyNow}>Buy It Now</button>
 
           {/* Product Details List */}
           <ul className="product-details-list">
-            {product.details.map((item, i) => (
-              <li key={i}>
-                {item.label}: <strong>{item.value}</strong>
+            <li>
+              Category: <strong>{product.category}</strong>
+            </li>
+            {product.stockQuantity !== undefined && (
+              <li>
+                Availability: <strong>{product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : 'Out of stock'}</strong>
               </li>
-            ))}
+            )}
+            {product.description && (
+              <li>
+                Description: <strong>{product.description}</strong>
+              </li>
+            )}
           </ul>
         </div>
       </section>
@@ -105,13 +170,26 @@ export default function ProductDetailsPage() {
       <section className="also-like-section">
         <h2 className="also-like-title">You may also like</h2>
         <div className="related-grid">
-          {relatedProducts.map((rp, i) => (
-            <div className="related-card" key={i}>
+          {relatedProducts.map((rp) => (
+            <div
+              className="related-card"
+              key={rp._id}
+              onClick={() => navigate(`/product/${rp._id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="related-card-image">
-                <PlaceholderIcon size={40} />
+                {rp.productImage ? (
+                  <img
+                    src={rp.productImage}
+                    alt={rp.productName}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                  />
+                ) : (
+                  <PlaceholderIcon size={40} />
+                )}
               </div>
-              <div className="related-card-name">{rp.name}</div>
-              <div className="related-card-price">{rp.price}</div>
+              <div className="related-card-name">{rp.productName}</div>
+              <div className="related-card-price">Rs. {rp.price.toLocaleString()}</div>
             </div>
           ))}
         </div>

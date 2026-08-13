@@ -39,9 +39,9 @@ function Footer() {
         <div>
           <h4 className="footer-heading">Quick Links</h4>
           <div className="footer-links-list">
-            <div className="footer-link-item">Home</div>
-            <div className="footer-link-item">About Us</div>
-            <div className="footer-link-item">Contact Us</div>
+            <Link to="/" className="footer-link-item">Home</Link>
+            <Link to="/about" className="footer-link-item">About Us</Link>
+            <Link to="/contact" className="footer-link-item">Contact Us</Link>
           </div>
         </div>
 
@@ -49,12 +49,12 @@ function Footer() {
         <div>
           <h4 className="footer-heading">Categories</h4>
           <div className="footer-links-list">
-            <div className="footer-link-item">Bangles</div>
-            <div className="footer-link-item">Pendants</div>
-            <div className="footer-link-item">Rings</div>
-            <div className="footer-link-item">Earrings</div>
-            <div className="footer-link-item">Necklaces</div>
-            <div className="footer-link-item">+ More</div>
+            <Link to="/category/bangles" className="footer-link-item">Bangles</Link>
+            <Link to="/category/jhumkas" className="footer-link-item">Jhumkas</Link>
+            <Link to="/category/rings" className="footer-link-item">Rings</Link>
+            <Link to="/category/earrings" className="footer-link-item">Earrings</Link>
+            <Link to="/category/necklaces" className="footer-link-item">Necklaces</Link>
+            <Link to="/best-sellers" className="footer-link-item">+ More</Link>
           </div>
         </div>
 
