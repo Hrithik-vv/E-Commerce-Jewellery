@@ -26,16 +26,19 @@ const apiFetch = async (endpoint, options = {}) => {
   const data = await response.json();
 
   if (response.status === 401) {
-    // Token expired or invalid
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
-    localStorage.removeItem('isLoggedIn');
-    window.location.href = '/login';
-    throw new Error('Session expired. Please login again.');
+    // Only intercept 401 if it's not a signin request
+    if (!endpoint.includes('/signin') && !endpoint.includes('/login')) {
+      // Token expired or invalid
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isLoggedIn');
+      window.location.href = '/login';
+      throw new Error('Session expired. Please login again.');
+    }
   }
 
   if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong');
+    throw new Error(data.error || data.message || 'Something went wrong');
   }
 
   return data;

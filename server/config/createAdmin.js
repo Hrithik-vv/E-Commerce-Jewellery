@@ -11,13 +11,15 @@ const createAdmin = async () => {
             return;
         }
 
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
         const existingAdmin = await User.findOne({ email: adminEmail });
         if (existingAdmin) {
-            console.log("Admin user already exists");
+            console.log("Admin user already exists, ensuring password uses bcrypt...");
+            existingAdmin.password = hashedPassword;
+            await existingAdmin.save();
             return;
         }
-
-        const hashedPassword = await bcrypt.hash(adminPassword, 10);
         
         const adminUser = new User({
             name: "Admin",
