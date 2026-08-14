@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import api from "../utils/api";
@@ -7,6 +7,9 @@ import "../css/Login.css";
 
 function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Where to go after login — honour ?redirect= or fall back to home
+  const redirectTarget = searchParams.get('redirect') || '/';
 
   // State Management
   const [email, setEmail] = useState("");
@@ -79,9 +82,26 @@ function Login() {
           
           // Role-Based Routing
           if (response.user.role === 'Admin') {
-            navigate("/admin-dashboard");
+            navigate('/admin-dashboard');
           } else {
-            navigate("/");
+            // Check for productId and qty in redirect path (Buy Now flow)
+            const url = new URL('http://dummy' + redirectTarget);
+            const productId = url.searchParams.get('productId');
+            const qtyParam = url.searchParams.get('qty');
+            const qty = qtyParam ? parseInt(qtyParam, 10) : 1;
+            if (productId) {
+              // Add the product to the cart via backend before navigating to checkout
+              api.post('/cart/addcart', { productId, quantity: qty })
+                .then(() => {
+                  navigate('/checkout');
+                })
+                .catch(() => {
+                  toast.error('Failed to add product to cart before checkout');
+                  navigate(redirectTarget);
+                });
+            } else {
+              navigate(redirectTarget);
+            }
           }
         }
       } catch (error) {

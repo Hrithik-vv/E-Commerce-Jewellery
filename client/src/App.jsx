@@ -31,6 +31,7 @@ import OrderListPage from './pages/OrderListPage';
 import SingleOrderPage from './pages/SingleOrderPage';
 import UserListPage from './pages/UserListPage';
 import SingleUserDetailsPage from './pages/SingleUserDetailsPage';
+import ProtectedRoute from './utils/ProtectedRoute';
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { CartProvider } from './utils/CartContext';
@@ -81,9 +82,6 @@ function App() {
             <Route path="/best-sellers" element={<BestSellerPage />} />
             <Route path="/product/:id" element={<ProductDetailsPage />} />
             <Route path="/category/:category" element={<Category />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/payment-success" element={<PaymentSuccessPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/otp" element={<OTPVerificationPage />} />
@@ -91,13 +89,18 @@ function App() {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/ordertracking" element={<OrderTracking />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/disclaimer-policy" element={<DisclaimerPolicy />} />
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/popup-best-sellers" element={<PopupBestSellers />} />
+
+            {/* Protected Pages – require authentication */}
+            <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+            <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+            <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccessPage /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+            <Route path="/ordertracking" element={<ProtectedRoute><OrderTracking /></ProtectedRoute>} />
 
             {/* Admin Pages */}
             <Route path="/admin-dashboard" element={<AdminDashboard />} />

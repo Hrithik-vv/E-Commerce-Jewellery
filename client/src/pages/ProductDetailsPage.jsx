@@ -82,10 +82,22 @@ export default function ProductDetailsPage() {
   const increment = () => setQty((q) => q + 1);
 
   const handleAddToCart = () => {
-    if (product) addToCart(product, qty);
+    if (product) {
+      addToCart(product, qty);
+      // After adding, navigate to the Cart page
+      navigate('/cart');
+    }
   };
 
   const handleBuyNow = () => {
+    // Ensure user is logged in before proceeding to checkout
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+      // Redirect to login with intent to checkout after authentication, preserving product and quantity
+      const redirectUrl = `/checkout?productId=${id}&qty=${qty}`;
+      navigate(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+      return;
+    }
     if (product) {
       addToCart(product, qty);
       navigate('/checkout');
