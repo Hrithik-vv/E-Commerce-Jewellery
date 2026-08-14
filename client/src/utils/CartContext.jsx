@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import api from './api';
+import { useNavigate } from 'react-router-dom';
 
 const CartContext = createContext();
 
@@ -47,6 +48,7 @@ const saveCartForUser = (userId, items) => {
 };
 
 export const CartProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(() => {
     const userId = getCurrentUserId();
     return loadCartForUser(userId);
@@ -82,7 +84,7 @@ export const CartProvider = ({ children }) => {
   const addToCart = (product, quantity = 1) => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (!isLoggedIn) {
-      window.location.href = '/login';
+      navigate('/login');
       return;
     }
 

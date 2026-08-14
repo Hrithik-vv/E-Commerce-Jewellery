@@ -73,8 +73,8 @@ const Layout = ({ children }) => {
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
+    <Router>
+      <CartProvider>
         <Layout>
           <Routes>
             {/* Public Pages */}
@@ -114,8 +114,8 @@ function App() {
             <Route path="/user-details/:id" element={<SingleUserDetailsPage />} />
           </Routes>
         </Layout>
-      </Router>
-    </CartProvider>
+      </CartProvider>
+    </Router>
   );
 }
 
