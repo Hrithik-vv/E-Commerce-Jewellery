@@ -15,6 +15,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Ensure DB connection for all API routes (Serverless Best Practice)
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
@@ -29,10 +35,8 @@ app.use("/api/newsletter", require("./routes/newsletterRoutes"));
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Connect to database and create admin
-connectDB()
-  .then(() => createAdmin())
-  .catch((err) => console.error("Database connection failed:", err));
+// Create admin user once DB is connected (in background)
+connectDB().then(() => createAdmin()).catch(() => {});
 
 // Start server locally if not in production
 if (process.env.NODE_ENV !== "production") {
