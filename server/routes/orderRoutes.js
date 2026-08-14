@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getAllOrders, getOrderById, updateOrderStatus } = require('../controllers/orderController');
-const { protect, authorize } = require('../middleware/AuthMiddleware');
+const { protect, authorize } = require('../middleware/authMiddleware');
 
 // All routes are protected and require Admin role
 router.use(protect);
