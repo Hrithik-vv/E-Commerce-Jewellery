@@ -56,6 +56,16 @@ exports.verifyPayment = async (req, res) => {
       user
     } = req.body;
 
+    // Check for duplicate order verification
+    const existingOrder = await Order.findOne({ 'paymentDetails.razorpay_order_id': razorpay_order_id });
+    if (existingOrder) {
+      return res.status(200).json({
+        success: true,
+        message: 'Order already verified',
+        order: existingOrder
+      });
+    }
+
     // 1. Verify the signature
     const sign = razorpay_order_id + '|' + razorpay_payment_id;
     const expectedSign = crypto
@@ -64,16 +74,41 @@ exports.verifyPayment = async (req, res) => {
       .digest('hex');
 
     if (razorpay_signature === expectedSign) {
-      // Payment is verified
-      
+      const mongoose = require('mongoose');
+
+      const sanitizeAddr = (addr) => ({
+        country: addr?.country || '',
+        firstName: addr?.firstName || '',
+        lastName: addr?.lastName || '',
+        address: addr?.address || '',
+        city: addr?.city || '',
+        state: addr?.state || '',
+        pinCode: addr?.pinCode || '',
+        phone: addr?.phone || ''
+      });
+
+      const sanitizedOrderItems = (orderItems || []).map(item => ({
+        product: mongoose.Types.ObjectId.isValid(item.product) ? item.product : undefined,
+        name: item.name || 'Jewellery Item',
+        quantity: item.quantity || 1,
+        price: item.price || 0,
+        image: item.image || ''
+      }));
+
       // 2. Save order to DB
       const newOrder = new Order({
         user: user || null,
-        contactEmail,
-        shippingAddress,
-        billingAddress,
-        orderItems,
-        pricing,
+        contactEmail: contactEmail || 'customer@example.com',
+        shippingAddress: sanitizeAddr(shippingAddress),
+        billingAddress: sanitizeAddr(billingAddress),
+        orderItems: sanitizedOrderItems,
+        pricing: {
+          subtotal: pricing?.subtotal || 0,
+          shipping: pricing?.shipping || 0,
+          tax: pricing?.tax || 0,
+          discount: pricing?.discount || 0,
+          total: pricing?.total || 0
+        },
         paymentDetails: {
           razorpay_order_id,
           razorpay_payment_id,
@@ -87,12 +122,14 @@ exports.verifyPayment = async (req, res) => {
 
       // Clear only the purchased items from the user's cart after successful checkout
       if (user && orderItems && orderItems.length > 0) {
-        const purchasedProductIds = orderItems.map(item => item.product);
+        const purchasedProductIds = orderItems.map(item => item.product).filter(Boolean);
         
-        await Cart.findOneAndUpdate(
-          { user: user },
-          { $pull: { items: { product: { $in: purchasedProductIds } } } }
-        );
+        if (purchasedProductIds.length > 0) {
+          await Cart.findOneAndUpdate(
+            { user: user },
+            { $pull: { items: { product: { $in: purchasedProductIds } } } }
+          );
+        }
       }
 
       return res.status(200).json({

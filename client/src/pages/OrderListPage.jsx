@@ -20,7 +20,7 @@ const OrderListPage = () => {
       setLoading(true);
       const res = await api.get('/orders/allorders');
       if (res.success) {
-        setOrders(res.data);
+        setOrders(res.orders || res.data || []);
       }
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -32,7 +32,10 @@ const OrderListPage = () => {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const res = await api.put(`/orders/updatestatus/${id}`, { orderStatus: newStatus });
+      const res = await api.put(`/orders/updatestatus/${id}`, { 
+        status: newStatus,
+        orderStatus: newStatus 
+      });
       if (res.success) {
         toast.success(`Order status updated to ${newStatus}`);
         setOrders(orders.map(order => 
@@ -46,7 +49,7 @@ const OrderListPage = () => {
   };
 
   // Filter orders based on search, status and payment
-  const displayedOrders = orders.filter(order => {
+  const displayedOrders = (orders || []).filter(order => {
     const customerName = order.user ? order.user.name : (order.contactEmail || 'Guest');
     const matchesSearch = customerName.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           order._id.toLowerCase().includes(searchTerm.toLowerCase());

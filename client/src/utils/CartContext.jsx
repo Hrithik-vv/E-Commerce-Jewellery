@@ -1,51 +1,93 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import api from './api';
 
 const CartContext = createContext();
 
-const INITIAL_CART = [
-  {
-    id: 1,
-    title: 'Diamond Ring',
-    variant: '18K Gold / Solitaire',
-    price: 499,
-    quantity: 1,
-    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=300',
-    error: '',
-  },
-  {
-    id: 3,
-    title: 'Emerald Necklace',
-    variant: '18K Yellow Gold / 18 Inch',
-    price: 1299,
-    quantity: 1,
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=300',
-    error: '',
-  },
-];
+// Helper: get the current logged-in user's ID
+const getCurrentUserId = () => {
+  try {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.id || user._id || null;
+    }
+  } catch {
+    // ignore parse errors
+  }
+  return null;
+};
+
+// Helper: build a user-scoped localStorage key for cart
+const getCartStorageKey = (userId) => {
+  return userId ? `cart_${userId}` : null;
+};
+
+// Helper: load cart items from user-scoped localStorage
+const loadCartForUser = (userId) => {
+  const key = getCartStorageKey(userId);
+  if (!key) return [];
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+};
+
+// Helper: save cart items to user-scoped localStorage
+const saveCartForUser = (userId, items) => {
+  const key = getCartStorageKey(userId);
+  if (!key) return;
+  try {
+    localStorage.setItem(key, JSON.stringify(items));
+  } catch (e) {
+    console.error('Failed to save cart to localStorage', e);
+  }
+};
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('cartItems');
-      return saved ? JSON.parse(saved) : INITIAL_CART;
-    } catch {
-      return INITIAL_CART;
-    }
+    const userId = getCurrentUserId();
+    return loadCartForUser(userId);
   });
 
   const [cartNotes, setCartNotes] = useState('');
 
+  // Persist cart to user-scoped localStorage whenever cartItems change
   useEffect(() => {
-    try {
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    } catch (e) {
-      console.error('Failed to save cart to localStorage', e);
-    }
+    const userId = getCurrentUserId();
+    saveCartForUser(userId, cartItems);
   }, [cartItems]);
 
+  // Listen for auth-change events (login/logout) and re-sync cart state
+  const handleAuthChange = useCallback(() => {
+    const userId = getCurrentUserId();
+    if (userId) {
+      // A user just logged in — load their cart
+      const userCart = loadCartForUser(userId);
+      setCartItems(userCart);
+    } else {
+      // User logged out — clear in-memory cart immediately
+      setCartItems([]);
+    }
+    setCartNotes('');
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('auth-change', handleAuthChange);
+    return () => window.removeEventListener('auth-change', handleAuthChange);
+  }, [handleAuthChange]);
+
   const addToCart = (product, quantity = 1) => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+      window.location.href = '/login';
+      return;
+    }
+
+    const productId = product._id || product.id;
+
     const itemPrice = typeof product.price === 'number'
       ? product.price
       : parseFloat(String(product.price).replace(/[^0-9.]/g, '')) || 0;
@@ -54,7 +96,7 @@ export const CartProvider = ({ children }) => {
     const itemTitle = product.name || product.title || product.productName || 'Jewellery Item';
 
     setCartItems((prevItems) => {
-      const existingIndex = prevItems.findIndex((item) => String(item.id) === String(product.id));
+      const existingIndex = prevItems.findIndex((item) => String(item.id) === String(productId));
       if (existingIndex > -1) {
         const updated = [...prevItems];
         updated[existingIndex] = {
@@ -66,7 +108,7 @@ export const CartProvider = ({ children }) => {
         return [
           ...prevItems,
           {
-            id: product.id,
+            id: productId,
             title: itemTitle,
             variant: product.variant || 'Standard',
             price: itemPrice,
@@ -81,9 +123,8 @@ export const CartProvider = ({ children }) => {
     toast.success(`${itemTitle} added to cart!`);
 
     // Optionally sync with backend if logged in
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (isLoggedIn) {
-      api.post('/cart/addcart', { productId: product.id, quantity }).catch(() => {
+      api.post('/cart/addcart', { productId: productId, quantity }).catch(() => {
         // Silent fallback for guest/offline
       });
     }
@@ -108,6 +149,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   const totalItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -119,6 +164,7 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
+        clearCart,
         totalItemCount,
         subtotal,
         cartNotes,

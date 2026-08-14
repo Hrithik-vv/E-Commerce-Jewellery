@@ -31,6 +31,7 @@ const AdminNavbar = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
         localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("cartItems");
         window.dispatchEvent(new Event('auth-change'));
         navigate("/login");
     };
@@ -64,24 +65,6 @@ const AdminNavbar = () => {
                     className={`admin-navbar-link ${location.pathname === '/add-product' ? 'active' : ''}`}
                 >
                     Add Product
-                </Link>
-                <Link 
-                    to="/products" 
-                    className={`admin-navbar-link ${location.pathname === '/products' ? 'active' : ''}`}
-                >
-                    Products
-                </Link>
-                <Link 
-                    to="/orders" 
-                    className={`admin-navbar-link ${location.pathname.startsWith('/order') ? 'active' : ''}`}
-                >
-                    Orders
-                </Link>
-                <Link 
-                    to="/users" 
-                    className={`admin-navbar-link ${location.pathname.startsWith('/user') ? 'active' : ''}`}
-                >
-                    Users
                 </Link>
             </div>
 

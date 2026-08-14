@@ -2,9 +2,59 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useCart } from '../utils/CartContext';
 import '../css/CheckoutPage.css';
 
+const AddressForm = ({ data, setData }) => (
+  <div className="checkout-form-grid">
+    <div className="checkout-input-group w-full">
+      <select className="checkout-select" value={data.country} onChange={e => setData({...data, country: e.target.value})}>
+        <option value="" disabled>Country/Region</option>
+        <option value="IN">India</option>
+        <option value="US">United States</option>
+      </select>
+    </div>
+    <div className="checkout-input-group w-half">
+      <input className="checkout-input" placeholder="First Name" value={data.firstName} onChange={e => setData({...data, firstName: e.target.value})} />
+    </div>
+    <div className="checkout-input-group w-half">
+      <input className="checkout-input" placeholder="Last Name" value={data.lastName} onChange={e => setData({...data, lastName: e.target.value})} />
+    </div>
+    <div className="checkout-input-group w-full">
+      <div className="checkout-input-wrapper">
+        <svg className="checkout-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        <input className="checkout-input with-icon" placeholder="Address" value={data.address} onChange={e => setData({...data, address: e.target.value})} />
+      </div>
+    </div>
+    <div className="checkout-input-group w-half">
+      <input className="checkout-input" placeholder="City" value={data.city} onChange={e => setData({...data, city: e.target.value})} />
+    </div>
+    <div className="checkout-input-group w-quarter">
+      <select className="checkout-select" value={data.state} onChange={e => setData({...data, state: e.target.value})}>
+        <option value="" disabled>State</option>
+        <option value="MH">MH</option>
+        <option value="DL">DL</option>
+      </select>
+    </div>
+    <div className="checkout-input-group w-quarter">
+      <input className="checkout-input" placeholder="PIN Code" value={data.pinCode} onChange={e => setData({...data, pinCode: e.target.value})} />
+    </div>
+    <div className="checkout-input-group w-full">
+      <div className="checkout-input-wrapper">
+        <svg className="checkout-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <input className="checkout-input with-icon" placeholder="Phone Number" value={data.phone} onChange={e => setData({...data, phone: e.target.value})} />
+      </div>
+    </div>
+  </div>
+);
+
 export default function CheckoutPage() {
+  const { cartItems, subtotal, clearCart } = useCart();
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [shippingMethod, setShippingMethod] = useState('standard');
@@ -15,12 +65,18 @@ export default function CheckoutPage() {
   const navigate = useNavigate();
 
   const [shipping, setShipping] = useState({
-    country: '', firstName: '', lastName: '', address: '', city: '', state: '', pin: '', phone: ''
+    country: '', firstName: '', lastName: '', address: '', city: '', state: '', pinCode: '', phone: ''
   });
 
   const [billing, setBilling] = useState({
-    country: '', firstName: '', lastName: '', address: '', city: '', state: '', pin: '', phone: ''
+    country: '', firstName: '', lastName: '', address: '', city: '', state: '', pinCode: '', phone: ''
   });
+
+  const currentSubtotal = subtotal || 0;
+  const shippingCost = shippingMethod === 'standard' ? 5 : 15;
+  const tax = 110;
+  const discount = Math.min(50, currentSubtotal);
+  const finalAmount = Math.max(0, currentSubtotal + shippingCost + tax - discount);
 
   const validateEmail = (val) => {
     if (!val) return "Email is required.";
@@ -49,11 +105,17 @@ export default function CheckoutPage() {
 
     setIsSubmitting(true);
     try {
-      const subtotal = 1100;
-      const shippingCost = shippingMethod === 'standard' ? 5 : 15;
-      const tax = 110;
-      const discount = 50;
-      const finalAmount = subtotal + shippingCost + tax - discount;
+      const isValidHex = (val) => typeof val === 'string' && /^[0-9a-fA-F]{24}$/.test(val);
+      const formattedOrderItems = (cartItems || []).map(item => {
+        const rawId = item._id || item.product || item.id;
+        return {
+          product: isValidHex(rawId) ? rawId : undefined,
+          name: item.title || item.name || 'Jewellery Item',
+          quantity: item.quantity,
+          price: item.price,
+          image: item.image
+        };
+      });
 
       // 1. Create Razorpay order via backend
       const { data: orderData } = await axios.post('/api/payment/create-order', {
@@ -77,6 +139,10 @@ export default function CheckoutPage() {
         order_id: orderData.order.id,
         handler: async function (response) {
           try {
+            const userStr = localStorage.getItem("user");
+            const loggedInUser = userStr ? JSON.parse(userStr) : null;
+            const userId = loggedInUser?._id || loggedInUser?.id || null;
+
             // 3. Verify Payment
             const verifyRes = await axios.post('/api/payment/verify-payment', {
               razorpay_order_id: response.razorpay_order_id,
@@ -85,12 +151,20 @@ export default function CheckoutPage() {
               contactEmail: email,
               shippingAddress: shipping,
               billingAddress: billingAddressType === 'same' ? shipping : billing,
-              orderItems: [], // Replace with actual cart items
-              pricing: { total: finalAmount },
+              orderItems: formattedOrderItems,
+              pricing: { 
+                subtotal: currentSubtotal,
+                shipping: shippingCost,
+                tax: tax,
+                discount: discount,
+                total: finalAmount 
+              },
+              user: userId
             });
 
             if (verifyRes.data.success) {
               toast.success('Payment successful!');
+              clearCart();
               navigate('/payment-success');
             } else {
               toast.error('Payment verification failed');
@@ -124,54 +198,6 @@ export default function CheckoutPage() {
       setIsSubmitting(false);
     }
   };
-
-  const AddressForm = ({ data, setData }) => (
-    <div className="checkout-form-grid">
-      <div className="checkout-input-group w-full">
-        <select className="checkout-select" value={data.country} onChange={e => setData({...data, country: e.target.value})}>
-          <option value="" disabled>Country/Region</option>
-          <option value="IN">India</option>
-          <option value="US">United States</option>
-        </select>
-      </div>
-      <div className="checkout-input-group w-half">
-        <input className="checkout-input" placeholder="First Name" value={data.firstName} onChange={e => setData({...data, firstName: e.target.value})} />
-      </div>
-      <div className="checkout-input-group w-half">
-        <input className="checkout-input" placeholder="Last Name" value={data.lastName} onChange={e => setData({...data, lastName: e.target.value})} />
-      </div>
-      <div className="checkout-input-group w-full">
-        <div className="checkout-input-wrapper">
-          <svg className="checkout-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
-          <input className="checkout-input with-icon" placeholder="Address" value={data.address} onChange={e => setData({...data, address: e.target.value})} />
-        </div>
-      </div>
-      <div className="checkout-input-group w-half">
-        <input className="checkout-input" placeholder="City" value={data.city} onChange={e => setData({...data, city: e.target.value})} />
-      </div>
-      <div className="checkout-input-group w-quarter">
-        <select className="checkout-select" value={data.state} onChange={e => setData({...data, state: e.target.value})}>
-          <option value="" disabled>State</option>
-          <option value="MH">MH</option>
-          <option value="DL">DL</option>
-        </select>
-      </div>
-      <div className="checkout-input-group w-quarter">
-        <input className="checkout-input" placeholder="PIN Code" value={data.pin} onChange={e => setData({...data, pin: e.target.value})} />
-      </div>
-      <div className="checkout-input-group w-full">
-        <div className="checkout-input-wrapper">
-          <svg className="checkout-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-          <input className="checkout-input with-icon" placeholder="Phone Number" value={data.phone} onChange={e => setData({...data, phone: e.target.value})} />
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="checkout-page-wrapper">
@@ -341,28 +367,35 @@ export default function CheckoutPage() {
             <h2 className="checkout-section-title">Order Summary</h2>
             
             {/* Section 8 – Order Summary */}
-            <div className="checkout-product-card">
-              <div className="checkout-product-img"></div>
-              <div className="checkout-product-info">
-                <h3 className="checkout-product-name">Elegant Ring</h3>
-                <p className="checkout-product-qty">Qty: 1</p>
+            {cartItems && cartItems.length > 0 ? (
+              cartItems.map((item, index) => (
+                <div key={item.id || item._id || index} className="checkout-product-card">
+                  <div className="checkout-product-img">
+                    {item.image && (
+                      <img 
+                        src={item.image} 
+                        alt={item.title || item.name} 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} 
+                      />
+                    )}
+                  </div>
+                  <div className="checkout-product-info">
+                    <h3 className="checkout-product-name">{item.title || item.name}</h3>
+                    <p className="checkout-product-qty">Qty: {item.quantity}</p>
+                  </div>
+                  <div className="checkout-product-price">${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
+              ))
+            ) : (
+              <div style={{ padding: '16px 0', color: '#6B7280', textAlign: 'center' }}>
+                Your cart is empty.
               </div>
-              <div className="checkout-product-price">$250.00</div>
-            </div>
-
-            <div className="checkout-product-card" style={{ borderBottom: 'none', marginBottom: '16px' }}>
-              <div className="checkout-product-img"></div>
-              <div className="checkout-product-info">
-                <h3 className="checkout-product-name">Diamond Necklace</h3>
-                <p className="checkout-product-qty">Qty: 1</p>
-              </div>
-              <div className="checkout-product-price">$850.00</div>
-            </div>
+            )}
 
             {/* Section 9 – Price Summary */}
             <div className="checkout-price-row">
               <span>Subtotal</span>
-              <span>$1100.00</span>
+              <span>${currentSubtotal.toFixed(2)}</span>
             </div>
             <div className="checkout-price-row">
               <span>Shipping</span>
@@ -374,14 +407,14 @@ export default function CheckoutPage() {
             </div>
             <div className="checkout-price-row checkout-price-discount">
               <span>Discount</span>
-              <span>-$50.00</span>
+              <span>-${discount.toFixed(2)}</span>
             </div>
 
             <div className="checkout-price-divider"></div>
 
             <div className="checkout-total-row">
               <span>Total</span>
-              <span>${1100 + (shippingMethod === 'standard' ? 5 : 15) + 110 - 50}.00</span>
+              <span>${finalAmount.toFixed(2)}</span>
             </div>
 
             {/* Section 10 – Action Buttons */}
@@ -389,11 +422,14 @@ export default function CheckoutPage() {
               <button 
                 className="checkout-pay-btn" 
                 onClick={handlePay}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !cartItems || cartItems.length === 0}
               >
                 Pay Now
               </button>
-              <button className="checkout-back-btn">
+              <button 
+                className="checkout-back-btn"
+                onClick={() => navigate('/cart')}
+              >
                 Back to Cart
               </button>
             </div>

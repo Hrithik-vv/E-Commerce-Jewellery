@@ -32,6 +32,8 @@ const apiFetch = async (endpoint, options = {}) => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
       localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('cartItems');
+      window.dispatchEvent(new Event('auth-change'));
       window.location.href = '/login';
       throw new Error('Session expired. Please login again.');
     }

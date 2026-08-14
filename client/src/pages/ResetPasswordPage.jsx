@@ -1,25 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api from '../utils/api';
 import '../css/ResetPasswordPage.css';
 
 export default function ResetPasswordPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
   const [isTokenValid, setIsTokenValid] = useState(true);
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [apiError, setApiError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Mock token validation on load
+  // Validate verified OTP state on load
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const token = searchParams.get('token');
-    if (token === 'invalid') {
+    const paramToken = searchParams.get('token');
+
+    const stateEmail = location.state?.email;
+    const stateOtp = location.state?.otp;
+
+    if (stateEmail && stateOtp) {
+      setEmail(stateEmail);
+      setOtp(stateOtp);
+      setIsTokenValid(true);
+    } else if (paramToken && paramToken !== 'invalid') {
+      setIsTokenValid(true);
+    } else {
       setIsTokenValid(false);
     }
-  }, []);
+  }, [location]);
 
   const validatePassword = (pass) => {
     if (!pass) return "New Password is required.";
@@ -37,8 +57,8 @@ export default function ResetPasswordPage() {
     const val = e.target.value;
     setPassword(val);
     setPasswordError(validatePassword(val));
+    setApiError('');
     
-    // Check confirm password match in real time if it has been touched
     if (confirmPassword) {
       if (val !== confirmPassword) {
         setConfirmPasswordError("Passwords do not match.");
@@ -51,6 +71,7 @@ export default function ResetPasswordPage() {
   const handleConfirmPasswordChange = (e) => {
     const val = e.target.value;
     setConfirmPassword(val);
+    setApiError('');
     
     if (!val) {
       setConfirmPasswordError("Confirm Password is required.");
@@ -61,8 +82,9 @@ export default function ResetPasswordPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError('');
     
     const passError = validatePassword(password);
     setPasswordError(passError);
@@ -81,14 +103,29 @@ export default function ResetPasswordPage() {
 
     setIsSubmitting(true);
 
-    // Mock API call and redirect
-    setTimeout(() => {
+    try {
+      const response = await api.post('/auth/reset-password', {
+        email: email,
+        otp: otp,
+        newPassword: password,
+        confirmPassword: confirmPassword,
+      });
+
+      if (response.success) {
+        setIsSuccess(true);
+        toast.success(response.message || "Password reset successful!");
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+      } else {
+        setApiError(response.message || 'Failed to reset password.');
+      }
+    } catch (err) {
+      console.error('Reset Password Error:', err);
+      setApiError(err.message || 'Failed to reset password. Please try again.');
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      setTimeout(() => {
-        alert('Redirecting to Sign In page...');
-      }, 1500);
-    }, 1000);
+    }
   };
 
   if (!isTokenValid) {
@@ -96,12 +133,16 @@ export default function ResetPasswordPage() {
       <div className="reset-page-wrapper">
         <div className="reset-card-container">
           <div className="reset-message-section">
-            <h1 className="reset-heading">Invalid Link</h1>
-            <p className="reset-description">This password reset link is invalid or has expired.</p>
+            <h1 className="reset-heading">Invalid Session</h1>
+            <p className="reset-description">This password reset link or OTP verification session is invalid or has expired.</p>
           </div>
-          <a href="#" className="reset-primary-button" style={{ textDecoration: 'none' }}>
+          <button 
+            className="reset-primary-button" 
+            style={{ textDecoration: 'none', border: 'none' }}
+            onClick={() => navigate('/forgot-password')}
+          >
             Go to Forgot Password
-          </a>
+          </button>
         </div>
       </div>
     );
@@ -126,11 +167,17 @@ export default function ResetPasswordPage() {
         </div>
 
         {isSuccess ? (
-          <div className="reset-success-message">
-            Password has been successfully reset!
+          <div className="reset-success-message" style={{ color: '#0B5D50', textAlign: 'center', fontWeight: 500, margin: '16px 0' }}>
+            Password has been successfully reset! Redirecting to Sign In...
           </div>
         ) : (
           <form className="reset-form" onSubmit={handleSubmit}>
+            {apiError && (
+              <div style={{ color: '#EF4444', fontSize: '13px', textAlign: 'center', marginBottom: '10px' }}>
+                {apiError}
+              </div>
+            )}
+
             {/* Section 4 – New Password Input */}
             <div className="reset-input-group">
               <label className="reset-field-label">New Password</label>
@@ -201,7 +248,7 @@ export default function ResetPasswordPage() {
               className="reset-primary-button"
               disabled={isSubmitting}
             >
-              Reset Password
+              {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
             </button>
           </form>
         )}
@@ -209,7 +256,7 @@ export default function ResetPasswordPage() {
         {/* Section 7 – Footer Row */}
         <div className="reset-footer-row">
           <span className="reset-footer-text">Remember your password?</span>
-          <a href="#" className="reset-sign-in-link">Sign In</a>
+          <span className="reset-sign-in-link" onClick={() => navigate('/login')}>Sign In</span>
         </div>
 
       </div>

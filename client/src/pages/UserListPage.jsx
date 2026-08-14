@@ -19,6 +19,9 @@ const UserListPage = () => {
     const [showViewModal, setShowViewModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
+    const userStr = localStorage.getItem("user");
+    const loggedInUser = userStr ? JSON.parse(userStr) : null;
+
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -26,9 +29,12 @@ const UserListPage = () => {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const res = await api.get('/users');
-            if (res.success && res.data) {
-                setUsers(res.data);
+            const res = await api.get('/users?limit=1000');
+            if (res.success && (res.data || res.users)) {
+                const allUsers = res.data || res.users || [];
+                // Exclude Admin users from the user list
+                const nonAdminUsers = allUsers.filter(u => u.role !== 'Admin' && u.role !== 'admin');
+                setUsers(nonAdminUsers);
             }
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -131,10 +137,10 @@ const UserListPage = () => {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
                         </div>
                         <div className="user-list-profile">
-                            <img src="https://i.pravatar.cc/150?u=admin" alt="Admin Avatar" className="user-list-avatar" />
+                            <img src={loggedInUser?.profileImage || "https://i.pravatar.cc/150?u=admin"} alt="Admin Avatar" className="user-list-avatar" />
                             <div className="user-list-profile-info">
-                                <span className="user-list-profile-name">Super Admin</span>
-                                <span className="user-list-profile-role">Administrator</span>
+                                <span className="user-list-profile-name">{loggedInUser?.name || "Super Admin"}</span>
+                                <span className="user-list-profile-role">{loggedInUser?.role || "Administrator"}</span>
                             </div>
                         </div>
                     </div>
@@ -309,7 +315,7 @@ const UserListPage = () => {
                         {/* Pagination */}
                         {!loading && filteredUsers.length > 0 && (
                             <div className="user-list-pagination">
-                                <span className="user-list-page-info">Showing 1 to {filteredUsers.length} of {filteredUsers.length} users</span>
+                                <span className="user-list-page-info">Showing {filteredUsers.length} of {users.length} user(s)</span>
                                 <div className="user-list-page-controls">
                                     <button className="user-list-page-btn">Previous</button>
                                     <button className="user-list-page-btn active">1</button>

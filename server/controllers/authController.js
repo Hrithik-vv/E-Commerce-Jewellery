@@ -354,9 +354,39 @@ const resetPassword = async (req, res) => {
     }
 };
 
+// @desc    Verify OTP
+// @route   POST /api/auth/verify-otp
+// @access  Public
+const verifyOTP = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).json({ success: false, message: "Email and OTP are required" });
+        }
+
+        const user = await User.findOne({
+            email: email.trim().toLowerCase(),
+            resetPasswordOTP: otp.trim(),
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ success: false, message: "Invalid or expired OTP" });
+        }
+
+        res.status(200).json({ success: true, message: "OTP verified successfully" });
+
+    } catch (error) {
+        console.error("Verify OTP Error:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
+
 module.exports = {
     signup,
     signin,
     forgotPassword,
+    verifyOTP,
     resetPassword
-}
+};

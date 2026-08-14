@@ -168,7 +168,7 @@ function Header() {
               </Nav.Link>
 
               {/* Cart Icon */}
-              <Nav.Link as={Link} to="/cart" className={`cart-link nav-link-custom ${isActive("/cart")}`}>
+              <Nav.Link as={Link} to={isLoggedIn ? "/cart" : "/login"} className={`cart-link nav-link-custom ${isActive("/cart")}`}>
                 <IoCart className="icon" />
                 {/* Cart Count Badge */}
                 {cartItemCount > 0 && (

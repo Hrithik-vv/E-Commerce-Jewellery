@@ -173,7 +173,9 @@ function Home() {
               onClick={() => navigate(`/category/${cat.slug}`)}
               style={{ cursor: "pointer" }}
             >
-              <img src={cat.image} alt={cat.name} />
+              <div className="category-img-container">
+                <img src={cat.image} alt={cat.name} />
+              </div>
               <span className="category-name">{cat.name}</span>
               <span className="category-count">{cat.count}</span>
             </div>

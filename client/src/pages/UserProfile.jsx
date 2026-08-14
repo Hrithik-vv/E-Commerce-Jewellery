@@ -1,20 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/UserProfile.css";
 import { Link } from "react-router-dom";
+import { api } from "../utils/api";
 
 function UserProfile() {
-  // --- Orders State & Dummy Data ---
-  const [orders] = useState([
-    { id: "#TH-1042", status: "Delivered", date: "Oct 24, 2025", price: "$1,299.00" },
-    { id: "#TH-1038", status: "In Transit", date: "Nov 02, 2025", price: "$499.00" },
-    { id: "#TH-1021", status: "Processing", date: "Nov 10, 2025", price: "$899.00" },
-  ]);
+  // --- Auth Check & User Data ---
+  useEffect(() => {
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "/login";
+    }
+  }, []);
+
+  const userStr = localStorage.getItem("user");
+  const user = userStr ? JSON.parse(userStr) : { name: "", email: "" };
+
+  // --- Real Orders State ---
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+
+  useEffect(() => {
+    const fetchUserOrders = async () => {
+      try {
+        setLoadingOrders(true);
+        const res = await api.get('/profile/orders');
+        if (res.success && (res.orders || res.data)) {
+          setOrders(res.orders || res.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch user orders:", err);
+      } finally {
+        setLoadingOrders(false);
+      }
+    };
+
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      fetchUserOrders();
+    }
+  }, []);
 
   // --- Contact Card States ---
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [contactData, setContactData] = useState({
-    name: "Ananya Sharma",
-    email: "ananya.sharma@example.com",
+    name: user.name || "User",
+    email: user.email || "user@example.com",
   });
   const [tempContact, setTempContact] = useState({ ...contactData });
 
@@ -87,9 +115,15 @@ function UserProfile() {
       case "Delivered":
         return { bg: "#F3F7F5", text: "#046A5A" };
       case "In Transit":
+      case "Shipped":
+      case "Out for Delivery":
         return { bg: "#FDF3DC", text: "#B8860B" };
       case "Processing":
+      case "Pending":
         return { bg: "#EEF1FA", text: "#4A5B9A" };
+      case "Cancelled":
+      case "Failed":
+        return { bg: "#FDF2F2", text: "#E53E3E" };
       default:
         return { bg: "#F3F7F5", text: "#046A5A" };
     }
@@ -111,17 +145,24 @@ function UserProfile() {
 
         {/* Order List */}
         <div className="orders-list">
-          {orders.length > 0 ? (
+          {loadingOrders ? (
+            <div style={{ padding: '16px', textAlign: 'center', fontSize: '14px', color: '#666' }}>Loading orders...</div>
+          ) : orders.length > 0 ? (
             orders.map((order) => {
-              const badgeStyle = getBadgeStyles(order.status);
+              const displayId = order._id ? `#${order._id.substring(order._id.length - 6).toUpperCase()}` : (order.id || 'N/A');
+              const status = order.orderStatus || order.status || 'Pending';
+              const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : (order.date || '');
+              const priceStr = order.pricing?.total !== undefined ? `₹${order.pricing.total.toLocaleString('en-IN')}` : (order.price || '₹0');
+              const badgeStyle = getBadgeStyles(status);
+
               return (
                 <div
-                  key={order.id}
+                  key={order._id || order.id}
                   className="order-card"
-                  onClick={() => handleOrderClick(order.id)}
+                  onClick={() => handleOrderClick(order._id || order.id)}
                 >
                   <div className="order-card-row">
-                    <span className="order-id">{order.id}</span>
+                    <span className="order-id">{displayId}</span>
                     <span
                       className="status-badge"
                       style={{
@@ -129,12 +170,12 @@ function UserProfile() {
                         color: badgeStyle.text,
                       }}
                     >
-                      {order.status}
+                      {status}
                     </span>
                   </div>
 
-                  <span className="order-date">{order.date}</span>
-                  <span className="order-price">{order.price}</span>
+                  <span className="order-date">{dateStr}</span>
+                  <span className="order-price">{priceStr}</span>
                 </div>
               );
             })
@@ -350,12 +391,13 @@ function UserProfile() {
         </div>
 
         {/* SIGN OUT BUTTON */}
-        <button 
-          className="btn-signout" 
+        <button
+          className="btn-signout"
           onClick={() => {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("user");
             localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("cartItems");
             window.dispatchEvent(new Event('auth-change'));
             window.location.href = "/login";
           }}
