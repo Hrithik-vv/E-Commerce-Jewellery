@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCart } from '../utils/CartContext';
+import api from '../utils/api';
 import '../css/CheckoutPage.css';
 
 const AddressForm = ({ data, setData }) => (
@@ -118,7 +118,7 @@ export default function CheckoutPage() {
       });
 
       // 1. Create Razorpay order via backend
-      const { data: orderData } = await axios.post('/api/payment/create-order', {
+      const orderData = await api.post('/payment/create-order', {
         amount: finalAmount,
         currency: 'INR'
       });
@@ -131,7 +131,7 @@ export default function CheckoutPage() {
 
       // 2. Configure Razorpay checkout
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Frontend Razorpay key
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: orderData.order.amount,
         currency: orderData.order.currency,
         name: 'ELORA Jewellery',
@@ -144,7 +144,7 @@ export default function CheckoutPage() {
             const userId = loggedInUser?._id || loggedInUser?.id || null;
 
             // 3. Verify Payment
-            const verifyRes = await axios.post('/api/payment/verify-payment', {
+            const verifyData = await api.post('/payment/verify-payment', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
@@ -162,7 +162,7 @@ export default function CheckoutPage() {
               user: userId
             });
 
-            if (verifyRes.data.success) {
+            if (verifyData.success) {
               toast.success('Payment successful!');
               clearCart();
               navigate('/payment-success');

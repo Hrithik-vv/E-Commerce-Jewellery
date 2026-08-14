@@ -1,5 +1,7 @@
 // Centralized API helper for all backend calls
-const API_BASE = '/api';
+// Uses VITE_API_URL (set in .env) for the deployed Render backend.
+// Falls back to '/api' so the local Vite dev-proxy still works if the var is absent.
+const API_BASE = (import.meta.env.VITE_API_URL || '') + '/api';
 
 // Get auth token from localStorage
 const getToken = () => localStorage.getItem('accessToken');
