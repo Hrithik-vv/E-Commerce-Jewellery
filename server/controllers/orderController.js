@@ -91,7 +91,7 @@ const getOrderById = async (req, res) => {
 // @access  Private/Admin
 const updateOrderStatus = async (req, res) => {
   try {
-    const { status } = req.body;
+    const status = req.body.status || req.body.orderStatus;
     
     // Validate status
     const validStatuses = ['Pending', 'Processing', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'];

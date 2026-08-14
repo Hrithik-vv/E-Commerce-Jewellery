@@ -1,5 +1,5 @@
 const User = require('../models/UserSchema');
-const argon2 = require('argon2');
+const bcrypt = require('bcryptjs');
 const cloudinary = require('../config/cloudinary');
 
 // @desc    Get all users with search, filter, and pagination
@@ -93,7 +93,7 @@ const createUser = async (req, res) => {
         }
 
         // Hash password
-        const hashedPassword = await argon2.hash(password);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await User.create({
             name,
@@ -278,7 +278,7 @@ const adminResetUserPassword = async (req, res) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        const hashedPassword = await argon2.hash(password);
+        const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
 
         // Log the activity

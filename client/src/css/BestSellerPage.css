@@ -1,0 +1,419 @@
+/* d:\E-Commerce-Jewellery\E-Commerce-Jewellery\client\src\css\BestSellerPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Section 1 – Page Header */
+.bsp-page-header {
+  text-align: center;
+  padding: 48px 20px 24px;
+  background: #FAF9F6;
+}
+
+.bsp-page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 44px;
+  color: #014D40;
+  margin: 0 0 8px 0;
+}
+
+.bsp-page-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* Section 2 – Shell */
+.bsp-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+  box-sizing: border-box;
+}
+
+/* Section 3 – Toolbar */
+.bsp-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* Section 4 – Price Filter */
+.bsp-price-filter-container {
+  position: relative;
+}
+
+.bsp-price-trigger {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: border-color 200ms ease;
+  outline: none;
+}
+
+.bsp-price-trigger:hover,
+.bsp-price-trigger.open {
+  border-color: #046A5A;
+}
+
+.bsp-trigger-label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2B2B2B;
+}
+
+.bsp-trigger-icon {
+  width: 12px;
+  height: 7px;
+  color: #046A5A;
+  transition: transform 200ms ease;
+  fill: currentColor;
+}
+
+.bsp-price-trigger.open .bsp-trigger-icon {
+  transform: rotate(180deg);
+}
+
+/* Section 5 – Price Popover */
+.bsp-price-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 260px;
+  z-index: 10;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(1,77,64,0.08);
+  box-sizing: border-box;
+}
+
+.bsp-highest-price-hint {
+  background: #F3F7F5;
+  border-radius: 6px;
+  padding: 7px 9px;
+  margin-bottom: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  color: #6B7280;
+}
+
+.bsp-highest-price-value {
+  font-weight: bold;
+  color: #046A5A;
+}
+
+.bsp-min-max-inputs {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.bsp-input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.bsp-input-prefix {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2B2B2B;
+  pointer-events: none;
+}
+
+.bsp-price-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2B2B2B;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 9px 10px 9px 34px;
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+  -moz-appearance: textfield;
+}
+
+.bsp-price-input::-webkit-outer-spin-button,
+.bsp-price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.bsp-price-input:focus {
+  border-color: #046A5A;
+  box-shadow: 0 0 0 3px rgba(4,106,90,0.1);
+}
+
+.bsp-apply-btn {
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #FFFFFF;
+  background: #046A5A;
+  border-radius: 8px;
+  padding: 9px;
+  border: none;
+  cursor: pointer;
+  transition: background 200ms ease;
+  outline: none;
+}
+
+.bsp-apply-btn:hover {
+  background: #014D40;
+}
+
+/* Section 6 – Result Count */
+.bsp-result-count {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+/* Section 7 – Toolbar Right (Sort) */
+.bsp-toolbar-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bsp-sort-label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2B2B2B;
+}
+
+.bsp-sort-select {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2B2B2B;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 8px 14px;
+  padding-right: 32px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7' fill='none'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23046A5A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  outline: none;
+  cursor: pointer;
+}
+
+.bsp-sort-select:focus {
+  border-color: #046A5A;
+}
+
+/* Section 8 – Product Grid */
+.bsp-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Section 9 – Product Card */
+.bsp-product-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.bsp-product-image-container {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 10px;
+  background: #F3F7F5;
+  color: #046A5A;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bsp-placeholder-icon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+}
+
+.bsp-best-seller-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #014D40;
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.bsp-product-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #2B2B2B;
+  margin: 0 0 4px 0;
+}
+
+.bsp-product-price {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #046A5A;
+  margin: 0;
+}
+
+/* Section 10 – Pagination */
+.bsp-pagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.bsp-page-btn {
+  height: 38px;
+  padding: 0 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2B2B2B;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease;
+  outline: none;
+}
+
+.bsp-page-btn:hover:not(:disabled) {
+  border-color: #046A5A;
+  color: #046A5A;
+}
+
+.bsp-page-btn:disabled {
+  color: #D1D5DB;
+  border-color: #E5E7EB;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.bsp-btn-icon {
+  width: 12px;
+  height: 12px;
+  color: currentColor;
+}
+
+.bsp-page-indicator {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #014D40;
+}
+
+/* Responsive Styles */
+@media (max-width: 900px) {
+  .bsp-product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bsp-page-header {
+    padding: 32px 16px 16px;
+  }
+  .bsp-page-title {
+    font-size: 30px;
+  }
+  .bsp-page-subtitle {
+    font-size: 13px;
+  }
+  .bsp-shell {
+    padding: 16px 16px 60px;
+  }
+  .bsp-toolbar {
+    gap: 10px;
+  }
+  .bsp-result-count {
+    font-size: 12px;
+  }
+  .bsp-sort-select {
+    font-size: 13px;
+  }
+  .bsp-best-seller-tag {
+    font-size: 8px;
+    padding: 3px 7px;
+  }
+  .bsp-product-name {
+    font-size: 13px;
+  }
+  .bsp-product-price {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 550px) {
+  .bsp-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bsp-price-popover {
+    width: 240px;
+  }
+  .bsp-pagination {
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .bsp-page-btn {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+  .bsp-page-indicator {
+    font-size: 13px;
+  }
+}

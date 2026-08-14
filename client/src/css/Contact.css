@@ -1,0 +1,327 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+
+.contact-page-root {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-page-root * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ----------------------------------
+   1. HERO SECTION
+---------------------------------- */
+.hero-section {
+  width: 100%;
+  min-height: 280px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+  z-index: 1;
+}
+
+.hero-heading {
+  position: relative;
+  z-index: 2;
+  width: fit-content;
+  max-width: 600px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 48px;
+  line-height: 1.15;
+}
+
+/* ----------------------------------
+   2. CONTACT INFO SECTION
+---------------------------------- */
+.contact-info-section {
+  background-color: #FAF9F6;
+  padding: 50px 20px;
+}
+
+.contact-info-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+/* Left Column */
+.info-left-col {
+  flex: 1 1 300px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.subheading-get-in-touch {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #014D40;
+  line-height: 32px;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.intro-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6B7280;
+  line-height: 22px;
+  text-align: left;
+}
+
+.chat-us-block {
+  margin-top: 32px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.subheading-chat-us {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #046A5A;
+  line-height: 28px;
+  text-align: left;
+}
+
+.chat-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6B7280;
+  line-height: 22px;
+  text-align: left;
+}
+
+.whatsapp-link {
+  font-weight: 500;
+  color: #046A5A;
+  text-decoration: none;
+  transition: color 200ms ease, text-decoration 200ms ease;
+}
+
+.whatsapp-link:hover {
+  color: #D4AF37;
+  text-decoration: underline;
+}
+
+/* Right Column */
+.info-right-col {
+  flex: 1 1 300px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.visit-us-nested-row {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  width: 100%;
+}
+
+.visit-us-block {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  flex: 1 1 200px;
+}
+
+.subheading-visit-us {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #046A5A;
+  line-height: 28px;
+  text-align: left;
+}
+
+.address-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6B7280;
+  line-height: 22px;
+  text-align: left;
+}
+
+/* ----------------------------------
+   3. DROP US A MESSAGE SECTION
+---------------------------------- */
+.drop-message-section {
+  background-color: #FAF9F6;
+  padding: 0 20px 50px;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 25px;
+  overflow: hidden;
+  background-color: #F3F7F5;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding: 0 20px 20px;
+}
+
+.form-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: #014D40;
+  line-height: 30px;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 12px;
+}
+
+.contact-form {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.name-email-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 100%;
+}
+
+.field-share {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.input-field {
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #2B2B2B;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.input-field::placeholder {
+  color: #8A8A8A;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #046A5A;
+  box-shadow: 0 0 0 3px rgba(4, 106, 90, 0.1);
+}
+
+.field-phone {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.field-comment {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  margin-top: 16px;
+}
+
+.submit-btn {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #FFFFFF;
+  background-color: #046A5A;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 32px;
+  width: 75%;
+  display: block;
+  margin: 20px auto 0;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.submit-btn:hover,
+.submit-btn:active {
+  background-color: #014D40;
+}
+
+/* ----------------------------------
+   RESPONSIVE BREAKPOINTS
+---------------------------------- */
+@media (max-width: 850px) {
+  .hero-heading {
+    font-size: 40px;
+  }
+
+  .contact-info-wrapper {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .hero-heading {
+    font-size: 32px;
+  }
+
+  .visit-us-nested-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .name-email-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}

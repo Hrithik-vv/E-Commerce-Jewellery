@@ -15,6 +15,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Ensure DB connection for all API routes (Serverless Best Practice)
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
@@ -29,19 +35,15 @@ app.use("/api/newsletter", require("./routes/newsletterRoutes"));
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const startServer = async () => {
-  try {
-    await connectDB();
-    await createAdmin();
+// Create admin user once DB is connected (in background)
+connectDB().then(() => createAdmin()).catch(() => {});
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
+// Start server locally if not in production
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
 
-  } catch (error) {
-    console.error("Failed to start server:", error);
-    process.exit(1);
-  }
-};
-
-startServer();
+// Export for Vercel serverless functions
+module.exports = app;

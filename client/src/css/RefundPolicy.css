@@ -1,0 +1,141 @@
+/* ==========================================
+   Refund Policy Stylesheet (BRD Compliant)
+   ========================================== */
+
+/* Full-width Section Container */
+.refund-policy-section {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 64px 40px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Centered Responsive Content Container (Max-Width 1000px) */
+.refund-policy-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Main Page Title (H1) */
+.refund-policy-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #005e68;
+  text-align: center;
+  margin: 0 0 32px 0;
+}
+
+/* Section Headings (H2) */
+.refund-policy-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #005e68;
+  text-align: left;
+  margin-top: 48px;
+  margin-bottom: 20px;
+}
+
+/* H2 First Section Margin Override */
+.refund-policy-heading.main-content-heading {
+  margin-top: 24px;
+}
+
+/* Paragraph Content */
+.refund-policy-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #45484c;
+  line-height: 1.8;
+  text-align: left;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Bold Policy Statements */
+.refund-policy-bold {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #45484c;
+}
+
+/* Unordered Lists */
+.refund-policy-list {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #45484c;
+  line-height: 1.8;
+  padding-left: 28px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  list-style-type: disc;
+}
+
+/* List Items */
+.refund-policy-list-item {
+  margin-bottom: 10px;
+}
+
+.refund-policy-list-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Hyperlinks */
+.refund-policy-link {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #005e68;
+  text-decoration: underline;
+  transition: color 300ms ease;
+}
+
+.refund-policy-link:hover {
+  color: #eac33f;
+}
+
+.refund-policy-link:focus-visible {
+  outline: 2px solid #eac33f;
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   Responsive Breakpoints
+   ========================================== */
+
+/* Tablet Layout (<= 1024px) */
+@media (max-width: 1024px) {
+  .refund-policy-section {
+    padding: 64px 30px;
+  }
+
+  .refund-policy-title {
+    font-size: 36px;
+  }
+
+  .refund-policy-heading {
+    font-size: 28px;
+  }
+}
+
+/* Mobile Layout (<= 640px) */
+@media (max-width: 640px) {
+  .refund-policy-section {
+    padding: 64px 16px;
+  }
+
+  .refund-policy-title {
+    font-size: 32px;
+  }
+
+  .refund-policy-heading {
+    font-size: 24px;
+  }
+}

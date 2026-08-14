@@ -10,7 +10,7 @@ const {
     deactivateUser,
     uploadUserProfilePhoto
 } = require('../controllers/userController');
-const { protect, authorize } = require('../middleware/AuthMiddleware');
+const { protect, authorize } = require('../middleware/authMiddleware');
 const upload = require('../middleware/ImageUploadMiddleware');
 
 // All routes are protected and require Admin role

@@ -1,0 +1,195 @@
+/* AdminNavbar.css */
+.admin-navbar-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 80px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.admin-navbar-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-navbar-logo-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #134E4A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-navbar-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #134E4A;
+    letter-spacing: 1px;
+}
+
+.admin-navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+}
+
+.admin-navbar-link {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #374151;
+    cursor: pointer;
+    text-decoration: none;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.admin-navbar-link:hover {
+    color: #134E4A;
+}
+
+.admin-navbar-link.active {
+    font-weight: 500;
+    color: #134E4A;
+    border-bottom: 2px solid #0B5D50;
+}
+
+.admin-navbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-navbar-search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.admin-navbar-search-input {
+    width: 0px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    opacity: 0;
+    outline: none;
+}
+
+.admin-navbar-search-input.expanded {
+    width: 220px;
+    padding: 0 40px 0 16px;
+    border: 1px solid #D1D5DB;
+    background-color: #FFFFFF;
+    opacity: 1;
+}
+
+.admin-navbar-search-icon {
+    width: 20px;
+    height: 20px;
+    color: #134E4A;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+}
+
+.admin-navbar-profile-container {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.admin-navbar-profile-icon {
+    width: 20px;
+    height: 20px;
+    color: #134E4A;
+}
+
+.admin-navbar-dropdown {
+    position: absolute;
+    top: calc(100% + 15px);
+    right: 0;
+    width: 200px;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 12px 0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.admin-navbar-dropdown.active {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.admin-navbar-dropdown-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #134E4A;
+    padding: 12px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-navbar-dropdown-item {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #374151;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.admin-navbar-dropdown-item:hover {
+    background-color: #F8F7F4;
+    color: #0B5D50;
+}
+
+.admin-navbar-dropdown-item.logout {
+    font-weight: 500;
+    color: #DC2626;
+}
+
+.admin-navbar-dropdown-item.logout:hover {
+    background-color: #F8F7F4;
+    color: #DC2626;
+}
+
+/* Responsive constraints */
+@media (max-width: 768px) {
+    .admin-navbar-container {
+        padding: 15px 20px;
+    }
+    
+    .admin-navbar-links {
+        display: none; /* Can be updated later for mobile view */
+    }
+}

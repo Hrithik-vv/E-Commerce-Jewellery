@@ -1,0 +1,418 @@
+/* SECTION 1 — Product List Page */
+.plp-main-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  padding: 32px 80px;
+  gap: 32px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-main-container {
+    padding: 24px 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .plp-main-container {
+    padding: 20px;
+  }
+}
+
+/* Page Header */
+.plp-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 767px) {
+  .plp-page-header {
+    gap: 6px;
+  }
+}
+
+.plp-page-title {
+  font-family: Manrope;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-page-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .plp-page-title {
+    font-size: 24px;
+  }
+}
+
+.plp-page-description {
+  font-family: Manrope;
+  font-size: 15px;
+  font-weight: 400;
+  color: #6B7280;
+}
+
+@media (max-width: 767px) {
+  .plp-page-description {
+    font-size: 14px;
+  }
+}
+
+/* SECTION 2 — Filter & Search Section */
+.plp-filter-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-filter-container {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .plp-filter-container {
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+}
+
+.plp-search-input {
+  width: 320px;
+  height: 44px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background: #FFFFFF;
+  padding: 0 16px;
+  font-family: Manrope;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-search-input {
+    flex: 1 1 320px;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 767px) {
+  .plp-search-input {
+    width: 100%;
+  }
+}
+
+.plp-filter-select {
+  width: 220px;
+  height: 44px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background: #FFFFFF;
+  font-family: Manrope;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-filter-select {
+    flex: 1 1 220px;
+  }
+}
+
+@media (max-width: 767px) {
+  .plp-filter-select {
+    width: 100%;
+  }
+}
+
+/* SECTION 3 — Products Table */
+.plp-table-container {
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-table-container {
+    overflow-x: auto;
+  }
+  .plp-table {
+    min-width: 1000px;
+  }
+}
+
+@media (max-width: 767px) {
+  .plp-table-container {
+    overflow-x: auto;
+  }
+  .plp-table {
+    min-width: 1000px;
+  }
+}
+
+.plp-table {
+  width: 100%;
+}
+
+.plp-table-header-row {
+  height: 56px;
+  background: #F9FAFB;
+}
+
+.plp-table th {
+  font-family: Manrope;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  text-align: left;
+}
+
+/* STATE 1 — Products Exist */
+.plp-table-row {
+  height: 64px;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.plp-table-row:hover {
+  background: #FAFAFA;
+}
+
+.plp-product-id {
+  font-family: Manrope;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.plp-product-name-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.plp-product-name-thumbnail {
+  width: 40px;
+  height: 40px;
+}
+
+.plp-product-name-text {
+  font-family: Manrope;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.plp-category {
+  font-family: Manrope;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+/* Stock Status Badge */
+.plp-stock-badge-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.plp-stock-in {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.plp-stock-low {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.plp-stock-out {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.plp-action-container {
+  display: flex;
+  gap: 8px;
+}
+
+.plp-btn-edit {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.plp-btn-edit:hover {
+  background: #F9FAFB;
+}
+
+.plp-btn-delete {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.plp-btn-delete:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+  border-color: #FEE2E2;
+}
+
+/* Pagination */
+.plp-pagination-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-pagination-container {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 767px) {
+  .plp-pagination-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.plp-records-count {
+  font-family: Manrope;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.plp-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .plp-pagination-controls {
+    flex-wrap: wrap;
+  }
+}
+
+.plp-btn-prev, .plp-btn-next {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .plp-btn-label {
+    display: none;
+  }
+}
+
+.plp-page-number {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  cursor: pointer;
+}
+
+.plp-page-active {
+  background: #0B5D50;
+  color: #FFFFFF;
+  border-color: #0B5D50;
+}
+
+@media (max-width: 767px) {
+  .plp-hide-mobile {
+    display: none;
+  }
+}
+
+/* STATE 2 — No Products */
+.plp-empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 20px;
+  gap: 16px;
+  background: #FFFFFF;
+}
+
+.plp-empty-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  color: #0B5D50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plp-empty-title {
+  font-family: Manrope;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.plp-empty-subtext {
+  font-family: Manrope;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6B7280;
+  text-align: center;
+  max-width: 320px;
+}

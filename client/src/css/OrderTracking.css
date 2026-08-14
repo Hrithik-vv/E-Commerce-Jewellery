@@ -1,0 +1,377 @@
+/* Container Layout */
+.order-tracking-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px 64px 20px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* 1. Back Link */
+.back-link {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #046a5a;
+  text-decoration: none;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #d4af37;
+}
+
+/* 2. Order Header */
+.order-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.order-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 32px;
+  color: #014d40;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.order-subtext {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.status-badge {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  display: inline-block;
+  height: fit-content;
+}
+
+.status-badge.delivered {
+  background-color: #f3f7f5;
+  color: #046a5a;
+}
+
+.status-badge.in-transit {
+  background-color: #fdf3dc;
+  color: #b8860b;
+}
+
+.status-badge.processing {
+  background-color: #eef1fa;
+  color: #4a5b9a;
+}
+
+/* Universal Card Base Styling */
+.tracking-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+/* 3. Timeline / Horizontal Tracker */
+.timeline-container {
+  position: relative;
+  width: 100%;
+}
+
+.timeline-track {
+  position: absolute;
+  top: 16px;
+  left: 32px;
+  right: 32px;
+  height: 3px;
+  background-color: #e5e7eb;
+  z-index: 1;
+}
+
+.timeline-progress-line {
+  height: 100%;
+  background-color: #046a5a;
+  transition: width 0.3s ease;
+}
+
+.timeline-steps {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+
+/* Dots */
+.step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+.step-dot.completed {
+  background-color: #046a5a;
+  border: 2px solid #046a5a;
+  color: #ffffff;
+}
+
+.step-dot.current {
+  background-color: #ffffff;
+  border: 2px solid #046a5a;
+}
+
+.inner-emerald-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #046a5a;
+}
+
+.step-dot.pending {
+  background-color: #ffffff;
+  border: 2px solid #e5e7eb;
+}
+
+.inner-gray-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #d1d5db;
+}
+
+/* Step Typography */
+.step-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  margin-top: 12px;
+  margin-bottom: 2px;
+}
+
+.step-label.active {
+  font-weight: 500;
+  color: #2b2b2b;
+}
+
+.step-label.pending {
+  font-weight: 400;
+  color: #8a8a8a;
+}
+
+.step-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #8a8a8a;
+}
+
+/* 4. Order Details Card */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.info-label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.info-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2b2b2b;
+  line-height: 22px;
+}
+
+.info-text .name-line {
+  font-weight: 600;
+  color: #014d40;
+}
+
+/* 5. Items Card */
+.items-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.item-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.item-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.item-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #014d40;
+}
+
+.item-qty {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: #8a8a8a;
+}
+
+.item-price {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #2b2b2b;
+  text-align: right;
+}
+
+/* 6. Order Summary Card */
+.summary-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summary-row {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6b7280;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-row.total-row {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 8px;
+  padding-top: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #014d40;
+}
+
+/* 7. Help Text */
+.help-text {
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 32px;
+}
+
+.help-link {
+  color: #046a5a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.help-link:hover {
+  color: #d4af37;
+  text-decoration: underline;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 700px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .timeline-track {
+    top: 16px;
+    bottom: 16px;
+    left: 15px;
+    width: 3px;
+    height: auto;
+    right: auto;
+  }
+
+  .timeline-progress-line {
+    width: 100% !important;
+    height: var(--vertical-progress, 0%);
+  }
+
+  .timeline-steps {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .timeline-step {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 16px;
+  }
+
+  .step-label {
+    margin-top: 0;
+  }
+}
