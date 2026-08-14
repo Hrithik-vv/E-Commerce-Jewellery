@@ -29,19 +29,17 @@ app.use("/api/newsletter", require("./routes/newsletterRoutes"));
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const startServer = async () => {
-  try {
-    await connectDB();
-    await createAdmin();
+// Connect to database and create admin
+connectDB()
+  .then(() => createAdmin())
+  .catch((err) => console.error("Database connection failed:", err));
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
+// Start server locally if not in production
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
 
-  } catch (error) {
-    console.error("Failed to start server:", error);
-    process.exit(1);
-  }
-};
-
-startServer();
+// Export for Vercel serverless functions
+module.exports = app;
