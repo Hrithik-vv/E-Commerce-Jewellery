@@ -17,20 +17,30 @@ app.use(express.urlencoded({ extended: true }));
 
 // Ensure DB connection for all API routes (Serverless Best Practice)
 app.use(async (req, res, next) => {
-  await connectDB();
-  next();
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Database connection failed", error: err.message });
+  }
 });
 
-// Routes
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/products", require("./routes/productRoutes"));
-app.use("/api/cart", require("./routes/cartRoutes"));
-app.use("/api/payment", require("./routes/paymentRoutes"));
-app.use("/api/orders", require("./routes/orderRoutes"));
-app.use("/api/profile", require("./routes/profileRoutes"));
-app.use("/api/dashboard", require("./routes/dashboardRoutes"));
-app.use("/api/newsletter", require("./routes/newsletterRoutes"));
+// Function to mount routes on a specific base path
+const mountRoutes = (basePath) => {
+  app.use(`${basePath}/auth`, require("./routes/authRoutes"));
+  app.use(`${basePath}/users`, require("./routes/userRoutes"));
+  app.use(`${basePath}/products`, require("./routes/productRoutes"));
+  app.use(`${basePath}/cart`, require("./routes/cartRoutes"));
+  app.use(`${basePath}/payment`, require("./routes/paymentRoutes"));
+  app.use(`${basePath}/orders`, require("./routes/orderRoutes"));
+  app.use(`${basePath}/profile`, require("./routes/profileRoutes"));
+  app.use(`${basePath}/dashboard`, require("./routes/dashboardRoutes"));
+  app.use(`${basePath}/newsletter`, require("./routes/newsletterRoutes"));
+};
+
+// Mount routes for both environments (Vercel strips /api in some configurations)
+mountRoutes("/api");
+mountRoutes("");
 
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
