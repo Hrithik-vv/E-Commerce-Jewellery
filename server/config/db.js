@@ -7,8 +7,7 @@ const connectDB = async () => {
     return;
   }
   if (!process.env.MONGODB_URL) {
-    console.warn("MONGODB_URL is not defined in the environment variables!");
-    return;
+    throw new Error("MONGODB_URL is not defined in the environment variables!");
   }
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URL);
@@ -16,6 +15,7 @@ const connectDB = async () => {
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Error connecting to MongoDB: ${error.message}`);
+    throw error;
   }
 };
 
