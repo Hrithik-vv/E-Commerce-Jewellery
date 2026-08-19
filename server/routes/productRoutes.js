@@ -1,42 +1,50 @@
 const express = require('express');
 const router = express.Router();
-const { addProduct, getAllProducts, editProduct, getProductById, getRelatedProducts, getBestSellers, getProductsByCategory, deleteProduct, getCategories } = require('../controllers/productController');
+const {
+  addProduct, getAllProducts, editProduct, getProductById,
+  getRelatedProducts, getBestSellers, getProductsByCategory,
+  deleteProduct, getCategories, searchProducts
+} = require('../controllers/productController');
+const { addReview, getProductReviews, deleteReview } = require('../controllers/reviewController');
+const { protect, authorize } = require('../middleware/authMiddleware');
 const upload = require('../middleware/ImageUploadMiddleware');
 
-// POST /api/products/addproduct
-// Add a new product (handles multipart/form-data for image upload)
-router.post('/addproduct', upload.single('productImage'), addProduct);
+// GET /api/products/search?q=...
+router.get('/search', searchProducts);
 
 // GET /api/products/allproducts
-// Fetch all products
 router.get('/allproducts', getAllProducts);
 
 // GET /api/products/categories
-// Fetch all categories with product counts
 router.get('/categories', getCategories);
 
-// PUT /api/products/editproduct/:id
-// Edit an existing product (handles optional image upload)
-router.put('/editproduct/:id', upload.single('productImage'), editProduct);
-
-// GET /api/products/getsingleproductdetails/:id
-// Fetch a single product by ID
-router.get('/getsingleproductdetails/:id', getProductById);
-
-// GET /api/products/getrelatedproducts/:id
-// Fetch related products
-router.get('/getrelatedproducts/:id', getRelatedProducts);
-
 // GET /api/products/getbestsellers
-// Fetch best sellers with pagination, sorting, and filtering
 router.get('/getbestsellers', getBestSellers);
 
 // GET /api/products/getproductsbycategory/:category
-// Fetch products by category with pagination, sorting, and filtering
 router.get('/getproductsbycategory/:category', getProductsByCategory);
 
+// POST /api/products/addproduct
+router.post('/addproduct', protect, authorize('Admin'), upload.single('productImage'), addProduct);
+
+// PUT /api/products/editproduct/:id
+router.put('/editproduct/:id', protect, authorize('Admin'), upload.single('productImage'), editProduct);
+
+// DELETE /api/products/reviews/:id (admin)
+router.delete('/reviews/:id', protect, authorize('Admin'), deleteReview);
+
+// GET /api/products/getsingleproductdetails/:id
+router.get('/getsingleproductdetails/:id', getProductById);
+
+// GET /api/products/getrelatedproducts/:id
+router.get('/getrelatedproducts/:id', getRelatedProducts);
+
 // DELETE /api/products/deleteproduct/:id
-// Delete a single product
-router.delete('/deleteproduct/:id', deleteProduct);
+router.delete('/deleteproduct/:id', protect, authorize('Admin'), deleteProduct);
+
+// GET  /api/products/:id/reviews
+// POST /api/products/:id/reviews
+router.get('/:id/reviews', getProductReviews);
+router.post('/:id/reviews', protect, addReview);
 
 module.exports = router;

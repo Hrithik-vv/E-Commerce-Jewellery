@@ -2,8 +2,10 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import AdminLayout from './Components/AdminLayout';
+import PrivateRoute from './Components/PrivateRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import AdminLogin from './pages/AdminLogin';
 import SignUp from './pages/SignUp';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -32,6 +34,9 @@ import SingleOrderPage from './pages/SingleOrderPage';
 import UserListPage from './pages/UserListPage';
 import SingleUserDetailsPage from './pages/SingleUserDetailsPage';
 import ProtectedRoute from './utils/ProtectedRoute';
+import SearchResultsPage from './pages/SearchResultsPage';
+import WishlistPage from './pages/WishlistPage';
+import CouponManagementPage from './pages/CouponManagementPage';
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { CartProvider } from './utils/CartContext';
@@ -39,15 +44,8 @@ import { CartProvider } from './utils/CartContext';
 const Layout = ({ children }) => {
   const location = useLocation();
   const adminRoutes = [
-    '/admin-dashboard',
-    '/admin-profile',
-    '/products',
-    '/add-product',
-    '/edit-product',
-    '/orders',
-    '/order',
-    '/users',
-    '/user-details',
+    '/admin-dashboard', '/admin-profile', '/products', '/add-product',
+    '/edit-product', '/orders', '/order', '/users', '/user-details', '/coupons',
   ];
 
   const isAdminRoute = adminRoutes.some(route => location.pathname.startsWith(route));
@@ -82,13 +80,16 @@ function App() {
             <Route path="/best-sellers" element={<BestSellerPage />} />
             <Route path="/product/:id" element={<ProductDetailsPage />} />
             <Route path="/category/:category" element={<Category />} />
+            <Route path="/search" element={<SearchResultsPage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/otp" element={<OTPVerificationPage />} />
             <Route path="/forgot-password" element={<OTPVerificationPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/disclaimer-policy" element={<DisclaimerPolicy />} />
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
@@ -101,17 +102,19 @@ function App() {
             <Route path="/payment-success" element={<ProtectedRoute><PaymentSuccessPage /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
             <Route path="/ordertracking" element={<ProtectedRoute><OrderTracking /></ProtectedRoute>} />
+            <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
 
-            {/* Admin Pages */}
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/admin-profile" element={<AdminProfilePage />} />
-            <Route path="/products" element={<ProductListPage />} />
-            <Route path="/add-product" element={<AddProductPage />} />
-            <Route path="/edit-product/:id" element={<EditProductPage />} />
-            <Route path="/orders" element={<OrderListPage />} />
-            <Route path="/order/:id" element={<SingleOrderPage />} />
-            <Route path="/users" element={<UserListPage />} />
-            <Route path="/user-details/:id" element={<SingleUserDetailsPage />} />
+            {/* Protected Admin Pages */}
+            <Route path="/admin-dashboard" element={<PrivateRoute role="Admin"><AdminDashboard /></PrivateRoute>} />
+            <Route path="/admin-profile" element={<PrivateRoute role="Admin"><AdminProfilePage /></PrivateRoute>} />
+            <Route path="/products" element={<PrivateRoute role="Admin"><ProductListPage /></PrivateRoute>} />
+            <Route path="/add-product" element={<PrivateRoute role="Admin"><AddProductPage /></PrivateRoute>} />
+            <Route path="/edit-product/:id" element={<PrivateRoute role="Admin"><EditProductPage /></PrivateRoute>} />
+            <Route path="/orders" element={<PrivateRoute role="Admin"><OrderListPage /></PrivateRoute>} />
+            <Route path="/order/:id" element={<PrivateRoute role="Admin"><SingleOrderPage /></PrivateRoute>} />
+            <Route path="/users" element={<PrivateRoute role="Admin"><UserListPage /></PrivateRoute>} />
+            <Route path="/user-details/:id" element={<PrivateRoute role="Admin"><SingleUserDetailsPage /></PrivateRoute>} />
+            <Route path="/coupons" element={<PrivateRoute role="Admin"><CouponManagementPage /></PrivateRoute>} />
           </Routes>
         </Layout>
       </CartProvider>

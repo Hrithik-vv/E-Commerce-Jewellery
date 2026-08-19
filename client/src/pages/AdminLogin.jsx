@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import api from "../utils/api";
 import "../css/Login.css";
 
-function Login() {
+function AdminLogin() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  // Where to go after login — honour ?redirect= or fall back to home
-  const redirectTarget = searchParams.get('redirect') || '/';
 
   // State Management
   const [email, setEmail] = useState("");
@@ -40,9 +37,6 @@ function Login() {
     if (!trimmedEmail) {
       setEmailError("Email is required.");
       isValid = false;
-    } else if (trimmedEmail.length > 100) {
-      setEmailError("Email cannot exceed 100 characters.");
-      isValid = false;
     } else if (!emailRegex.test(trimmedEmail)) {
       setEmailError("Please enter a valid email address.");
       isValid = false;
@@ -51,12 +45,6 @@ function Login() {
     // Password Validation
     if (!password) {
       setPasswordError("Password is required.");
-      isValid = false;
-    } else if (password.length < 8 || password.length > 20) {
-      setPasswordError("Password must be 8-20 characters long.");
-      isValid = false;
-    } else if (/\s/.test(password)) {
-      setPasswordError("Spaces are not allowed in password.");
       isValid = false;
     }
 
@@ -76,7 +64,12 @@ function Login() {
         });
 
         if (response.success) {
-          toast.success(response.message || "Login Successful!");
+          if (response.user.role !== 'Admin') {
+            toast.error("Access Denied. Admins only.");
+            return;
+          }
+
+          toast.success(response.message || "Admin Login Successful!");
 
           // Store Access Token & User Details
           localStorage.setItem("accessToken", response.accessToken);
@@ -89,31 +82,7 @@ function Login() {
           
           window.dispatchEvent(new Event('auth-change'));
           
-          if (response.user.role === 'Admin') {
-            toast.error("Admins must use the Admin Portal to sign in.");
-            localStorage.clear();
-            return;
-          }
-
-          // Check for productId and qty in redirect path (Buy Now flow)
-          const url = new URL('http://dummy' + redirectTarget);
-          const productId = url.searchParams.get('productId');
-          const qtyParam = url.searchParams.get('qty');
-          const qty = qtyParam ? parseInt(qtyParam, 10) : 1;
-          
-          if (productId) {
-            // Add the product to the cart via backend before navigating to checkout
-            api.post('/cart/addcart', { productId, quantity: qty })
-              .then(() => {
-                navigate('/checkout');
-              })
-              .catch(() => {
-                toast.error('Failed to add product to cart before checkout');
-                navigate(redirectTarget);
-              });
-          } else {
-            navigate(redirectTarget);
-          }
+          navigate("/admin-dashboard");
         }
       } catch (error) {
         toast.error(error.message || "Unable to connect to the backend server.");
@@ -125,7 +94,7 @@ function Login() {
 
   return (
     <div className="page-background">
-      <div className="card-container">
+      <div className="card-container admin-card">
         {/* Logo Section */}
         <div className="logo-section">
           <img 
@@ -133,25 +102,23 @@ function Login() {
             alt="ELORA Logo" 
             className="logo-image" 
           />
-          <span className="logo-text">ELORA</span>
+          <span className="logo-text">ELORA <span style={{fontSize: '12px', color: 'gray', marginLeft: '8px'}}>ADMIN</span></span>
         </div>
 
         {/* Headings */}
-        <h1 className="page-heading">Welcome Back</h1>
-        <p className="subtext">Signin to continue</p>
+        <h1 className="page-heading">Admin Portal</h1>
+        <p className="subtext">Secure sign-in for authorized personnel</p>
 
         {/* Form */}
         <form onSubmit={handleLogin} noValidate>
           <div className="form-fields-container">
             {/* Email Field */}
             <div>
-              <label className="field-label" htmlFor="email">
-                Email
-              </label>
+              <label className="field-label" htmlFor="email">Email</label>
               <input
                 id="email"
                 type="email"
-                placeholder="Enter your email address"
+                placeholder="Admin Email Address"
                 maxLength={100}
                 className="email-input"
                 value={email}
@@ -163,16 +130,12 @@ function Login() {
 
             {/* Password Field */}
             <div>
-              <label className="field-label" htmlFor="password">
-                Password
-              </label>
+              <label className="field-label" htmlFor="password">Password</label>
               <div className="password-wrapper">
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  minLength={8}
-                  maxLength={20}
+                  placeholder="Admin Password"
                   className="password-input"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -184,11 +147,7 @@ function Login() {
                   className="toggle-password-btn"
                   aria-label="Toggle password visibility"
                 >
-                  {showPassword ? (
-                    <FiEyeOff color="#6B7280" size={18} />
-                  ) : (
-                    <FiEye color="#6B7280" size={18} />
-                  )}
+                  {showPassword ? <FiEyeOff color="#6B7280" size={18} /> : <FiEye color="#6B7280" size={18} />}
                 </button>
               </div>
               {passwordError && <div className="error-message">{passwordError}</div>}
@@ -230,30 +189,12 @@ function Login() {
 
           {/* Sign In Button */}
           <button type="submit" className="sign-in-button" disabled={isSubmitting}>
-            {isSubmitting ? "Signing In..." : "Sign In"}
+            {isSubmitting ? "Authenticating..." : "Admin Sign In"}
           </button>
         </form>
-
-        {/* Divider Row */}
-        <div className="divider-row">
-          <div className="divider-line" />
-          <span className="divider-text">OR</span>
-          <div className="divider-line" />
-        </div>
-
-        {/* Footer Row */}
-        <div className="footer-row">
-          <span className="footer-text">Don't have an account?</span>
-          <span
-            className="sign-up-link"
-            onClick={() => navigate("/signup")}
-          >
-            Sign Up
-          </span>
-        </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default AdminLogin;

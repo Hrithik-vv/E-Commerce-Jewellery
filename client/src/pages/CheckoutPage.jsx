@@ -61,7 +61,14 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [billingAddressType, setBillingAddressType] = useState('same');
   const [saveAddress, setSaveAddress] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState('');
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
+
   const navigate = useNavigate();
 
   const [shipping, setShipping] = useState({
@@ -74,8 +81,8 @@ export default function CheckoutPage() {
 
   const currentSubtotal = subtotal || 0;
   const shippingCost = shippingMethod === 'standard' ? 5 : 15;
-  const tax = 110;
-  const discount = Math.min(50, currentSubtotal);
+  const tax = currentSubtotal > 0 ? 110 : 0;
+  const discount = appliedCoupon ? appliedCoupon.discountAmount : 0;
   const finalAmount = Math.max(0, currentSubtotal + shippingCost + tax - discount);
 
   const validateEmail = (val) => {
@@ -90,10 +97,45 @@ export default function CheckoutPage() {
     if (emailError) setEmailError(validateEmail(e.target.value));
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError('Please enter a coupon code');
+      return;
+    }
+    setApplyingCoupon(true);
+    setCouponError('');
+    try {
+      const res = await axios.post('/api/coupons/apply', {
+        code: couponCode,
+        orderAmount: currentSubtotal
+      });
+      if (res.data.success) {
+        setAppliedCoupon(res.data.coupon);
+        setCouponCode('');
+        toast.success(res.data.message);
+      }
+    } catch (err) {
+      setCouponError(err.response?.data?.message || 'Failed to apply coupon');
+      setAppliedCoupon(null);
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    toast.info('Coupon removed');
+  };
+
   const handlePay = async () => {
     const err = validateEmail(email);
     if (err) {
       setEmailError(err);
+      return;
+    }
+
+    if (!acceptTerms) {
+      toast.error('You must accept the Privacy Policy and Terms of Service.');
       return;
     }
 
@@ -399,22 +441,74 @@ export default function CheckoutPage() {
             </div>
             <div className="checkout-price-row">
               <span>Shipping</span>
-              <span>{shippingMethod === 'standard' ? '$5.00' : '$15.00'}</span>
+              <span>${shippingMethod === 'standard' ? '5.00' : '15.00'}</span>
             </div>
             <div className="checkout-price-row">
               <span>Tax</span>
-              <span>$110.00</span>
+              <span>${tax.toFixed(2)}</span>
             </div>
-            <div className="checkout-price-row checkout-price-discount">
-              <span>Discount</span>
-              <span>-${discount.toFixed(2)}</span>
+            
+            {/* Coupon Section */}
+            <div className="checkout-coupon-section" style={{ margin: '16px 0', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>Discount Code</h3>
+              {appliedCoupon ? (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#e8f5f3', padding: '8px 12px', borderRadius: '6px', border: '1px solid #0b5d50' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: 600, color: '#0b5d50' }}>{appliedCoupon.code}</span>
+                  </div>
+                  <button onClick={handleRemoveCoupon} style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '18px' }}>&times;</button>
+                </div>
+              ) : (
+                <div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <input 
+                      type="text" 
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      placeholder="Enter code" 
+                      style={{ flex: 1, padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', outline: 'none' }}
+                    />
+                    <button 
+                      onClick={handleApplyCoupon}
+                      disabled={applyingCoupon || !couponCode.trim()}
+                      style={{ padding: '8px 16px', backgroundColor: couponCode.trim() ? '#0b5d50' : '#e5e7eb', color: couponCode.trim() ? 'white' : '#9ca3af', border: 'none', borderRadius: '6px', cursor: couponCode.trim() ? 'pointer' : 'not-allowed', fontWeight: 500 }}
+                    >
+                      {applyingCoupon ? 'Applying...' : 'Apply'}
+                    </button>
+                  </div>
+                  {couponError && <p style={{ color: '#dc2626', fontSize: '12px', marginTop: '6px' }}>{couponError}</p>}
+                </div>
+              )}
             </div>
+
+            {discount > 0 && (
+              <div className="checkout-price-row checkout-price-discount" style={{ color: '#16a34a', fontWeight: 500 }}>
+                <span>Discount ({appliedCoupon?.code})</span>
+                <span>-${discount.toFixed(2)}</span>
+              </div>
+            )}
 
             <div className="checkout-price-divider"></div>
 
             <div className="checkout-total-row">
               <span>Total</span>
               <span>${finalAmount.toFixed(2)}</span>
+            </div>
+
+            {/* Privacy Terms */}
+            <div style={{ marginTop: '16px', marginBottom: '16px' }}>
+              <label className="checkout-checkbox-wrapper" style={{ cursor: 'pointer', alignItems: 'flex-start' }}>
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  className="checkout-checkbox"
+                  style={{ marginTop: '4px' }}
+                />
+                <span className="checkout-checkbox-label" style={{ lineHeight: '1.5' }}>
+                  I accept the Privacy Policy and Terms of Service.
+                </span>
+              </label>
             </div>
 
             {/* Section 10 – Action Buttons */}

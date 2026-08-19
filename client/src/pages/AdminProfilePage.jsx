@@ -3,312 +3,193 @@ import '../css/AdminProfilePage.css';
 
 export default function AdminProfilePage() {
   return (
-    <div className="admin-profile-page">
-      <div className="admin-profile-container">
+    <div className="mb-4">
+      {/* Page Header */}
+      <div className="mb-4">
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-text-main)', margin: '0 0 8px 0' }}>Admin Profile</h1>
+        <p style={{ color: 'var(--admin-text-muted)', margin: 0, fontSize: '0.95rem' }}>Manage your personal information and preferences.</p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
         
-        {/* Section 1: Left Sidebar */}
-        <aside className="admin-sidebar">
-          {/* Sidebar content intentionally left blank as per BRD */}
-        </aside>
-
-        {/* Main Content (82%) */}
-        <main className="admin-main-content">
+        {/* Left Column (Profile & Personal Info) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
-          {/* Section 2: Top Navigation */}
-          <header className="admin-header">
-            <h1 className="page-title">Admin Profile</h1>
-            <div className="header-actions">
-              <input type="text" className="admin-input search-bar" placeholder="Search..." />
-              {/* Notification Bell Icon */}
-              <svg className="notification-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-              </svg>
-              {/* Profile Menu */}
-              <div className="profile-menu">
-                <svg className="icon-profile" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <div className="profile-dropdown"></div>
+          {/* Profile Banner */}
+          <div className="admin-card text-center" style={{ marginBottom: 0, padding: '32px 24px' }}>
+            <div style={{ position: 'relative', width: '120px', height: '120px', margin: '0 auto 16px' }}>
+              <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', border: '4px solid var(--admin-bg)' }}>
+                <img src="https://i.pravatar.cc/150?u=admin" alt="Admin Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <button className="admin-btn admin-btn-primary" style={{ position: 'absolute', bottom: '0', right: '0', width: '36px', height: '36px', padding: '0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </button>
+            </div>
+            <h2 style={{ fontSize: '1.25rem', margin: '0 0 8px', color: 'var(--admin-text-main)' }}>John Doe</h2>
+            <div className="d-flex justify-content-center gap-2">
+              <span className="admin-badge admin-badge-primary">Administrator</span>
+              <span className="admin-badge admin-badge-success">Active</span>
+            </div>
+          </div>
+
+          {/* Personal Information */}
+          <div className="admin-card" style={{ marginBottom: 0 }}>
+            <div className="admin-card-header">
+              <h3 className="admin-card-title">Personal Information</h3>
+            </div>
+            <div className="admin-grid-2 mb-3">
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>Full Name</label>
+                <input type="text" className="admin-input" defaultValue="John Doe" />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>Username</label>
+                <input type="text" className="admin-input" defaultValue="johndoe_admin" />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>Email</label>
+                <input type="email" className="admin-input" defaultValue="john.doe@example.com" />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>Phone</label>
+                <input type="tel" className="admin-input" defaultValue="+1 234 567 8900" />
               </div>
             </div>
-          </header>
-
-          {/* Section 3: Profile Banner */}
-          <section className="banner-card">
-            <div className="profile-avatar-container">
-              <div className="profile-avatar">
-                <div className="edit-avatar">
-                  {/* Camera Icon */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                  </svg>
-                </div>
-              </div>
-              <div className="profile-info">
-                <h2 className="admin-name">John Doe</h2>
-                <div className="badges">
-                  <span className="role-badge">Administrator</span>
-                  <span className="status-badge">Active</span>
-                </div>
-              </div>
+            <div className="mb-3">
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>Address</label>
+              <textarea className="admin-input" defaultValue="123 Main St" rows="2"></textarea>
             </div>
-          </section>
-
-          {/* Section 4: Profile Information */}
-          <section className="admin-card">
-            <h3 className="section-title">Personal Information</h3>
-            <div className="info-grid input-gap">
-              <div className="field-group">
-                <label className="field-label">Full Name</label>
-                <input type="text" className="admin-input input-text full-name-input" defaultValue="John Doe" />
+            <div className="admin-grid-2">
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>City</label>
+                <input type="text" className="admin-input" defaultValue="New York" />
               </div>
-              <div className="field-group">
-                <label className="field-label">Username</label>
-                <input type="text" className="admin-input input-text username-input" defaultValue="johndoe_admin" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Email</label>
-                <input type="email" className="admin-input input-text email-input" defaultValue="john.doe@example.com" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Phone</label>
-                <input type="tel" className="admin-input input-text phone-input" defaultValue="+1 234 567 8900" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Date of Birth</label>
-                <input type="date" className="admin-input input-text dob-picker" defaultValue="1990-01-01" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Gender</label>
-                <select className="admin-input input-text gender-dropdown">
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="field-group">
-                <label className="field-label">Address</label>
-                <textarea className="admin-input input-text address-textarea" defaultValue="123 Main St"></textarea>
-              </div>
-              <div className="field-group">
-                <label className="field-label">City</label>
-                <input type="text" className="admin-input input-text city-input" defaultValue="New York" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">State</label>
-                <select className="admin-input input-text state-dropdown">
-                  <option>NY</option>
-                  <option>CA</option>
-                </select>
-              </div>
-              <div className="field-group">
-                <label className="field-label">Country</label>
-                <select className="admin-input input-text country-dropdown">
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>Country</label>
+                <select className="admin-select">
                   <option>USA</option>
                   <option>UK</option>
                 </select>
               </div>
-              <div className="field-group">
-                <label className="field-label">Postal Code</label>
-                <input type="text" className="admin-input input-text postal-code-input" defaultValue="10001" />
-              </div>
             </div>
-          </section>
+          </div>
 
-          {/* Section 5: Account Information */}
-          <section className="admin-card section-gap">
-            <h3 className="section-title">Account Information</h3>
-            <div className="info-grid input-gap">
-              <div className="field-group">
-                <label className="field-label">Employee ID</label>
-                <input type="text" className="admin-input input-text employee-id-field" defaultValue="EMP-10293" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Department</label>
-                <input type="text" className="admin-input input-text department-field" defaultValue="IT Administration" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Role</label>
-                <input type="text" className="admin-input input-text role-field" defaultValue="System Administrator" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Account Status</label>
-                <input type="text" className="admin-input input-text status-field" defaultValue="Active" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Created Date</label>
-                <input type="text" className="admin-input input-text created-date-field" defaultValue="2023-01-15" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">Last Updated</label>
-                <input type="text" className="admin-input input-text last-updated-field" defaultValue="2023-10-01" />
-              </div>
+          {/* Preferences */}
+          <div className="admin-card" style={{ marginBottom: 0 }}>
+            <div className="admin-card-header">
+              <h3 className="admin-card-title">Preferences</h3>
             </div>
-          </section>
-
-          {/* Section 6: Security Settings */}
-          <section className="admin-card section-gap">
-            <h3 className="section-title">Security</h3>
-            <div className="security-row">
-              <div className="security-info">
-                <span className="field-label password-field">Password</span>
-                <span className="body-text">Last changed 3 months ago</span>
-              </div>
-              <button className="btn-change-password button-text">Change Password</button>
-            </div>
-            <div className="security-row">
-              <div className="security-info">
-                <span className="field-label">Two-Factor Authentication</span>
-                <span className="body-text">Enable 2FA for enhanced security</span>
-              </div>
-              <div className="two-fa-toggle active"></div>
-            </div>
-            <div className="security-row">
-              <div className="security-info">
-                <span className="field-label">Email Verification</span>
-              </div>
-              <span className="email-verification-badge">Verified</span>
-            </div>
-            <div className="security-row">
-              <div className="security-info">
-                <span className="field-label">Phone Verification</span>
-              </div>
-              <span className="phone-verification-badge">Not Verified</span>
-            </div>
-            <div className="security-row">
-              <div className="security-info">
-                <span className="field-label">Last Login</span>
-                <span className="body-text last-login">Today, 10:30 AM</span>
-              </div>
-            </div>
-            <div className="security-row">
-              <div className="security-info">
-                <span className="field-label">Login Device</span>
-                <span className="body-text login-device">MacBook Pro 16"</span>
-              </div>
-            </div>
-            <div className="security-row">
-              <div className="security-info">
-                <span className="field-label">IP Address</span>
-                <span className="body-text ip-address">192.168.1.1</span>
-              </div>
-            </div>
-          </section>
-
-          {/* Section 7: Statistics */}
-          <section className="stats-grid section-gap">
-            <div className="stat-card total-users">
-              <span className="body-text">Total Users</span>
-              <span className="stat-value">1,234</span>
-            </div>
-            <div className="stat-card orders-managed">
-              <span className="body-text">Orders Managed</span>
-              <span className="stat-value">8,492</span>
-            </div>
-            <div className="stat-card revenue">
-              <span className="body-text">Revenue</span>
-              <span className="stat-value">$45K</span>
-            </div>
-            <div className="stat-card reports">
-              <span className="body-text">Reports</span>
-              <span className="stat-value">128</span>
-            </div>
-          </section>
-
-          {/* Section 8: Recent Activity */}
-          <section className="admin-card section-gap">
-            <h3 className="section-title">Recent Activity</h3>
-            <div className="activity-list">
-              <div className="activity-item">
-                <svg className="activity-icon icon-security" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <div className="activity-content">
-                  <span className="activity-title">Updated security settings</span>
-                  <span className="activity-time body-text">2 hours ago</span>
-                </div>
-              </div>
-              <div className="activity-item">
-                <svg className="activity-icon icon-security" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <div className="activity-content">
-                  <span className="activity-title">Changed account password</span>
-                  <span className="activity-time body-text">Yesterday</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Section 9: Active Sessions */}
-          <section className="admin-card section-gap">
-            <h3 className="section-title">Active Sessions</h3>
-            <div className="session-card">
-              <div className="session-info">
-                <span className="session-device">MacBook Pro 16"</span>
-                <span className="session-browser">Chrome</span>
-                <span className="session-location body-text">New York, USA</span>
-                <span className="session-last-active body-text">Last Active: Just now</span>
-              </div>
-              <button className="btn-end-session button-text">End Session</button>
-            </div>
-            <div className="session-card">
-              <div className="session-info">
-                <span className="session-device">iPhone 13 Pro</span>
-                <span className="session-browser">Safari</span>
-                <span className="session-location body-text">New York, USA</span>
-                <span className="session-last-active body-text">Last Active: 2 hours ago</span>
-              </div>
-              <button className="btn-end-session button-text">End Session</button>
-            </div>
-          </section>
-
-          {/* Section 10: Preferences */}
-          <section className="admin-card section-gap">
-            <h3 className="section-title">Preferences</h3>
-            <div className="pref-row">
-              <span className="field-label">Theme</span>
-              <select className="pref-select theme-toggle">
-                <option>Light Mode</option>
-                <option>Dark Mode</option>
-              </select>
-            </div>
-            <div className="pref-row">
-              <span className="field-label">Language</span>
-              <select className="pref-select language-dropdown">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span style={{ fontSize: '0.875rem', color: 'var(--admin-text-main)' }}>Language</span>
+              <select className="admin-select" style={{ width: '150px' }}>
                 <option>English</option>
                 <option>Spanish</option>
-                <option>French</option>
               </select>
             </div>
-            <div className="pref-row">
-              <span className="field-label">Timezone</span>
-              <select className="pref-select timezone-dropdown">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span style={{ fontSize: '0.875rem', color: 'var(--admin-text-main)' }}>Timezone</span>
+              <select className="admin-select" style={{ width: '150px' }}>
                 <option>EST (GMT-5)</option>
                 <option>PST (GMT-8)</option>
               </select>
             </div>
-            <div className="pref-row">
-              <span className="field-label">Notification</span>
-              <div className="notification-toggle active"></div>
+            <div className="d-flex justify-content-between align-items-center">
+              <span style={{ fontSize: '0.875rem', color: 'var(--admin-text-main)' }}>Email Alerts</span>
+              <div style={{ width: '40px', height: '24px', backgroundColor: 'var(--admin-success)', borderRadius: '12px', position: 'relative', cursor: 'pointer' }}>
+                <div style={{ width: '20px', height: '20px', backgroundColor: 'white', borderRadius: '50%', position: 'absolute', top: '2px', right: '2px' }}></div>
+              </div>
             </div>
-            <div className="pref-row">
-              <span className="field-label">Email Alerts</span>
-              <div className="email-alerts-toggle"></div>
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', gridColumn: 'span 2' }}>
+          
+          {/* Stats */}
+          <div className="admin-grid-4">
+            <div className="admin-card text-center" style={{ marginBottom: 0, padding: '24px 16px' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-primary)', marginBottom: '4px' }}>1,234</div>
+              <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>Total Users</div>
             </div>
-          </section>
+            <div className="admin-card text-center" style={{ marginBottom: 0, padding: '24px 16px' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-secondary)', marginBottom: '4px' }}>8,492</div>
+              <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>Orders Managed</div>
+            </div>
+            <div className="admin-card text-center" style={{ marginBottom: 0, padding: '24px 16px' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-text-success)', marginBottom: '4px' }}>$45K</div>
+              <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>Revenue</div>
+            </div>
+            <div className="admin-card text-center" style={{ marginBottom: 0, padding: '24px 16px' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-text-warning)', marginBottom: '4px' }}>128</div>
+              <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>Reports</div>
+            </div>
+          </div>
 
-          {/* Section 11: Action Buttons */}
-          <section className="action-buttons-container section-gap">
-            <button className="btn-edit-profile button-text">Edit Profile</button>
-            <button className="btn-save-changes button-text">Save Changes</button>
-            <button className="btn-cancel button-text">Cancel</button>
-            <button className="btn-logout button-text">Logout</button>
-          </section>
+          {/* Account Information */}
+          <div className="admin-card" style={{ marginBottom: 0 }}>
+            <div className="admin-card-header">
+              <h3 className="admin-card-title">Account Information</h3>
+            </div>
+            <div className="admin-grid-2">
+              <div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-light)', marginBottom: '4px' }}>Employee ID</div>
+                <div style={{ fontWeight: 500, color: 'var(--admin-text-main)' }}>EMP-10293</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-light)', marginBottom: '4px' }}>Department</div>
+                <div style={{ color: 'var(--admin-text-main)' }}>IT Administration</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-light)', marginBottom: '4px' }}>Created Date</div>
+                <div style={{ color: 'var(--admin-text-main)' }}>15 Jan 2023</div>
+              </div>
+              <div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-light)', marginBottom: '4px' }}>Last Updated</div>
+                <div style={{ color: 'var(--admin-text-main)' }}>01 Oct 2023</div>
+              </div>
+            </div>
+          </div>
 
-        </main>
+          {/* Security */}
+          <div className="admin-card" style={{ marginBottom: 0 }}>
+            <div className="admin-card-header">
+              <h3 className="admin-card-title">Security</h3>
+            </div>
+            <div className="d-flex justify-content-between align-items-center mb-4 pb-4" style={{ borderBottom: '1px solid var(--admin-border)' }}>
+              <div>
+                <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)', marginBottom: '4px' }}>Password</div>
+                <div style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)' }}>Last changed 3 months ago</div>
+              </div>
+              <button className="admin-btn admin-btn-outline">Change Password</button>
+            </div>
+            <div className="d-flex justify-content-between align-items-center mb-4 pb-4" style={{ borderBottom: '1px solid var(--admin-border)' }}>
+              <div>
+                <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)', marginBottom: '4px' }}>Two-Factor Authentication</div>
+                <div style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)' }}>Enable 2FA for enhanced security</div>
+              </div>
+              <div style={{ width: '40px', height: '24px', backgroundColor: 'var(--admin-success)', borderRadius: '12px', position: 'relative', cursor: 'pointer' }}>
+                <div style={{ width: '20px', height: '20px', backgroundColor: 'white', borderRadius: '50%', position: 'absolute', top: '2px', right: '2px' }}></div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)', marginBottom: '4px' }}>Active Sessions</div>
+                <div style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)' }}>Manage your logged-in devices</div>
+              </div>
+              <button className="admin-btn admin-btn-outline">View Sessions</button>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="d-flex justify-content-end gap-3 mt-4">
+            <button className="admin-btn admin-btn-outline">Cancel</button>
+            <button className="admin-btn admin-btn-primary">Save Changes</button>
+          </div>
+          
+        </div>
       </div>
     </div>
   );

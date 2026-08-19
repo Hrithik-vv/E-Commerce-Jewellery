@@ -312,6 +312,48 @@ const getCategories = async (req, res) => {
   }
 };
 
+// GET /api/products/search?q=&page=&limit=
+const searchProducts = async (req, res) => {
+  try {
+    const { q, page = 1, limit = 12 } = req.query;
+
+    if (!q || q.trim().length < 1) {
+      return res.status(400).json({ success: false, message: 'Search query is required' });
+    }
+
+    const searchRegex = new RegExp(q.trim(), 'i');
+    const query = {
+      $or: [
+        { productName: searchRegex },
+        { description: searchRegex },
+        { category: searchRegex }
+      ]
+    };
+
+    const pageNumber = parseInt(page, 10) || 1;
+    const limitNumber = parseInt(limit, 10) || 12;
+    const skip = (pageNumber - 1) * limitNumber;
+
+    const [products, total] = await Promise.all([
+      Product.find(query).sort({ createdAt: -1 }).skip(skip).limit(limitNumber),
+      Product.countDocuments(query)
+    ]);
+
+    res.status(200).json({
+      success: true,
+      query: q.trim(),
+      count: products.length,
+      total,
+      totalPages: Math.ceil(total / limitNumber),
+      currentPage: pageNumber,
+      products
+    });
+  } catch (error) {
+    console.error('Search Products Error:', error);
+    res.status(500).json({ success: false, message: 'Failed to search products', error: error.message });
+  }
+};
+
 module.exports = {
   addProduct,
   getAllProducts,
@@ -321,5 +363,6 @@ module.exports = {
   getBestSellers,
   getProductsByCategory,
   deleteProduct,
-  getCategories
+  getCategories,
+  searchProducts
 };

@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const path = require("path");
 require("dotenv").config();
 
@@ -10,8 +11,26 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Security Middleware
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" } // Allow Cloudinary images
+}));
+
+const allowedOrigins = process.env.CLIENT_URL
+  ? [process.env.CLIENT_URL, "http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5174", "http://localhost:5174"]
+  : ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5174", "http://localhost:5174"];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -36,6 +55,7 @@ const mountRoutes = (basePath) => {
   app.use(`${basePath}/profile`, require("./routes/profileRoutes"));
   app.use(`${basePath}/dashboard`, require("./routes/dashboardRoutes"));
   app.use(`${basePath}/newsletter`, require("./routes/newsletterRoutes"));
+  app.use(`${basePath}/coupons`, require("./routes/couponRoutes"));
 };
 
 // Mount routes for both environments (Vercel strips /api in some configurations)
@@ -44,6 +64,11 @@ mountRoutes("");
 
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Root Route
+app.get("/", (req, res) => {
+  res.send("Welcome to the E-Commerce Jewellery API Backend!");
+});
 
 // Create admin user once DB is connected (in background)
 connectDB().then(() => createAdmin()).catch(() => {});

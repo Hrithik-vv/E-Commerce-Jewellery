@@ -1,0 +1,292 @@
+/* Admin Panel Core CSS System */
+:root {
+  --admin-bg: #F9FAFB;
+  --admin-surface: #FFFFFF;
+  --admin-primary: #D4AF37;
+  --admin-primary-hover: #c4a132;
+  --admin-text-main: #111827;
+  --admin-text-muted: #4B5563;
+  --admin-text-light: #9CA3AF;
+  --admin-border: #E5E7EB;
+  --admin-border-focus: #9ca3af;
+  
+  --admin-success: #10B981;
+  --admin-success-bg: #D1FAE5;
+  --admin-danger: #EF4444;
+  --admin-danger-bg: #FEE2E2;
+  --admin-warning: #F59E0B;
+  --admin-warning-bg: #FEF3C7;
+  --admin-info: #3B82F6;
+  --admin-info-bg: #DBEAFE;
+
+  --admin-radius-sm: 4px;
+  --admin-radius-md: 8px;
+  --admin-radius-lg: 12px;
+  
+  --admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --admin-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Global Reset for Admin */
+.admin-dashboard-wrapper {
+  background-color: var(--admin-bg);
+  min-height: 100vh;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  color: var(--admin-text-main);
+}
+
+.admin-dashboard-main {
+  padding: 24px;
+  margin-top: 64px; /* for fixed navbar */
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard-main {
+    padding: 16px;
+    margin-top: 56px;
+  }
+}
+
+/* Cards */
+.admin-card {
+  background: var(--admin-surface);
+  border-radius: var(--admin-radius-md);
+  box-shadow: var(--admin-shadow-sm);
+  border: 1px solid var(--admin-border);
+  padding: 20px;
+  margin-bottom: 24px;
+  transition: box-shadow 0.2s ease;
+}
+
+.admin-card:hover {
+  box-shadow: var(--admin-shadow-md);
+}
+
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 12px;
+}
+
+.admin-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--admin-text-main);
+  margin: 0;
+}
+
+/* Forms */
+.admin-form-group {
+  margin-bottom: 16px;
+}
+
+.admin-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--admin-text-muted);
+  margin-bottom: 6px;
+}
+
+.admin-input, .admin-select, .admin-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  font-size: 0.95rem;
+  color: var(--admin-text-main);
+  background-color: #fff;
+  transition: all 0.2s;
+}
+
+.admin-input:focus, .admin-select:focus, .admin-textarea:focus {
+  outline: none;
+  border-color: var(--admin-border-focus);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.admin-input:disabled, .admin-select:disabled, .admin-textarea:disabled {
+  background-color: #f3f4f6;
+  color: var(--admin-text-light);
+  cursor: not-allowed;
+}
+
+/* Buttons */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--admin-radius-sm);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  gap: 8px;
+}
+
+.admin-btn-primary {
+  background-color: var(--admin-text-main);
+  color: white;
+}
+
+.admin-btn-primary:hover {
+  background-color: #000;
+}
+
+.admin-btn-accent {
+  background-color: var(--admin-primary);
+  color: white;
+}
+
+.admin-btn-accent:hover {
+  background-color: var(--admin-primary-hover);
+}
+
+.admin-btn-danger {
+  background-color: var(--admin-danger);
+  color: white;
+}
+
+.admin-btn-danger:hover {
+  background-color: #DC2626;
+}
+
+.admin-btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-muted);
+}
+
+.admin-btn-outline:hover {
+  background-color: #f9fafb;
+  color: var(--admin-text-main);
+}
+
+/* Tables */
+.admin-table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #F9FAFB;
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-table td {
+  padding: 16px;
+  font-size: 0.875rem;
+  color: var(--admin-text-main);
+  border-bottom: 1px solid var(--admin-border);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background-color: #F9FAFB;
+}
+
+/* Badges */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-badge-success {
+  background-color: var(--admin-success-bg);
+  color: #065F46;
+}
+
+.admin-badge-danger {
+  background-color: var(--admin-danger-bg);
+  color: #991B1B;
+}
+
+.admin-badge-warning {
+  background-color: var(--admin-warning-bg);
+  color: #92400E;
+}
+
+.admin-badge-info {
+  background-color: var(--admin-info-bg);
+  color: #1E40AF;
+}
+
+/* Grids */
+.admin-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.admin-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .admin-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-grid-3, .admin-grid-2, .admin-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Layout Utilities */
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-center { justify-content: center; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 16px; }
+.gap-4 { gap: 24px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 16px; }
+.mb-4 { margin-bottom: 24px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 16px; }
+.mt-4 { margin-top: 24px; }
+
+/* Product Image Thumbnail in tables */
+.admin-img-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--admin-radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--admin-border);
+}

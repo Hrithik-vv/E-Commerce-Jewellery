@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FiGrid, FiPackage, FiLayers, FiShoppingBag, FiUsers, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
+import { FiGrid, FiPackage, FiLayers, FiShoppingBag, FiUsers, FiUser, FiLogOut, FiMenu, FiX, FiTag } from 'react-icons/fi';
 import AdminNavbar from './AdminNavbar';
 import '../css/AdminDashboard.css';
+import '../css/admin-core.css';
 
 const AdminLayout = ({ children }) => {
     const navigate = useNavigate();
@@ -56,9 +57,9 @@ const AdminLayout = ({ children }) => {
     const navItems = [
         { label: 'Dashboard', icon: <FiGrid size={20} />, path: '/admin-dashboard' },
         { label: 'Products', icon: <FiPackage size={20} />, path: '/products' },
-        { label: 'Categories', icon: <FiLayers size={20} />, path: '/products' },
         { label: 'Orders', icon: <FiShoppingBag size={20} />, path: '/orders' },
         { label: 'Users', icon: <FiUsers size={20} />, path: '/users' },
+        { label: 'Coupons', icon: <FiTag size={20} />, path: '/coupons' },
         { label: 'Profile', icon: <FiUser size={20} />, path: '/admin-profile' },
     ];
 
@@ -73,6 +74,7 @@ const AdminLayout = ({ children }) => {
         if (path === '/users') return 'Users';
         if (path.startsWith('/user-details')) return 'User Details';
         if (path === '/admin-profile') return 'Profile';
+        if (path === '/coupons') return 'Coupon Management';
         return 'Dashboard';
     };
 
@@ -83,6 +85,7 @@ const AdminLayout = ({ children }) => {
         if (itemLabel === 'Categories') return false;
         if (itemLabel === 'Orders') return path === '/orders' || path.startsWith('/order/');
         if (itemLabel === 'Users') return path === '/users' || path.startsWith('/user-details');
+        if (itemLabel === 'Coupons') return path === '/coupons';
         if (itemLabel === 'Profile') return path === '/admin-profile';
         return false;
     };

@@ -105,281 +105,200 @@ const UserListPage = () => {
     };
 
     return (
-        <div className="user-list-dashboard">
-            {/* Sidebar */}
-            <aside className="user-list-sidebar">
-                <div className="user-list-sidebar-logo">Logo</div>
-                <nav className="user-list-sidebar-nav">
-                    <a href="#" className="user-list-nav-item">Dashboard</a>
-                    <a href="#" className="user-list-nav-item active">Users</a>
-                    <a href="#" className="user-list-nav-item">Roles</a>
-                    <a href="#" className="user-list-nav-item">Permissions</a>
-                    <a href="#" className="user-list-nav-item">Projects</a>
-                    <a href="#" className="user-list-nav-item">Tasks</a>
-                    <a href="#" className="user-list-nav-item">Reports</a>
-                    <a href="#" className="user-list-nav-item">Settings</a>
-                    <a href="#" className="user-list-nav-item">Logout</a>
-                </nav>
-            </aside>
-
-            {/* Main Content */}
-            <main className="user-list-main-content">
-                
-                {/* Topbar */}
-                <header className="user-list-topbar">
-                    <div className="user-list-search-bar">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                        <input type="text" placeholder="Search..." />
-                    </div>
-                    
-                    <div className="user-list-topbar-right">
-                        <div className="user-list-notification">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                        </div>
-                        <div className="user-list-profile">
-                            <img src={loggedInUser?.profileImage || "https://i.pravatar.cc/150?u=admin"} alt="Admin Avatar" className="user-list-avatar" />
-                            <div className="user-list-profile-info">
-                                <span className="user-list-profile-name">{loggedInUser?.name || "Super Admin"}</span>
-                                <span className="user-list-profile-role">{loggedInUser?.role || "Administrator"}</span>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
-                <div className="user-list-page-container">
-                    
-                    {/* Page Header */}
-                    <div className="user-list-page-header">
-                        <div className="user-list-page-title-box">
-                            <h1 className="user-list-page-title">User List</h1>
-                            <p className="user-list-page-description">Manage user accounts and their roles.</p>
-                        </div>
-                        <button className="user-list-btn-primary" onClick={handleAddClick}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                            Add User
-                        </button>
-                    </div>
-
-                    {/* Card Container */}
-                    <div className="user-list-card">
-                        
-                        {/* Search & Filters */}
-                        <div className="user-list-filters-row">
-                            <input 
-                                type="text" 
-                                className="user-list-filter-input" 
-                                placeholder="Search by name or email" 
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            
-                            <select 
-                                className="user-list-filter-select"
-                                value={roleFilter}
-                                onChange={(e) => setRoleFilter(e.target.value)}
-                            >
-                                <option value="">All Roles</option>
-                                <option value="Admin">Admin</option>
-                                <option value="User">User</option>
-                            </select>
-
-                            <select 
-                                className="user-list-filter-select"
-                                value={statusFilter}
-                                onChange={(e) => setStatusFilter(e.target.value)}
-                            >
-                                <option value="">All Statuses</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-
-                            <button className="user-list-btn-reset" onClick={handleReset}>
-                                Reset Filter
-                            </button>
-                        </div>
-
-                        {/* Desktop / Tablet Table */}
-                        <div className="user-list-table-container">
-                            {loading ? (
-                                <div style={{ padding: '20px', textAlign: 'center' }}>Loading users...</div>
-                            ) : (
-                                <table className="user-list-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Avatar</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                            <th>Status</th>
-                                            <th>Joined Date</th>
-                                            <th>Last Login</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {filteredUsers.map(user => (
-                                            <tr key={user._id}>
-                                                <td>
-                                                    <img src={user.profileImage || `https://i.pravatar.cc/150?u=${user._id}`} alt="Avatar" className="user-list-table-avatar" />
-                                                </td>
-                                                <td>{user.name}</td>
-                                                <td>{user.email}</td>
-                                                <td>{user.role}</td>
-                                                <td>
-                                                    <div className={`user-list-status-badge status-${user.status?.toLowerCase()}`}>
-                                                        {user.status}
-                                                    </div>
-                                                </td>
-                                                <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                                                <td>{user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A'}</td>
-                                                <td>
-                                                    <div className="user-list-action-btns">
-                                                        <button className="user-list-action-btn" title="View" onClick={() => handleViewClick(user)}>
-                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button className="user-list-action-btn" title="Edit" onClick={() => handleEditClick(user)}>
-                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                                                        </button>
-                                                        <button className="user-list-action-btn" title="Delete" onClick={() => handleDeleteClick(user)}>
-                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        {filteredUsers.length === 0 && (
-                                            <tr>
-                                                <td colSpan="8" style={{ textAlign: 'center', color: '#6B7280' }}>No users found.</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            )}
-                        </div>
-
-                        {/* Mobile Stacked Cards */}
-                        {!loading && (
-                            <div className="user-list-mobile-cards">
-                                {filteredUsers.map(user => (
-                                    <div className="user-list-mobile-card" key={`mobile-${user._id}`}>
-                                        <div className="user-list-mobile-card-row">
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                <img src={user.profileImage || `https://i.pravatar.cc/150?u=${user._id}`} alt="Avatar" className="user-list-table-avatar" />
-                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <span className="user-list-mobile-value">{user.name}</span>
-                                                    <span className="user-list-mobile-label">{user.email}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="user-list-mobile-card-row">
-                                            <span className="user-list-mobile-label">Role</span>
-                                            <span className="user-list-mobile-value">{user.role}</span>
-                                        </div>
-
-                                        <div className="user-list-mobile-card-row">
-                                            <span className="user-list-mobile-label">Status</span>
-                                            <div className={`user-list-status-badge status-${user.status?.toLowerCase()}`}>
-                                                {user.status}
-                                            </div>
-                                        </div>
-
-                                        <div className="user-list-mobile-card-row">
-                                            <span className="user-list-mobile-label">Joined Date</span>
-                                            <span className="user-list-mobile-value">{new Date(user.createdAt).toLocaleDateString()}</span>
-                                        </div>
-
-                                        <div className="user-list-mobile-card-row">
-                                            <span className="user-list-mobile-label">Last Login</span>
-                                            <span className="user-list-mobile-value">{user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A'}</span>
-                                        </div>
-
-                                        <div className="user-list-mobile-card-row" style={{ marginTop: '8px' }}>
-                                            <div className="user-list-action-btns">
-                                                <button className="user-list-action-btn" title="View" onClick={() => handleViewClick(user)}>
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                </button>
-                                                <button className="user-list-action-btn" title="Edit" onClick={() => handleEditClick(user)}>
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                                                </button>
-                                                <button className="user-list-action-btn" title="Delete" onClick={() => handleDeleteClick(user)}>
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Pagination */}
-                        {!loading && filteredUsers.length > 0 && (
-                            <div className="user-list-pagination">
-                                <span className="user-list-page-info">Showing {filteredUsers.length} of {users.length} user(s)</span>
-                                <div className="user-list-page-controls">
-                                    <button className="user-list-page-btn">Previous</button>
-                                    <button className="user-list-page-btn active">1</button>
-                                    <button className="user-list-page-btn">Next</button>
-                                </div>
-                            </div>
-                        )}
-
-                    </div>
+        <div className="mb-4">
+            {/* Page Header */}
+            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <div>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-text-main)', margin: '0 0 8px 0' }}>User List</h1>
+                    <p style={{ color: 'var(--admin-text-muted)', margin: 0, fontSize: '0.95rem' }}>Manage user accounts and their roles.</p>
                 </div>
-            </main>
+                <button className="admin-btn admin-btn-primary" onClick={handleAddClick}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                        <path d="M5 12h14"/><path d="M12 5v14"/>
+                    </svg>
+                    Add User
+                </button>
+            </div>
+
+            {/* Filter & Search Section */}
+            <div className="admin-card mb-4" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                <input 
+                    type="text" 
+                    className="admin-input" 
+                    style={{ flex: '1 1 300px' }}
+                    placeholder="Search by name or email" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <select 
+                    className="admin-select"
+                    style={{ flex: '0 1 150px' }}
+                    value={roleFilter}
+                    onChange={(e) => setRoleFilter(e.target.value)}
+                >
+                    <option value="">All Roles</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                </select>
+                <select 
+                    className="admin-select"
+                    style={{ flex: '0 1 150px' }}
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                    <option value="">All Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+                <button className="admin-btn admin-btn-outline" onClick={handleReset}>
+                    Reset
+                </button>
+            </div>
+
+            {/* Users Table */}
+            <div className="admin-card admin-table-container mb-4">
+                {loading ? (
+                    <div style={{ padding: '40px', textAlign: 'center', color: 'var(--admin-text-muted)' }}>Loading users...</div>
+                ) : (
+                    <table className="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Joined Date</th>
+                                <th>Last Login</th>
+                                <th style={{ textAlign: 'right' }}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredUsers.length > 0 ? (
+                                filteredUsers.map(user => {
+                                    const statusClass = user.status?.toLowerCase() === 'active' ? 'admin-badge-success' : 'admin-badge-danger';
+                                    return (
+                                        <tr key={user._id}>
+                                            <td>
+                                                <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden' }}>
+                                                    <img src={user.profileImage || `https://i.pravatar.cc/150?u=${user._id}`} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                </div>
+                                            </td>
+                                            <td style={{ fontWeight: 500, color: 'var(--admin-text-main)' }}>{user.name}</td>
+                                            <td>{user.email}</td>
+                                            <td>
+                                                <span className={`admin-badge ${user.role === 'Admin' ? 'admin-badge-warning' : 'admin-badge-success'}`} style={{ opacity: 0.8 }}>
+                                                    {user.role}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span className={`admin-badge ${statusClass}`}>
+                                                    {user.status || 'Active'}
+                                                </span>
+                                            </td>
+                                            <td>{new Date(user.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                                            <td>
+                                                {user.lastLogin ? (
+                                                    <span style={{ fontSize: '0.875rem' }}>{new Date(user.lastLogin).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                                                ) : 'N/A'}
+                                            </td>
+                                            <td style={{ textAlign: 'right' }}>
+                                                <div className="d-flex justify-content-center gap-2" style={{ justifyContent: 'flex-end' }}>
+                                                    <button className="admin-btn admin-btn-outline" style={{ padding: '6px' }} title="View" onClick={() => handleViewClick(user)}>
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                    </button>
+                                                    <button className="admin-btn admin-btn-outline" style={{ padding: '6px' }} title="Edit" onClick={() => handleEditClick(user)}>
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                                                    </button>
+                                                    <button className="admin-btn admin-btn-danger" style={{ padding: '6px' }} title="Delete" onClick={() => handleDeleteClick(user)}>
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            ) : (
+                                <tr>
+                                    <td colSpan="8">
+                                        <div style={{ textAlign: 'center', padding: '40px' }}>
+                                            <div style={{ color: 'var(--admin-text-light)', marginBottom: '16px' }}>
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="9" cy="7" r="4"></circle>
+                                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                </svg>
+                                            </div>
+                                            <h3 style={{ fontSize: '1.125rem', color: 'var(--admin-text-main)', marginBottom: '8px' }}>No users found</h3>
+                                            <p style={{ color: 'var(--admin-text-muted)' }}>No users match your current criteria.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                )}
+                
+                {!loading && filteredUsers.length > 0 && (
+                    <div style={{ padding: '16px', borderTop: '1px solid var(--admin-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>Showing {filteredUsers.length} of {users.length} user(s)</span>
+                    </div>
+                )}
+            </div>
 
             {/* Modals for Functional Mocking */}
+            {/* Keeping simple styling for modals so they look good in the new system too. Using simple fixed absolute overlays. */}
             {showDeleteModal && (
-                <div className="user-list-dialog-overlay">
-                    <div className="user-list-dialog">
-                        <h3 className="user-list-dialog-title">Delete User</h3>
-                        <p className="user-list-dialog-body">Are you sure you want to delete {selectedUser?.name}? This action cannot be undone.</p>
-                        <div className="user-list-dialog-actions">
-                            <button className="user-list-btn-cancel" onClick={closeModals}>Cancel</button>
-                            <button className="user-list-btn-primary" style={{ background: '#EF4444' }} onClick={confirmDelete}>Delete</button>
+                <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+                    <div className="admin-card" style={{ width: '400px', maxWidth: '90%' }}>
+                        <h3 style={{ fontSize: '1.25rem', margin: '0 0 16px 0', color: 'var(--admin-text-main)' }}>Delete User</h3>
+                        <p style={{ color: 'var(--admin-text-muted)', marginBottom: '24px' }}>Are you sure you want to delete {selectedUser?.name}? This action cannot be undone.</p>
+                        <div className="d-flex gap-3 justify-content-center" style={{ justifyContent: 'flex-end' }}>
+                            <button className="admin-btn admin-btn-outline" onClick={closeModals}>Cancel</button>
+                            <button className="admin-btn admin-btn-danger" onClick={confirmDelete}>Delete</button>
                         </div>
                     </div>
                 </div>
             )}
 
             {showAddModal && (
-                <div className="user-list-dialog-overlay">
-                    <div className="user-list-dialog">
-                        <h3 className="user-list-dialog-title">Add User</h3>
-                        <p className="user-list-dialog-body">Add a new user form would go here.</p>
-                        <div className="user-list-dialog-actions">
-                            <button className="user-list-btn-cancel" onClick={closeModals}>Cancel</button>
-                            <button className="user-list-btn-primary" onClick={closeModals}>Save</button>
+                <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+                    <div className="admin-card" style={{ width: '400px', maxWidth: '90%' }}>
+                        <h3 style={{ fontSize: '1.25rem', margin: '0 0 16px 0', color: 'var(--admin-text-main)' }}>Add User</h3>
+                        <p style={{ color: 'var(--admin-text-muted)', marginBottom: '24px' }}>Add a new user form would go here.</p>
+                        <div className="d-flex gap-3 justify-content-center" style={{ justifyContent: 'flex-end' }}>
+                            <button className="admin-btn admin-btn-outline" onClick={closeModals}>Cancel</button>
+                            <button className="admin-btn admin-btn-primary" onClick={closeModals}>Save</button>
                         </div>
                     </div>
                 </div>
             )}
 
             {showEditModal && (
-                <div className="user-list-dialog-overlay">
-                    <div className="user-list-dialog">
-                        <h3 className="user-list-dialog-title">Edit User</h3>
-                        <p className="user-list-dialog-body">Edit form for {selectedUser?.name} would go here.</p>
-                        <div className="user-list-dialog-actions">
-                            <button className="user-list-btn-cancel" onClick={closeModals}>Cancel</button>
-                            <button className="user-list-btn-primary" onClick={closeModals}>Save</button>
+                <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+                    <div className="admin-card" style={{ width: '400px', maxWidth: '90%' }}>
+                        <h3 style={{ fontSize: '1.25rem', margin: '0 0 16px 0', color: 'var(--admin-text-main)' }}>Edit User</h3>
+                        <p style={{ color: 'var(--admin-text-muted)', marginBottom: '24px' }}>Edit form for {selectedUser?.name} would go here.</p>
+                        <div className="d-flex gap-3 justify-content-center" style={{ justifyContent: 'flex-end' }}>
+                            <button className="admin-btn admin-btn-outline" onClick={closeModals}>Cancel</button>
+                            <button className="admin-btn admin-btn-primary" onClick={closeModals}>Save</button>
                         </div>
                     </div>
                 </div>
             )}
 
             {showViewModal && (
-                <div className="user-list-dialog-overlay">
-                    <div className="user-list-dialog">
-                        <h3 className="user-list-dialog-title">View User</h3>
-                        <p className="user-list-dialog-body">Viewing details for {selectedUser?.name}.</p>
-                        <div className="user-list-dialog-actions">
-                            <button className="user-list-btn-primary" onClick={closeModals}>Close</button>
+                <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+                    <div className="admin-card" style={{ width: '400px', maxWidth: '90%' }}>
+                        <h3 style={{ fontSize: '1.25rem', margin: '0 0 16px 0', color: 'var(--admin-text-main)' }}>View User</h3>
+                        <p style={{ color: 'var(--admin-text-muted)', marginBottom: '24px' }}>Viewing details for {selectedUser?.name}.</p>
+                        <div className="d-flex gap-3 justify-content-center" style={{ justifyContent: 'flex-end' }}>
+                            <button className="admin-btn admin-btn-primary" onClick={closeModals}>Close</button>
                         </div>
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

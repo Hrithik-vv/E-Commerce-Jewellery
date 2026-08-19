@@ -72,10 +72,10 @@ const addToCart = async (req, res) => {
     }
 
     // Check stock
-    if (qty > product.stock) {
+    if (qty > product.stockQuantity) {
       return res.status(400).json({
         success: false,
-        message: "Insufficient stock",
+        message: `Only ${product.stockQuantity} item(s) available in stock`,
       });
     }
 
@@ -97,10 +97,10 @@ const addToCart = async (req, res) => {
     if (itemIndex > -1) {
       const newQty = cart.items[itemIndex].quantity + qty;
 
-      if (newQty > product.stock) {
+      if (newQty > product.stockQuantity) {
         return res.status(400).json({
           success: false,
-          message: "Not enough stock available",
+          message: `Only ${product.stockQuantity} item(s) available in stock`,
         });
       }
 
@@ -170,10 +170,10 @@ const updateQuantity = async (req, res) => {
       });
     }
 
-    if (qty > product.stock) {
+    if (qty > product.stockQuantity) {
       return res.status(400).json({
         success: false,
-        message: "Insufficient stock",
+        message: `Only ${product.stockQuantity} item(s) available in stock`,
       });
     }
 

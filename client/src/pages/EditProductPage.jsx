@@ -133,168 +133,206 @@ const EditProductPage = () => {
   }
 
   return (
-    <div className="edit-product-main-container">
-      <Link to="/products" className="edit-product-back-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: '4px' }}>
+    <div className="mb-4">
+      <Link to="/products" style={{ display: 'inline-flex', alignItems: 'center', color: 'var(--admin-text-muted)', textDecoration: 'none', marginBottom: '16px', fontSize: '0.875rem' }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
           <path d="M15 18L9 12L15 6"/>
         </svg>
         Back to Products
       </Link>
 
-      <div className="edit-product-page-header">
-        <h1 className="edit-product-page-title">Edit Product</h1>
-        <p className="edit-product-page-description">Update the details for #{id.substring(0, 8).toUpperCase()} - {formData.productName}.</p>
+      <div className="mb-4">
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-text-main)', margin: '0 0 8px 0' }}>Edit Product</h1>
+        <p style={{ color: 'var(--admin-text-muted)', margin: 0, fontSize: '0.95rem' }}>Update the details for #{id.substring(0, 8).toUpperCase()} - {formData.productName}.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="edit-product-form-shell">
-        <div className="edit-product-form-main">
+      <form onSubmit={handleSubmit}>
+        <div className="d-flex flex-wrap gap-4" style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
           
-          <div className="edit-product-card">
-            <h2 className="edit-product-card-title">Product Information</h2>
-            <input 
-              type="text" 
-              name="productName"
-              value={formData.productName}
-              onChange={handleInputChange}
-              className="edit-product-input" 
-              required 
-            />
-            <textarea 
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              className="edit-product-textarea" 
-            ></textarea>
-            <select 
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              className="edit-product-select" 
-              required
-            >
-              <option value="">Select category</option>
-              <option value="Rings">Rings</option>
-              <option value="Necklaces">Necklaces</option>
-              <option value="Bracelets">Bracelets</option>
-              <option value="Earrings">Earrings</option>
-              <option value="Bangles">Bangles</option>
-              <option value="Jhumkas">Jhumkas</option>
-            </select>
-          </div>
-
-          <div className="edit-product-card">
-            <h2 className="edit-product-card-title">Pricing</h2>
-            <div className="edit-product-price-row">
-               <div>
-                 <span>(Rs.) Price</span>
-                 <input 
-                   type="number" 
-                   name="price"
-                   value={formData.price}
-                   onChange={handleInputChange}
-                   className="edit-product-number-input" 
-                   required 
-                 />
-               </div>
-               <div>
-                 <span>(Rs.) Discount Price</span>
-                 <input 
-                   type="number" 
-                   name="discountPrice"
-                   value={formData.discountPrice}
-                   onChange={handleInputChange}
-                   className="edit-product-number-input" 
-                 />
-               </div>
-            </div>
-            <p className="edit-product-field-hint">Discount price is shown as a strikethrough price if lower than the current price.</p>
-          </div>
-
-          <div className="edit-product-card">
-            <h2 className="edit-product-card-title">Product Image</h2>
-            <div className="edit-product-image-preview">
-              <div className="edit-product-image-thumbnail">
-                {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+          {/* Main Column */}
+          <div style={{ flex: '1 1 600px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="admin-card" style={{ marginBottom: 0 }}>
+              <div className="admin-card-header">
+                <h2 className="admin-card-title">Product Information</h2>
               </div>
-              <div>
-                 <div className="edit-product-image-filename">{imageFile ? imageFile.name : 'Current Image'}</div>
-                 <div className="edit-product-image-subtext">Click below to change</div>
-              </div>
-            </div>
-            <div className="edit-product-upload-box" onClick={triggerFileInput} style={{ cursor: 'pointer' }}>
-              Click to replace image
-            </div>
-            <input 
-              type="file" 
-              accept="image/*"
-              ref={fileInputRef} 
-              style={{ display: 'none' }}
-              onChange={handleImageChange}
-            />
-          </div>
-
-        </div>
-        
-        <div className="edit-product-form-side">
-          <div className="edit-product-card">
-            <div className="edit-product-inventory-header">
-              <h2 className="edit-product-card-title">Inventory</h2>
-              <span className={`edit-product-inventory-badge ${formData.stockQuantity > 0 ? 'edit-product-badge-instock' : 'edit-product-badge-outofstock'}`}>
-                {formData.stockQuantity > 0 ? 'In Stock' : 'Out of Stock'}
-              </span>
-            </div>
-            <input 
-              type="number" 
-              name="stockQuantity"
-              value={formData.stockQuantity}
-              onChange={handleInputChange}
-              className="edit-product-number-input" 
-              required 
-            />
-            <p className="edit-product-field-hint">Stock status is calculated automatically from this quantity.</p>
-          </div>
-
-          <div className="edit-product-card">
-            <h2 className="edit-product-card-title">Visibility</h2>
-            <div className="edit-product-visibility-row">
-              <span className="edit-product-visibility-label">Mark as Best Seller</span>
-              <label className="edit-product-toggle-switch-label" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <div className="admin-form-group">
+                <label className="admin-label">Product Name</label>
                 <input 
-                  type="checkbox" 
-                  name="bestSeller"
-                  checked={formData.bestSeller}
+                  type="text" 
+                  name="productName"
+                  value={formData.productName}
                   onChange={handleInputChange}
-                  style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                  className="admin-input" 
+                  required 
                 />
-              </label>
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-label">Description</label>
+                <textarea 
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  className="admin-textarea" 
+                  rows="4"
+                ></textarea>
+              </div>
+              <div className="admin-form-group mb-0">
+                <label className="admin-label">Category</label>
+                <select 
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  className="admin-select" 
+                  required
+                >
+                  <option value="">Select category</option>
+                  <option value="Rings">Rings</option>
+                  <option value="Necklaces">Necklaces</option>
+                  <option value="Bracelets">Bracelets</option>
+                  <option value="Earrings">Earrings</option>
+                  <option value="Bangles">Bangles</option>
+                  <option value="Jhumkas">Jhumkas</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="admin-card" style={{ marginBottom: 0 }}>
+              <div className="admin-card-header">
+                <h2 className="admin-card-title">Pricing</h2>
+              </div>
+              <div className="admin-grid-2">
+                 <div className="admin-form-group mb-0">
+                   <label className="admin-label">Price (₹)</label>
+                   <input 
+                     type="number" 
+                     name="price"
+                     value={formData.price}
+                     onChange={handleInputChange}
+                     className="admin-input" 
+                     required 
+                   />
+                 </div>
+                 <div className="admin-form-group mb-0">
+                   <label className="admin-label">Discount Price (₹)</label>
+                   <input 
+                     type="number" 
+                     name="discountPrice"
+                     value={formData.discountPrice}
+                     onChange={handleInputChange}
+                     className="admin-input" 
+                   />
+                 </div>
+              </div>
+              <p style={{ marginTop: '12px', fontSize: '0.75rem', color: 'var(--admin-text-light)' }}>Discount price is shown as a strikethrough price if lower than the current price.</p>
+            </div>
+
+            <div className="admin-card" style={{ marginBottom: 0 }}>
+              <div className="admin-card-header">
+                <h2 className="admin-card-title">Product Image</h2>
+              </div>
+              <div className="d-flex align-items-center gap-3 mb-3">
+                <div style={{ width: '64px', height: '64px', borderRadius: 'var(--admin-radius-md)', overflow: 'hidden', border: '1px solid var(--admin-border)' }}>
+                  {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                </div>
+                <div>
+                   <div style={{ fontWeight: 500, color: 'var(--admin-text-main)', fontSize: '0.875rem' }}>{imageFile ? imageFile.name : 'Current Image'}</div>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-light)' }}>Click below to change</div>
+                </div>
+              </div>
+              <div 
+                onClick={triggerFileInput} 
+                style={{ 
+                  cursor: 'pointer', 
+                  border: '1px dashed var(--admin-border)', 
+                  borderRadius: 'var(--admin-radius-sm)', 
+                  padding: '12px', 
+                  textAlign: 'center',
+                  backgroundColor: 'var(--admin-bg)',
+                  fontSize: '0.875rem',
+                  color: 'var(--admin-text-muted)'
+                }}
+              >
+                Click to replace image
+              </div>
+              <input 
+                type="file" 
+                accept="image/*"
+                ref={fileInputRef} 
+                style={{ display: 'none' }}
+                onChange={handleImageChange}
+              />
             </div>
           </div>
           
-          {productData && (
-            <div className="edit-product-card">
-              <h2 className="edit-product-card-title">Product Meta</h2>
-              <div className="edit-product-meta-row">
-                 <span className="edit-product-meta-label">Product ID</span>
-                 <span className="edit-product-meta-value">#{productData._id.substring(0, 8).toUpperCase()}</span>
+          {/* Side Column */}
+          <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="admin-card" style={{ marginBottom: 0 }}>
+              <div className="admin-card-header" style={{ marginBottom: '16px' }}>
+                <h2 className="admin-card-title">Inventory</h2>
+                <span className={`admin-badge ${formData.stockQuantity > 0 ? 'admin-badge-success' : 'admin-badge-danger'}`}>
+                  {formData.stockQuantity > 0 ? 'In Stock' : 'Out of Stock'}
+                </span>
               </div>
-              <div className="edit-product-meta-row">
-                 <span className="edit-product-meta-label">Date Added</span>
-                 <span className="edit-product-meta-value">{new Date(productData.createdAt).toLocaleDateString()}</span>
+              <div className="admin-form-group mb-0">
+                <label className="admin-label">Stock Quantity</label>
+                <input 
+                  type="number" 
+                  name="stockQuantity"
+                  value={formData.stockQuantity}
+                  onChange={handleInputChange}
+                  className="admin-input" 
+                  required 
+                />
               </div>
-              <div className="edit-product-meta-row">
-                 <span className="edit-product-meta-label">Last Updated</span>
-                 <span className="edit-product-meta-value">{new Date(productData.updatedAt).toLocaleDateString()}</span>
+              <p style={{ marginTop: '12px', fontSize: '0.75rem', color: 'var(--admin-text-light)' }}>Stock status is calculated automatically from this quantity.</p>
+            </div>
+
+            <div className="admin-card" style={{ marginBottom: 0 }}>
+              <div className="admin-card-header">
+                <h2 className="admin-card-title">Visibility</h2>
+              </div>
+              <div className="d-flex justify-content-between align-items-center">
+                <label className="admin-label mb-0">Mark as Best Seller</label>
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input 
+                    type="checkbox" 
+                    name="bestSeller"
+                    checked={formData.bestSeller}
+                    onChange={handleInputChange}
+                    style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                  />
+                </label>
               </div>
             </div>
-          )}
-        </div>
-        
-        <div className="edit-product-form-footer" style={{ gridColumn: '1 / -1', display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
-          <button type="button" onClick={handleDelete} className="edit-product-btn-delete" style={{ marginRight: 'auto' }}>Delete Product</button>
-          <button type="button" onClick={() => navigate('/products')} className="edit-product-btn-cancel">Cancel</button>
-          <button type="submit" disabled={isSubmitting} className="edit-product-btn-save">
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
-          </button>
+            
+            {productData && (
+              <div className="admin-card" style={{ marginBottom: 0 }}>
+                <div className="admin-card-header">
+                  <h2 className="admin-card-title">Product Meta</h2>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                   <span style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)' }}>Product ID</span>
+                   <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>#{productData._id.substring(0, 8).toUpperCase()}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                   <span style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)' }}>Date Added</span>
+                   <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>{new Date(productData.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="d-flex justify-content-between">
+                   <span style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)' }}>Last Updated</span>
+                   <span style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--admin-text-main)' }}>{new Date(productData.updatedAt).toLocaleDateString()}</span>
+                </div>
+              </div>
+            )}
+            
+            <div className="d-flex gap-3 flex-wrap mt-2">
+              <button type="button" onClick={handleDelete} className="admin-btn admin-btn-danger" style={{ flex: '1 1 100%' }}>Delete Product</button>
+              <button type="button" onClick={() => navigate('/products')} className="admin-btn admin-btn-outline" style={{ flex: 1 }}>Cancel</button>
+              <button type="submit" disabled={isSubmitting} className="admin-btn admin-btn-primary" style={{ flex: 1 }}>
+                {isSubmitting ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
         </div>
       </form>
     </div>

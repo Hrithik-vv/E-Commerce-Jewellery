@@ -112,6 +112,11 @@ const userSchema = new mongoose.Schema({
         activityType: { type: String },
         description: { type: String },
         date: { type: Date, default: Date.now }
+    }],
+
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
     }]
 }, {
     timestamps: true

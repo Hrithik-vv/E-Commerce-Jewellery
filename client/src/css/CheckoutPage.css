@@ -410,14 +410,63 @@
     padding: 24px;
   }
   .checkout-container {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
-  .checkout-left-section, .checkout-right-section {
-    width: 100%;
-  }
-  .checkout-summary-wrapper {
-    position: static;
-  }
+}
+
+/* ===================== PREMIUM DESIGN ENHANCEMENTS ===================== */
+
+.checkout-container {
+  background-color: var(--white);
+}
+
+.checkout-card {
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s ease;
+  border-radius: var(--radius-xl);
+}
+
+.checkout-card:hover {
+  box-shadow: var(--shadow);
+}
+
+.checkout-section-title {
+  font-family: var(--font-serif);
+  color: var(--brand-dark);
+  font-weight: 700;
+}
+
+.checkout-input, .checkout-select {
+  transition: all 0.3s ease;
+  border-radius: var(--radius);
+}
+
+.checkout-input:focus, .checkout-select:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(11, 93, 80, 0.08);
+}
+
+.checkout-pay-btn {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-dark));
+  box-shadow: 0 4px 16px rgba(11, 93, 80, 0.2);
+  border-radius: var(--radius-full);
+  font-family: var(--font-ui);
+  letter-spacing: 0.5px;
+}
+
+.checkout-pay-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(11, 93, 80, 0.3);
+  background: linear-gradient(135deg, #0d7063, var(--brand-primary));
+}
+
+.checkout-shipping-card.selected, .checkout-payment-card.selected {
+  border-color: var(--brand-primary);
+  background-color: var(--brand-light);
+}
+
+.checkout-checkbox {
+  accent-color: var(--brand-primary);
 }
 
 @media (max-width: 768px) {

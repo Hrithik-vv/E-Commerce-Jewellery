@@ -11,10 +11,13 @@ const SignUp = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     consent: false,
   });
+
+  const [countryCode, setCountryCode] = useState('+91');
 
   // UI Visibility States
   const [showPassword, setShowPassword] = useState(false);
@@ -153,6 +156,7 @@ const SignUp = () => {
         const payload = {
           name: formData.fullName,
           email: formData.email,
+          phone: `${countryCode}${formData.phone}`,
           password: formData.password,
           confirmPassword: formData.confirmPassword,
           consent: formData.consent,
@@ -224,6 +228,38 @@ const SignUp = () => {
                 required
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
+            </div>
+
+            {/* Phone Input */}
+            <div className="field-group">
+              <label className="field-label" htmlFor="phone">
+                Phone Number
+              </label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <select
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  style={{ padding: '12px', border: '1px solid #d1d5db', borderRadius: '4px', backgroundColor: '#fff' }}
+                >
+                  <option value="+91">+91 (IN)</option>
+                  <option value="+1">+1 (US/CA)</option>
+                  <option value="+44">+44 (UK)</option>
+                  <option value="+61">+61 (AU)</option>
+                  <option value="+971">+971 (AE)</option>
+                </select>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="Enter phone number"
+                  maxLength={15}
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="input-field"
+                  style={{ flex: 1 }}
+                  required
+                />
+              </div>
             </div>
 
             {/* Password Input */}

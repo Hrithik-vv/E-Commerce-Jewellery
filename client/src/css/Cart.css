@@ -376,3 +376,66 @@
     width: 100%;
   }
 }
+
+/* ===================== PREMIUM DESIGN ENHANCEMENTS ===================== */
+
+.cart-drawer {
+  box-shadow: -8px 0 32px rgba(11, 93, 80, 0.15);
+}
+
+.cart-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: #0B3D36;
+}
+
+.cart-count-badge {
+  background: linear-gradient(135deg, #D4AF37, #B8962E);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.cart-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.cart-item:hover {
+  background: #f9fafb;
+  transform: translateX(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.cart-item-title {
+  font-family: 'Poppins', sans-serif;
+  color: #0B3D36;
+  font-weight: 600;
+}
+
+.cart-item-price {
+  color: #0B5D50;
+  font-weight: 700;
+}
+
+.qty-btn {
+  transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+  background: #E8F5F3;
+  color: #0B5D50;
+}
+
+.checkout-btn {
+  background: linear-gradient(135deg, #0B5D50, #0B3D36);
+  box-shadow: 0 4px 16px rgba(11, 93, 80, 0.2);
+  border-radius: 9999px;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(11, 93, 80, 0.3);
+  background: linear-gradient(135deg, #0d7063, #0B5D50);
+}

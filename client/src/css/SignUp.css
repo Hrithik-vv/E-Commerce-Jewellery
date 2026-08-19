@@ -255,3 +255,37 @@
 .sign-in-link:hover {
   text-decoration: underline;
 }
+
+/* ===================== PREMIUM DESIGN ENHANCEMENTS ===================== */
+.signup-card {
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--gray-200);
+}
+
+.signup-title {
+  font-family: var(--font-serif);
+  color: var(--brand-dark);
+}
+
+.input-field {
+  transition: all 0.3s ease;
+  border-radius: var(--radius);
+}
+
+.input-field:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(11, 93, 80, 0.08);
+}
+
+.create-account-btn {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-dark));
+  box-shadow: 0 4px 16px rgba(11, 93, 80, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.create-account-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(11, 93, 80, 0.3);
+  background: linear-gradient(135deg, #0d7063, var(--brand-primary));
+}

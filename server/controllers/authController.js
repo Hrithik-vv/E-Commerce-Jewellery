@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 
 const signup = async (req, res) => {
     try {
-        let { name, email, password, confirmPassword, consent } = req.body;
+        let { name, email, phone, password, confirmPassword, consent } = req.body;
 
         // Trim inputs
         const trimmedName = name?.trim();
@@ -121,6 +121,7 @@ const signup = async (req, res) => {
         const newUser = new User({
             name: trimmedName,
             email: trimmedEmail,
+            phone: phone ? phone.trim() : "",
             password: hashedPassword
             // role will automatically be "User"
         })

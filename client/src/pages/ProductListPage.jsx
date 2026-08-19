@@ -66,23 +66,30 @@ const ProductListPage = () => {
   });
 
   return (
-    <div className="plp-main-container">
+    <div className="mb-4">
       {/* Page Header */}
-      <div className="plp-page-header">
-        <h1 className="plp-page-title">Products</h1>
-        <p className="plp-page-description">Manage your entire jewellery catalog, monitor stock statuses, and easily edit or remove product listings from your store.</p>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--admin-text-main)', margin: '0 0 8px 0' }}>Products</h1>
+          <p style={{ color: 'var(--admin-text-muted)', margin: 0, fontSize: '0.95rem' }}>Manage your catalog, stock statuses, and listings.</p>
+        </div>
+        <button className="admin-btn admin-btn-primary" onClick={() => navigate('/add-product')}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Product
+        </button>
       </div>
 
       {/* Filter & Search Section */}
-      <div className="plp-filter-container">
+      <div className="admin-card mb-4" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
         <input 
           type="text" 
-          className="plp-search-input" 
-          placeholder="Search by Product ID or Product Name..." 
+          className="admin-input" 
+          style={{ flex: '1 1 300px' }}
+          placeholder="Search by Product ID or Name..." 
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <select className="plp-filter-select" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+        <select className="admin-select" style={{ flex: '0 1 200px' }} value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
           <option value="All">All Categories</option>
           <option value="Rings">Rings</option>
           <option value="Earrings">Earrings</option>
@@ -91,7 +98,7 @@ const ProductListPage = () => {
           <option value="Bracelets">Bracelets</option>
           <option value="Necklaces">Necklaces</option>
         </select>
-        <select className="plp-filter-select" value={stockFilter} onChange={(e) => setStockFilter(e.target.value)}>
+        <select className="admin-select" style={{ flex: '0 1 200px' }} value={stockFilter} onChange={(e) => setStockFilter(e.target.value)}>
           <option value="All">All Stock</option>
           <option value="In Stock">In Stock</option>
           <option value="Low Stock">Low Stock</option>
@@ -100,18 +107,18 @@ const ProductListPage = () => {
       </div>
 
       {/* Products Table */}
-      <div className="plp-table-container">
+      <div className="admin-card admin-table-container">
         {loading ? (
-          <div style={{ padding: '20px', textAlign: 'center' }}>Loading products...</div>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--admin-text-muted)' }}>Loading products...</div>
         ) : (
-          <table className="plp-table">
+          <table className="admin-table">
             <thead>
-              <tr className="plp-table-header-row">
+              <tr>
                 <th>Product ID</th>
                 <th>Product Name</th>
                 <th>Category</th>
                 <th>Stock Status</th>
-                <th>Action</th>
+                <th style={{ textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -119,34 +126,34 @@ const ProductListPage = () => {
                 displayedProducts.map((product) => {
                   const isLowStock = product.stockQuantity > 0 && product.stockQuantity < 10;
                   const isOutOfStock = product.stockQuantity === 0;
-                  const stockClass = isOutOfStock ? 'plp-stock-out' : (isLowStock ? 'plp-stock-low' : 'plp-stock-in');
+                  const stockClass = isOutOfStock ? 'admin-badge-danger' : (isLowStock ? 'admin-badge-warning' : 'admin-badge-success');
                   const stockText = isOutOfStock ? 'Out of Stock' : (isLowStock ? 'Low Stock' : 'In Stock');
 
                   return (
-                    <tr key={product._id} className="plp-table-row">
-                      <td className="plp-product-id">#{product._id.substring(0, 8).toUpperCase()}</td>
+                    <tr key={product._id}>
+                      <td style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>#{product._id.substring(0, 8).toUpperCase()}</td>
                       <td>
-                        <div className="plp-product-name-container">
-                          <img className="plp-product-name-thumbnail" src={product.productImage || "https://placehold.co/40x40"} alt={product.productName} />
-                          <span className="plp-product-name-text">{product.productName}</span>
+                        <div className="d-flex align-items-center gap-3">
+                          <img className="admin-img-thumb" src={product.productImage || "https://placehold.co/48x48"} alt={product.productName} />
+                          <span style={{ fontWeight: 500, color: 'var(--admin-text-main)' }}>{product.productName}</span>
                         </div>
                       </td>
-                      <td className="plp-category">{product.category}</td>
+                      <td>{product.category}</td>
                       <td>
-                        <div className={`plp-stock-badge-container ${stockClass}`}>
+                        <span className={`admin-badge ${stockClass}`}>
                           {stockText} ({product.stockQuantity})
-                        </div>
+                        </span>
                       </td>
-                      <td>
-                        <div className="plp-action-container">
-                          <button className="plp-btn-edit" title="Edit" onClick={() => handleEdit(product._id)}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <td style={{ textAlign: 'right' }}>
+                        <div className="d-flex justify-content-center gap-2" style={{ justifyContent: 'flex-end' }}>
+                          <button className="admin-btn admin-btn-outline" style={{ padding: '6px' }} title="Edit" onClick={() => handleEdit(product._id)}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M12 20h9"></path>
                               <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                             </svg>
-                          </button>{' '}
-                          <button className="plp-btn-delete" title="Delete" onClick={() => handleDelete(product._id)}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          </button>
+                          <button className="admin-btn admin-btn-danger" style={{ padding: '6px' }} title="Delete" onClick={() => handleDelete(product._id)}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <polyline points="3 6 5 6 21 6"></polyline>
                               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
@@ -159,17 +166,17 @@ const ProductListPage = () => {
               ) : (
                 <tr>
                   <td colSpan="5">
-                    <div className="plp-empty-state-container">
-                      <div className="plp-empty-icon-wrapper">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <div style={{ textAlign: 'center', padding: '40px' }}>
+                      <div style={{ color: 'var(--admin-text-light)', marginBottom: '16px' }}>
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                           <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
                           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                           <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                           <line x1="12" y1="22.08" x2="12" y2="12"></line>
                         </svg>
                       </div>
-                      <p className="plp-empty-title">No products found</p>
-                      <p className="plp-empty-subtext">Try adjusting your filters or search term.</p>
+                      <h3 style={{ fontSize: '1.125rem', color: 'var(--admin-text-main)', marginBottom: '8px' }}>No products found</h3>
+                      <p style={{ color: 'var(--admin-text-muted)' }}>Try adjusting your filters or search term.</p>
                     </div>
                   </td>
                 </tr>
@@ -177,10 +184,10 @@ const ProductListPage = () => {
             </tbody>
           </table>
         )}
-
+        
         {!loading && displayedProducts.length > 0 && (
-          <div className="plp-pagination-container">
-            <span className="plp-records-count">Showing {displayedProducts.length} product(s)</span>
+          <div style={{ padding: '16px', borderTop: '1px solid var(--admin-border)', color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>
+            Showing {displayedProducts.length} product(s)
           </div>
         )}
       </div>
